@@ -328,7 +328,7 @@ select:disabled{opacity:.5}
 <h2>شيت إدخال البيانات</h2>
 <div class="tabs" id="unitTabs"><button type="button" class="tab on" id="utRes" onclick="setUnitMode('res')">وحدة سكنية</button><button type="button" class="tab" id="utAdm" onclick="setUnitMode('adm')">وحدة إدارية (بنك / مول)</button></div>
 <div class="pick" id="resPick"><div class="pk-title">اختيار الوحدة بالتدريج (اختياري)</div>
-<div class="grid"><div><label>رقم العمارة</label><select id="selB" onchange="onB()"></select></div><div><label>النموذج</label><select id="selM" onchange="onM()" disabled></select></div><div><label>الدور</label><select id="selF" onchange="onF()" disabled></select></div></div>
+<div class="grid"><div><label>رقم العمارة</label><select id="selB" onchange="onB()"></select></div><div><label>الدور</label><select id="selF" onchange="onF()" disabled></select></div><div><label>النموذج</label><select id="selM" onchange="onM()" disabled></select></div></div>
 <div class="hint">أو اكتب / اختار الكود جاهز في خانة "كود الوحدة" تحت – الاتنين بيتزامنوا مع بعض</div></div>
 <div class="pick" id="auBox" style="display:none">
 <div class="pk-title">بيانات الوحدة الإدارية</div>
@@ -558,17 +558,14 @@ const TREE={};U.forEach(u=>{const q=u.code.split('-'),b=q[0]+'-'+q[1];TREE[b]=TR
 const opt=(v,t)=>`<option value="${v}">${t}</option>`;
 const flName=u=>u.fl==='ground'?'Ground':u.fl;
 const natCmp=(a,b)=>{const x=a.match(/^([A-Za-z]*)(\d*)$/)||[0,a,'0'],y=b.match(/^([A-Za-z]*)(\d*)$/)||[0,b,'0'];return x[1].localeCompare(y[1])||((+x[2])-(+y[2]))};
-function fillM(b){const e=$('selM');if(!b||!TREE[b]){e.innerHTML=opt('','—');e.disabled=true;return}const ms={},us={};Object.keys(TREE[b]).forEach(f=>Object.keys(TREE[b][f]).forEach(m=>{const u=TREE[b][f][m];(ms[m]=ms[m]||new Set()).add(u.spec);(us[m]=us[m]||[]).push(u)}));
- const fn=u=>/ground/i.test(u.fl)?'الأرضي':/loft/i.test(u.fl)?'اللوفت':/roof|pent/i.test(u.fl)?'الروف':flName(u);
- const aTxt=m=>{const L=(us[m]||[]).filter(u=>+u.ua>0);if(!L.length)return'';const c={};L.forEach(u=>c[u.ua]=(c[u.ua]||0)+1);const main=+Object.keys(c).sort((x,y)=>c[y]-c[x])[0],ex=L.filter(u=>+u.ua!==main);return' · '+main+' م²'+(ex.length?' ('+ex.map(u=>fn(u)+' '+u.ua).join('، ')+')':'')};
- e.innerHTML=opt('','اختار النموذج')+Object.keys(ms).sort(natCmp).map(m=>opt(m,m+(ms[m].size===1?' · '+[...ms[m]][0]:'')+aTxt(m))).join('');e.disabled=false}
-function fillF(b,m){const e=$('selF');if(!b||!m||!TREE[b]){e.innerHTML=opt('','—');e.disabled=true;return}const fs=Object.keys(TREE[b]).filter(f=>TREE[b][f][m]).sort((x,y)=>(+x)-(+y));e.innerHTML=opt('','اختار الدور')+fs.map(f=>{const u=TREE[b][f][m];return opt(f,flName(u)+' · '+u.spec+(+u.ua>0?' · '+u.ua+' م²':'')+(+u.ga>0?' + جنينة '+u.ga+' م²':'')+(u.st!=='Available'?' ('+stLbl(u.st)+')':''))}).join('');e.disabled=false}
+function fillF(b){const e=$('selF');if(!b||!TREE[b]){e.innerHTML=opt('','—');e.disabled=true;return}const fs=Object.keys(TREE[b]).sort((x,y)=>(+x)-(+y));e.innerHTML=opt('','اختار الدور')+fs.map(f=>{const us=Object.values(TREE[b][f]),av=us.filter(u=>u.st==='Available').length;return opt(f,flName(us[0])+' · '+us.length+' وحدة'+(av?' ('+av+' متاحة)':' (مفيش متاح)'))}).join('');e.disabled=false}
+function fillM(b,f){const e=$('selM');if(!b||!f||!TREE[b]||!TREE[b][f]){e.innerHTML=opt('','—');e.disabled=true;return}const ms=Object.keys(TREE[b][f]).sort(natCmp);e.innerHTML=opt('','اختار النموذج')+ms.map(m=>{const u=TREE[b][f][m];return opt(m,m+' · '+u.spec+(+u.ua>0?' · '+u.ua+' م²':'')+(+u.ga>0?' + جنينة '+u.ga+' م²':'')+(+u.ra>0?' + روف '+u.ra+' م²':'')+(u.st!=='Available'?' ('+stLbl(u.st)+')':''))}).join('');e.disabled=false}
 function setCode(){const b=$('selB').value,f=$('selF').value,m=$('selM').value;$('code').value=(b&&f&&m)?b+'-'+f+'-'+m:'';render()}
-function onB(){fillM($('selB').value);fillF('','');setCode()}
-function onF(){setCode()}
-function onM(){fillF($('selB').value,$('selM').value);setCode()}
-function syncSel(){const u=BY[$('code').value.trim().toUpperCase()];if(!u)return;const q=u.code.split('-'),b=q[0]+'-'+q[1];$('selB').value=b;fillM(b);$('selM').value=q[3];fillF(b,q[3]);$('selF').value=q[2]}
-$('selB').innerHTML=opt('','اختار العمارة')+Object.keys(TREE).sort().map(b=>opt(b,b)).join('');fillM('');fillF('','');
+function onB(){fillF($('selB').value);fillM('','');setCode()}
+function onF(){fillM($('selB').value,$('selF').value);setCode()}
+function onM(){setCode()}
+function syncSel(){const u=BY[$('code').value.trim().toUpperCase()];if(!u)return;const q=u.code.split('-'),b=q[0]+'-'+q[1];$('selB').value=b;fillF(b);$('selF').value=q[2];fillM(b,q[2]);$('selM').value=q[3]}
+$('selB').innerHTML=opt('','اختار العمارة')+Object.keys(TREE).sort().map(b=>opt(b,b)).join('');fillF('');fillM('','');
 $('code').addEventListener('input',syncSel);
 {const uniq=f=>[...new Set(U.map(f))].sort(),fill=(id,a,ph)=>$(id).innerHTML='<option value="">'+ph+'</option>'+a.map(v=>`<option>${v}</option>`).join('');fill('sugT',uniq(u=>u.type),'كل الأنواع');fill('sugS',uniq(u=>u.spec),'كل عدد الغرف');fill('sugBd',uniq(u=>u.bld),'كل العمارات')}
 const SUG={tab:'A',res:[],all:false,meta:''};
@@ -850,7 +847,7 @@ function holdModal(u){if(!u||document.getElementById('holdOv'))return;const o=do
  y.onclick=()=>{if(!ck.checked)return;holdAck=u.code;o.remove();try{snd('warnAppr')}catch(e){}render();setTimeout(()=>{const b=document.querySelector('.holdban');if(b)b.scrollIntoView({behavior:'smooth',block:'start'})},80)}}
 function holdBanner(){const I=unitInfo&&unitInfo(),P=document.getElementById('planBody');if(!P||!I||!I.u||I.u.st!=='Hold'||holdAck!==I.u.code||P.querySelector('.holdban'))return;
  P.insertAdjacentHTML('afterbegin',`<div class="holdban noprint"><span class="hb-ic">⚠️</span><div><b>تنبيه: الوحدة <bdi>${I.u.code}</bdi> محجوزة (HOLD)</b><span class="hb-d">البيمنت ده على مسؤوليتك الكاملة – لازم تأكيد الإدارة قبل عرضه على العميل.</span></div></div>`)}
-function pickAnother(){$('code').value='';$('selB').value='';fillM('');fillF('','');unlocked=null;render();window.scrollTo({top:0,behavior:'smooth'});$('selB').focus()}
+function pickAnother(){$('code').value='';$('selB').value='';fillF('');fillM('','');unlocked=null;render();window.scrollTo({top:0,behavior:'smooth'});$('selB').focus()}
 function askBj(){if(isOwner()){const I=unitInfo();if(I){unlocked=I.u.code;snd('ok');render()}return}$('bjRow').style.display='grid';$('bjPw').focus()}
 function bjCheck(){const I=unitInfo();if(!I)return;if($('bjPw').value.trim().toLowerCase()==='bj'+I.u0.ua){pwOk();unlocked=I.u.code;render()}else pwWrong()}
 function calcStd(k,net,dpIn){const o=SP.on,od=NODD;SP.on=false;NODD=true;try{return calc(k,net,dpIn)}finally{SP.on=o;NODD=od}}
@@ -1970,6 +1967,7 @@ html.pm.pm.pm #pmToasts{display:flex;position:fixed;top:calc(env(safe-area-inset
 #pgGame .pg-node .wi small{font:700 11px 'Cairo',sans-serif;opacity:.85}
 #pgGame .pg-pu button{min-width:84px}
 @media (max-width:560px){#pgGame .pg-alt{right:6px}#pgGame .pg-alt i{height:30vh}#pgGame .pg-pu{gap:5px}#pgGame .pg-pu button{min-width:0;padding:5px 9px;font-size:13px}}
+#pgGame .pg-own{display:inline-block;background:linear-gradient(90deg,#b8860b,#ffd700);color:#2a1a00;border-radius:99px;padding:3px 14px;font:800 14px 'Cairo',sans-serif;margin-bottom:8px}
 #pmToasts{z-index:490!important}
 @media print{#pgGame{display:none!important}}
 
@@ -2232,7 +2230,8 @@ function applyWorld(i){PM.wi=i;LS('pm-world',String(i));const w=W[i],s=H.style;
  if(w.logo)s.setProperty('--wlogo',w.logo);else s.removeProperty('--wlogo');if(w.btn)s.setProperty('--wbtn',w.btn);else s.removeProperty('--wbtn');
  H.dataset.pmw=w.id;const st=$i('pmStage');if(st){st.querySelector('.pm-dec').innerHTML=DEC[w.id]||''}cvSize();seed(w.pt);SONG=genSong(w);step=0;walkLoop();paintHud();plate(true)}
 function worldForLvl(l){return Math.min(l,W.length)-1}
-function unlocked(i){return i<=Math.min(lvlOf(PM.xp),W.length)-1+(INV.tix||0)}
+const ownerOK=()=>{try{return typeof isOwner==='function'&&!!isOwner()}catch(e){return false}};
+function unlocked(i){return ownerOK()||i<=Math.min(lvlOf(PM.xp),W.length)-1+(INV.tix||0)}
 
 /* ================= GAME ================= */
 const lvlOf=x=>Math.floor(x/250)+1;
@@ -2325,7 +2324,7 @@ function ensureDom(){if($i('pmHud'))return;
  $i('pmMapB').onclick=openMap;$i('pmShopB').onclick=openShop;$i('pmGameB').onclick=()=>{ac();musStart();openGame()};$i('pmCoins').parentNode.style.cursor='pointer';$i('pmCoins').parentNode.onclick=openShop;$i('pmOff').onclick=()=>pmToggle(false);
  const pb=$i('planBody');if(pb)new MutationObserver(()=>{clearTimeout(PM.pT);PM.pT=setTimeout(planCheck,900)}).observe(pb,{childList:true,subtree:true,characterData:true})}
 function openMap(){if($i('pmMap'))return;const L=lvlOf(PM.xp),m=D.createElement('div');m.id='pmMap';m.setAttribute('data-noi18n','');
- m.innerHTML='<div class="box"><h3>🗺️ خريطة العوالم</h3><div class="sub">كل مستوى بيفتح عالم جديد بشكله وموسيقته ووحوشه – إنت في المستوى '+L+'</div><div class="gr">'+W.map((w,i)=>{const lk=!unlocked(i);return`<button type="button" class="pm-wc${lk?' lock':''}${i===PM.wi?' cur':''}" data-i="${i}" style="background:${w.bg};font-family:${w.font},'Cairo',sans-serif"><span class="pm-hl"></span><span class="i">${lk?'🔒':w.ic}</span><span class="n">${w.name}</span><span class="l">${lk?'يفتح في المستوى '+(i+1):(i===PM.wi?'✦ إنت هنا':'ادخل')}</span></button>`}).join('')+'</div><button type="button" class="btn x">رجوع</button></div>';
+ m.innerHTML='<div class="box"><h3>🗺️ خريطة العوالم</h3><div class="sub">'+(ownerOK()?'👑 وضع الأونر: كل العوالم مفتوحة':'كل مستوى بيفتح عالم جديد بشكله وموسيقته ووحوشه – إنت في المستوى '+L)+'</div><div class="gr">'+W.map((w,i)=>{const lk=!unlocked(i);return`<button type="button" class="pm-wc${lk?' lock':''}${i===PM.wi?' cur':''}" data-i="${i}" style="background:${w.bg};font-family:${w.font},'Cairo',sans-serif"><span class="pm-hl"></span><span class="i">${lk?'🔒':w.ic}</span><span class="n">${w.name}</span><span class="l">${lk?'يفتح في المستوى '+(i+1):(i===PM.wi?'✦ إنت هنا':'ادخل')}</span></button>`}).join('')+'</div><button type="button" class="btn x">رجوع</button></div>';
  D.body.appendChild(m);m.addEventListener('click',e=>{const c=e.target.closest('.pm-wc');if(c){const i=+c.dataset.i;if(!unlocked(i)){c.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:250});sfx('hit');return}m.remove();if(i!==PM.wi){travel(i);progress('travel')}return}if(e.target.closest('.x')||e.target===m)m.remove()});
  m.addEventListener('pointermove',e=>{const c=e.target.closest('.pm-wc');if(!c)return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.transform=`perspective(600px) rotateY(${(x-.5)*18}deg) rotateX(${(.5-y)*16}deg) translateY(-6px) scale(1.05)`;const h=c.querySelector('.pm-hl');h.style.setProperty('--mx',x*100+'%');h.style.setProperty('--my',y*100+'%');h.style.setProperty('--h',Math.round(x*360))});
  m.addEventListener('pointerout',e=>{const c=e.target.closest('.pm-wc');if(c&&!c.contains(e.relatedTarget))c.style.transform=''})}
@@ -2587,8 +2586,8 @@ function gDraw(){const G=GS,X=G.x;if(!G.cfg){X.clearRect(0,0,G.cw,G.ch);return}X
 /* ---- الشاشات ---- */
 function gPanel(kind){const G=GS,P=G.g.querySelector('.pg-panel');G.g.classList.toggle('playing',!kind);if(!kind){P.innerHTML='';P.classList.remove('on');return}P.classList.add('on');
  if(kind==='select'){G.state='menu';G.cfg=null;const st=gStars();G.g.style.background=WC().bg;G.g.querySelector('.pg-lv').textContent='🏗️ ابني بالميرا';G.g.querySelector('.pg-fl').textContent='⭐ '+st+'/'+GLV*3;G.g.querySelector('.pg-hp').textContent='';G.g.querySelector('.pg-cb').textContent='';G.g.querySelector('.pg-co').textContent=PM.coins.toLocaleString('en');
-  P.innerHTML='<div class="pg-card wide"><div class="pg-h">🏗️ ابني بالميرا</div><div class="pg-s">الونش بينزّل الأدوار… نزّل كل دور فوق اللي تحته بالظبط. البرج <b>بيتمايل أكتر كل ما يطول</b>، فخلي عينك على قمته. ليك 3 ❤️ في كل مستوى، و5 PERFECT ورا بعض بتشغّل 🔥FEVER والنقط بتتضاعف.</div><button type="button" class="pg-end" data-a="inf"><span>♾️ تحدي ناطحة السحاب</span><small>ابني لحد ما تقع – رقمك القياسي: '+gData.endBest+' دور</small></button><div class="pg-tot">⭐ '+st+' / '+GLV*3+'</div><div class="pg-grid">'+Array.from({length:GLV},(_,i)=>{const n=i+1,c=lvCfg(n),w=W[c.wi],lk=n>gData.unl,s=gData.stars[n]||0;return'<button type="button" class="pg-node'+(lk?' lk':'')+(c.boss?' boss':'')+'" data-n="'+n+'" style="background:'+w.bg+'"><span class="nn">'+(lk?'🔒':n)+'</span><span class="wi">'+(c.boss?'⚔️':w.ic)+' <small>'+c.target+'🏢</small></span><span class="ss">'+'★'.repeat(s)+'<i>'+'★'.repeat(3-s)+'</i></span></button>'}).join('')+'</div><button type="button" class="pg-b ghost" data-a="close">رجوع للبرنامج</button></div>';
-  P.querySelectorAll('.pg-node').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;if(n>gData.unl){b.animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'none'}],{duration:240});sfx('hit');return}gPanelStart(n)})}
+  P.innerHTML='<div class="pg-card wide"><div class="pg-h">🏗️ ابني بالميرا</div><div class="pg-s">الونش بينزّل الأدوار… نزّل كل دور فوق اللي تحته بالظبط. البرج <b>بيتمايل أكتر كل ما يطول</b>، فخلي عينك على قمته. ليك 3 ❤️ في كل مستوى، و5 PERFECT ورا بعض بتشغّل 🔥FEVER والنقط بتتضاعف.</div><button type="button" class="pg-end" data-a="inf"><span>♾️ تحدي ناطحة السحاب</span><small>ابني لحد ما تقع – رقمك القياسي: '+gData.endBest+' دور</small></button>'+(ownerOK()?'<div class="pg-own">👑 وضع الأونر: كل المستويات مفتوحة</div>':'')+'<div class="pg-tot">⭐ '+st+' / '+GLV*3+'</div><div class="pg-grid">'+Array.from({length:GLV},(_,i)=>{const n=i+1,c=lvCfg(n),w=W[c.wi],lk=n>gData.unl&&!ownerOK(),s=gData.stars[n]||0;return'<button type="button" class="pg-node'+(lk?' lk':'')+(c.boss?' boss':'')+'" data-n="'+n+'" style="background:'+w.bg+'"><span class="nn">'+(lk?'🔒':n)+'</span><span class="wi">'+(c.boss?'⚔️':w.ic)+' <small>'+c.target+'🏢</small></span><span class="ss">'+'★'.repeat(s)+'<i>'+'★'.repeat(3-s)+'</i></span></button>'}).join('')+'</div><button type="button" class="pg-b ghost" data-a="close">رجوع للبرنامج</button></div>';
+  P.querySelectorAll('.pg-node').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;if(n>gData.unl&&!ownerOK()){b.animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'none'}],{duration:240});sfx('hit');return}gPanelStart(n)})}
  else if(kind==='pause')P.innerHTML='<div class="pg-card"><div class="pg-h">⏸️ استراحة</div><div class="pg-s">البرج مستنيك</div><div class="pg-row"><button type="button" class="pg-b" data-a="resume">كمّل ▶</button><button type="button" class="pg-b ghost" data-a="select">الخريطة</button><button type="button" class="pg-b ghost" data-a="close">خروج</button></div></div>';
  else if(kind==='lose'){const c=G.cfg;P.innerHTML='<div class="pg-card"><div class="pg-big">😅</div><div class="pg-h">البرج وقع!</div><div class="pg-s">وصلت للدور '+(G.stack.length-1)+' من '+c.target+' – '+pickR(['قربت جدًا!','المرة الجاية هتعديها 💪','بص على قمة البرج وهي بتتمايل قبل ما تنزّل','استخدم ⏳ التبطيء أو ❤️ قلب زيادة'])+'</div><div class="pg-row"><button type="button" class="pg-b" data-a="retry">حاول تاني 🔁</button><button type="button" class="pg-b ghost" data-a="select">الخريطة</button></div></div>'}
  else if(kind==='endover'){const fl=G.stack.length-1,rec=fl>gData.endBest;if(rec){gData.endBest=fl;gSave()}const coins=Math.round(G.score/5);addCoins(coins);addXp(10+Math.min(80,fl*2));if(fl>=25)ach('g_end25','🏙️ ناطحة سحاب – 25 دور في التحدي');if(fl>=50)ach('g_end50','🚀 برج الفضاء – 50 دور في التحدي');progress('game');
@@ -2612,6 +2611,6 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261101-203629";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261101-210107";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
