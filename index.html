@@ -551,12 +551,12 @@ const SYS={
  5:{c:'c5',e:'',n:5,dp:'manual',cnt:20,t:'5 سنين'},
  6:{c:'c5',e:'🤝',n:6,dp:.05,cnt:25,t:'6 سنين',bd:true},
  8:{c:'c8',e:'',n:8,dp:.05,cnt:33,t:'8 سنين'},
- 9:{c:'c9',e:'',n:9,dp:.05,cnt:37,t:'9 سنين',sp:true,appr:true},
+ 9:{c:'c9',e:'',n:9,dp:.05,cnt:37,t:'9 سنين',sp:true},
   'adm':{c:'c8',e:'',n:5,dp:.10,cnt:20,adm:true,t:'5 سنين إداري'},
- 10:{c:'c10',e:'',n:10,dp:.10,cnt:41,t:'10 سنين',appr:true},
+ 10:{c:'c10',e:'',n:10,dp:.10,cnt:41,t:'10 سنين'},
  '8s':{c:'c8',e:'',n:8,dp:.05,cnt:16,step:6,semi:true,rest:.85/15,del:.05,t:'8 سنين نصف سنوي'},
- '9s':{c:'c9',e:'',n:9,dp:.05,cnt:18,step:6,semi:true,rest:.85/17,del:.05,appr:true,t:'9 سنين نصف سنوي'},
- '10s':{c:'c10',e:'',n:10,dp:.10,cnt:21,step:6,semi:true,rest:.75/20,del:.10,appr:true,t:'10 سنين نصف سنوي'},
+ '9s':{c:'c9',e:'',n:9,dp:.05,cnt:18,step:6,semi:true,rest:.85/17,del:.05,t:'9 سنين نصف سنوي'},
+ '10s':{c:'c10',e:'',n:10,dp:.10,cnt:21,step:6,semi:true,rest:.75/20,del:.10,t:'10 سنين نصف سنوي'},
  'cash':{c:'cc',n:0,cash:true,dp:1,cnt:1,t:'كاش'}
 };
 const $=id=>document.getElementById(id);
@@ -2766,6 +2766,6 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261105-100719";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261105-100930";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
