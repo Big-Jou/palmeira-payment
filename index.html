@@ -902,7 +902,7 @@ function dpGet(){const f=$('spDp');if(!AU.on&&SP.ok&&SP.on&&f&&f.value!=='')retu
 function mPctGet(){if(typeof bdOn==='function'&&bdOn())return 8;const e=$('spMPct');if(!SP.ok||!e||e.value==='')return 10;const v=parseFloat(e.value);return isFinite(v)&&v>=0&&v<=30?v:10}
 const pctTxt=v=>(Math.round(v*100)/100)+'%';
 function maintPlan(c0,maint){if(!SP.ok)return null;const on=$('spMOn');if(!on||!on.checked)return null;const n=+$('spMN').value===3?3:2,ds=[1,2,3].slice(0,n).map(i=>$('spMD'+i).value);if(ds.some(v=>!v))return{wait:true};const per=r100(maint/n),rows=ds.map((v,i)=>({d:pd(v),a:i==n-1?maint-per*(n-1):per})).sort((a,b)=>a.d-b.d),lim=addM(c0,36);return{rows,lim,bad:rows.filter(x=>x.d>lim||x.d<c0)}}
-function spOpen(){if(!SP.ok&&isOwner()){spUnlock();snd('ok');render();return}if(SP.ok){const b=$('spBox');b.style.display=b.style.display==='none'?'block':'none'}else $('spLogin').style.display='grid'}
+function spOpen(){if(!SP.ok){spUnlock();snd('ok');render();return}if(SP.ok){const b=$('spBox');b.style.display=b.style.display==='none'?'block':'none'}else $('spLogin').style.display='grid'}
 let WRONG=0;
 function pwOk(){WRONG=0;snd('ok')}
 function pwWrong(){WRONG++;if(WRONG>=3){snd('errLock');$('lock').classList.remove('hide')}else{snd('errPw');alert('كلمة السر غلط – محاولة '+WRONG+' من 3')}}
@@ -1058,8 +1058,8 @@ function recDraw(){const a=recGet(),L=$('recList');$('recN').textContent=a.lengt
 function recFill(v){RECF.forEach(id=>{const e=$(id);if(!e||v[id]===undefined||v[id]===null)return;if(e.type==='checkbox')e.checked=!!v[id];else e.value=v[id]})}
 function recOpen(i){const x=recGet()[i];if(!x)return;recBusy=true;try{
  setUnitMode(x.au?'adm':'res');recFill(x.v);
- if(x.sp&&!SP.ok){$('spOn').checked=false;try{say('البيمنت ده كان اسبشيل – ادخل باسورد الاسبشيل علشان يظهر بنفس الشكل')}catch(e){}}
- if(x.bd&&SP.ok){BD.on=true;BD.amt=x.bd.amt;BD.freq=x.bd.freq}else BD.on=false;
+ if((x.sp||x.bd)&&!SP.ok){const v=$('spOn').checked;spUnlock();$('spOn').checked=v}
+ if(x.bd){BD.on=true;BD.amt=x.bd.amt;BD.freq=x.bd.freq}else BD.on=false;
  if(!x.au)syncSel();NX=x.nx||0;$('nxSel').value=NX;firstTouched=!!x.ft;unlocked=null;
  window.BDNOASK=true;try{if(x.sel&&SYS[x.sel])pick(x.sel);else{sel=null;render()}}finally{window.BDNOASK=false}
  $('recList').hidden=true;$('recBtn').setAttribute('aria-expanded','false');try{snd('ok')}catch(e){}
@@ -2766,6 +2766,6 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261104-192229";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261105-100719";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
