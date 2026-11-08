@@ -2779,8 +2779,260 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 })();
 </script>
 
+<script>
+/* ===== مساعد البيمنت (بيفهم الكلام المصري ويسأل عن الناقص) – مجاني ومن غير إنترنت ===== */
+(function(){
+const $=id=>document.getElementById(id);
+const AR='٠١٢٣٤٥٦٧٨٩';
+function norm(t){t=String(t||'').replace(/[٠-٩]/g,d=>AR.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/٫/g,'.').replace(/٪/g,'%');
+ t=t.replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').toLowerCase();
+ t=t.replace(/(\d),(?=\d{3}\b)/g,'$1');return t.replace(/\s+/g,' ').trim()}
+const W2N={'واحد':1,'اتنين':2,'اثنين':2,'تلاته':3,'ثلاثه':3,'تلات':3,'اربعه':4,'اربع':4,'خمسه':5,'خمس':5,'سته':6,'ست':6,'سبعه':7,'سبع':7,'تمانيه':8,'ثمانيه':8,'تمن':8,'تسعه':9,'تسع':9,'عشره':10,'عشر':10,'حداشر':11,'اتناشر':12,'تلتاشر':13};
+function words2num(t){for(const k in W2N)t=t.replace(new RegExp('(^|\\s)'+k+'(?=\\s|$)','g'),'$1'+W2N[k]);return t}
+/* المبالغ: 60 الف / 60k / 1.5 مليون / مليون ونص / نص مليون */
+function amounts(t){const out=[];let m;t=t.replace(/(^|[^\d.\s])\s*مليون\s*و\s*نص/g,'$1 1.5 مليون').replace(/(^|[^\d.\s])\s*مليون\s*و\s*ربع/g,'$1 1.25 مليون').replace(/نص مليون/g,'0.5 مليون').replace(/ربع مليون/g,'0.25 مليون').replace(/(^|[^\d.\s])\s*مليون/g,'$1 1 مليون');
+ const re=/(\d+(?:\.\d+)?)\s*(مليون|ملايين|م(?=\s|$)|الف|الاف|k|ك(?=\s|$))?(\s*و\s*(نص|ربع))?/g;
+ while((m=re.exec(t))){let v=parseFloat(m[1]);const u=m[2]||'';if(/مليون|ملايين|^م$/.test(u))v*=1e6;else if(/الف|الاف|k|ك/.test(u))v*=1e3;
+  if(m[4]){const f=m[4]==='نص'?.5:.25;v+=(/مليون|ملايين|^م$/.test(u)?1e6:/الف|الاف|k|ك/.test(u)?1e3:0)*f}
+  out.push({v,i:m.index,end:m.index+m[0].length,raw:m[0],unit:u,pct:/^\s*%|^\s*(في الميه|بالميه)/.test(t.slice(m.index+m[0].length))})}
+ return out}
+const near=(t,a,re,back=28,fwd=4)=>re.test(t.slice(Math.max(0,a.i-back),a.end+fwd));
+const CATS=[['dp',/مقدم|دفعه اولي|اول دفعه|دفعه التعاقد/g],['y',/سنوي|سنويه|اخر السنه|اخر كل سنه|نهايه السنه|كل سنه/g],['q',/قسط|اقساط|كوارتر|كورتر|كوتر|شهري|كل شهر|بالشهر/g],['disc',/خصم/g],['maint',/صيانه|مقايسات/g]];
+function classify(t,a){let best=null,bd=1e9;
+ for(const [c,re] of CATS){re.lastIndex=0;let m;while((m=re.exec(t))){let d;
+   if(m.index+m[0].length<=a.i){const gap=t.slice(m.index+m[0].length,a.i);if(/\d/.test(gap.replace(/\s/g,'')))continue;d=a.i-(m.index+m[0].length)}
+   else if(m.index>=a.end){const gap=t.slice(a.end,m.index);if(gap.length>14||/\d/.test(gap))continue;d=(m.index-a.end)+3}
+   else continue;
+   if(d<=26&&d<bd){bd=d;best=c}}}
+ return best}
+const money=v=>Math.round(v).toLocaleString('en-US');
+
+/* ===== الحالة ===== */
+let S0=()=>({}),ST=S0(),PEND=null,LAST=null;
+function sysName(k){const s=SYS[k];return !s?'':s.cash?'كاش':s.adm?'إداري':s.n+' سنين'+(s.semi?' نصف سنوي':'')}
+
+/* ===== فهم الرسالة ===== */
+function parse(raw){
+ let t=words2num(norm(raw));const f={};const used=new Set();
+ if(/^(ابدا|ابتدي|نبدا)?\s*(من (الاول|جديد)|بيمنت جديد|reset)/.test(t)||/^جديد$/.test(t))f.reset=true;
+ /* الوحدة */
+ let m=t.match(/\b([ab])\s*-?\s*(\d{2})\s*-?\s*(\d{1,2})\s*-?\s*([fs]?\d{1,2})\b/i);
+ if(m){const c=(m[1].toUpperCase()+'-'+m[2]+'-'+m[3].padStart(2,'0')+'-'+(/^[fs]/i.test(m[4])?m[4].toUpperCase():m[4].padStart(2,'0')));f.unit=c;used.add(m.index)}
+ else{const b=t.match(/(عماره|مبني|بلوك|عمارة)\s*([ab])?\s*-?\s*(\d{2})/),fl=t.match(/(دور|الدور)\s*(ال)?(ارضي|\d{1,2})/),md=t.match(/(نموذج|نمودج|موديل|شقه|وحده)\s*(رقم\s*)?([fs]?\d{1,2})/);
+  if(b){const nums=Object.keys(BY).map(c=>c.split('-').slice(0,2).join('-'));const cands=[...new Set(nums)].filter(x=>x.endsWith('-'+b[3])&&(!b[2]||x[0]===b[2].toUpperCase()));
+   if(cands.length===1)f.bld=cands[0];else if(cands.length>1)f.bldAmb=cands}
+  if(fl)f.floor=fl[3]==='ارضي'?'00':fl[3].padStart(2,'0');
+  if(md)f.model=/^[fs]/i.test(md[3])?md[3].toUpperCase():md[3].padStart(2,'0')}
+ /* النظام */
+ if(/كاش|cash|نقدي/.test(t))f.sys='cash';
+ const semi=/نص سنوي|نصف سنوي|كل 6 شهور|كل سته شهور/.test(t);
+ const sysRe=/(نظام|علي|ع|بيمنت|سيستم)?\s*(\d{1,2})\s*(سنين|سنوات|سنه|سنة|years)/g;let sm;
+ while((sm=sysRe.exec(t))){const pre=t.slice(Math.max(0,sm.index-8),sm.index);const n=+sm[2];
+  if(/اول|لمده|مده|خلال|اخر/.test(pre)||/اول\s*$/.test(t.slice(0,sm.index+ (sm[1]?sm[1].length:0))))continue;
+  if([3,5,6,8,9,10].includes(n)){f.sys=String(n)+(semi&&[8,9,10].includes(n)?'s':'');}}
+ if(/اول\s*(سنه|سنة)\b/.test(t))f.spYrs=1;if(/اول\s*سنتين/.test(t))f.spYrs=2;
+ m=t.match(/(اول|لمده|مده|خلال)\s*(\d{1,2})\s*(سنين|سنوات|سنه|سنة)/);if(m)f.spYrs=Math.min(13,+m[2]);
+ if(/طول (المده|الفتره|مده السداد)|كل المده/.test(t))f.spYrs='all';
+ /* بالك ديل */
+ if(/بالك ديل|بلك ديل|مستشار|bulk/.test(t))f.bd=true;
+ /* خصم */
+ m=t.match(/خصم\s*(\d+(?:\.\d+)?)\s*%?/);if(m)f.disc=+m[1];if(/من غير خصم|بدون خصم|مفيش خصم/.test(t))f.disc=0;
+ /* صيانة */
+ m=t.match(/(صيانه|مقايسات)\s*(\d+(?:\.\d+)?)\s*%/);if(m)f.mpct=+m[2];
+ /* تكرار */
+ if(/كل شهر|شهري|شهريا|بالشهر|monthly/.test(t))f.freq='m';
+ if(/كل كوارتر|كوارتر|كورتر|كوتر|ربع سنوي|كل 3 شهور|كل تلات شهور|quarter/.test(t)&&!/(زود|زياده|نقص|قلل|شيل|يشيل|بعد)\s*\d*\s*(كوارتر|كورتر|كوتر)/.test(t))f.freq=f.freq||'q';
+ /* دفعات سنوية */
+ if(/(من غير|بدون|مفيش|ملهوش|مش عاوز)\s*(اي\s*)?(دفعات|دفعه)?\s*سنوي/.test(t))f.ym='none';
+ else if(/سنوي(ه)?\s*(تلقائي|اوتوماتيك|اتوماتيك)|احسب(ها)?\s*(ال)?سنوي|سنويه تتحسب/.test(t))f.ym='auto';
+ /* بداية الأقساط */
+ if(/(يشيل|نشيل|شيل|من غير|بدون)\s*(اول|ال1)\s*(كوارتر|كورتر|كوتر|قسط)/.test(t))f.shift=6;
+ m=t.match(/(يبدا|نبدا|تبدا|يبتدي|اول قسط|الاقساط|يقسط|التقسيط)[^.،,]{0,20}?بعد\s*(\d{1,2})\s*(شهور|شهر|اشهر)/);if(m&&!/اسبشيل|الاسبشيل/.test(m[0]))f.shift=+m[2];
+ m=t.match(/(يبدا|نبدا|اول قسط|الاقساط|يقسط)[^.،,]{0,20}?بعد\s*(سنه|سنة)/);if(m)f.shift=12;
+ m=t.match(/(الاسبشيل|السبشيل)[^.،,]{0,20}?بعد\s*(\d{1,2})\s*(كوارتر|كورتر|كوتر)/);if(m)f.spStart=Math.min(10,+m[2]);
+ /* زيادة/نقص كوارتر */
+ m=t.match(/(زود|زياده|ضيف|اضافه|\+)\s*(\d{1,2})\s*(كوارتر|كورتر|كوتر)/);if(m)f.extra=+m[2];
+ m=t.match(/(نقص|قلل|شيل|انقص|-)\s*(\d{1,2})\s*(كوارتر|كورتر|كوتر)/);if(m)f.extra=-m[2];
+ /* دفعة الـ5% بعد 6 شهور */
+ if(/(شيل|نشيل|من غير|بدون)\s*(دفعه)?\s*(ال)?\s*5\s*%?\s*(بتاعت|بتاعه|اللي)?\s*(بعد)?\s*(ال)?\s*6\s*شهور/.test(t))f.keep=false;
+ /* الاسم والتاريخ */
+ m=String(raw).match(/(اسم العميل|اسمه|العميل اسمه|العميل|الاستاذ|أ\/|ا\/|مدام|الدكتور|د\/)\s*[:：]?\s*([^\d،,.\n؟?]{2,40})/);
+ if(m&&!/عاوز|محتاج|هيدفع|بيدفع|يدفع|مقدم|قسط/.test(m[2]))f.name=m[2].replace(/\s+(و|عاوز|محتاج).*$/,'').trim();
+ m=t.match(/(تاريخ (التعاقد|العقد)|التعاقد|العقد)\s*(يوم)?\s*(\d{1,2})[\/\-.](\d{1,2})(?:[\/\-.](\d{2,4}))?/);
+ if(m){let y=m[6]?+m[6]:new Date().getFullYear();if(y<100)y+=2000;f.contract=y+'-'+String(m[5]).padStart(2,'0')+'-'+String(m[4]).padStart(2,'0')}
+ /* المبالغ والنسب */
+ const A=amounts(t).filter(a=>!(f.unit&&/\d{2}-\d{2}/.test(a.raw)));
+ for(const a of A){
+  if(a.v<=31&&!a.unit&&!a.pct&&near(t,a,/(سنين|سنه|سنوات|سنتين|شهور|شهر|كوارتر|كورتر|كوتر|دور|نموذج|عماره|يوم|\/)/,6,10))continue;
+  const cat=classify(t,a);
+  if(cat==='disc'||cat==='maint')continue;
+  if(cat==='dp'){if(a.pct||(a.v<=60&&!a.unit))f.dpPct=a.v;else f.dpAmt=a.v;continue}
+  if(cat==='y'){f.y=a.v;f.ym='fix';continue}
+  if(a.pct)continue;
+  if(a.v>=1000){if(f.bd&&(a.v===10000||a.v===15000)){f.bdAmt=a.v;continue}
+   if(f.q===undefined)f.q=a.v;else f.extraAmt=(f.extraAmt||[]).concat(a.v)}}
+ /* أسئلة؟ */
+ f.question=/(ازاي|ازay|ايه|اي هو|يعني ايه|فين|امتي|ليه|هل|ممكن اعرف|\?|؟)/.test(t)&&!f.unit&&!f.sys&&f.q===undefined&&f.dpAmt===undefined&&f.dpPct===undefined;
+ f._t=t;return f}
+
+/* ===== قاعدة معرفة ===== */
+const KB=[
+ [/بالك ديل|مستشار/,'🤝 <b>بالك ديل (المستشارين):</b> من «بيمنت اسبشيل» دوس زرار بالك ديل. خصم 15% على كل الأنظمة، صيانة 8%، و3 أنظمة: 6 سنين (أقساط ربع سنوية متساوية)، و8 و10 سنين بقسط 10 أو 15 ألف شهري أو كل كوارتر ودفعات سنوية بتعوّض الباقي. نظام 10 سنين مقدمه 10% واستلامه 10%. وتقدر تقولي «بالك ديل 8 سنين 10 الف شهري» وأنا أعمله.'],
+ [/اطبع|طباعه|pdf|بي دي اف/,'🖨️ زرار «طباعة / PDF» فوق ورقة البيمنت. لو البيمنت طويل بيطلع في كذا صفحة مليانة، والتوقيعات بتيجي بعد الجدول على طول.'],
+ [/اكسل|excel/,'📊 زرار Excel جنب زرار الطباعة بيطلّع البيمنت كشيت.'],
+ [/اسبشيل|سبشيل|special/,'⭐ <b>البيمنت الاسبشيل:</b> دوس «بيمنت اسبشيل» (من غير باسورد). تقدر تحدد مقدم بأي مبلغ، وقسط ثابت كل كوارتر أو كل شهر لأول كام سنة، وبعدها النظام يرجع طبيعي، ودفعات سنوية (أو من غيرها)، وتزود أو تنقص كوارترات. أو قولّي الكلام بلغتك: «مقدم 300 الف وأول 3 سنين 60 الف كل كوارتر وبعد كده عادي».'],
+ [/كوارتر|كورتر|كوتر/,'➕➖ في البيمنت العادي تحت الكروت فيه «تعديل عدد الكوارترات» من −12 لـ +12، والأقساط بتتوزع بالتساوي. في الاسبشيل فيه خانة من −8 لـ +8.'],
+ [/صيانه|مقايسات/,'🛠️ الصيانة والمقايسات 10% من سعر الوحدة (8% في بالك ديل). في الاسبشيل تقدر تغيّر النسبة وتقسّطها على قسطين أو 3.'],
+ [/عقد|contract/,'📝 «وضع العقد» بيحط التوقيعات في آخر كل صفحة، وبيحتاج باسورد 2MDY من الإدارة.'],
+ [/hold|محجوز/,'⚠️ الوحدة المحجوزة (Hold) تقدر تعمل لها بيمنت، بس بيظهر تنبيه إنك بتتحمل المسؤولية كاملة.'],
+ [/اخر 5|اخر خمس|ارجع لبيمنت|السجل/,'🕘 زرار «آخر 5 بيمنت» فوق شيت الإدخال بيرجّعك لأي بيمنت من آخر 5 عملتهم على الجهاز ده.'],
+ [/جديد|من الاول|امسح/,'🔄 زرار «ابدأ بيمنت جديد» بيمسح كل البيانات (بيسألك «متأكد؟» الأول). أو اكتبلي «من الأول».'],
+ [/مساحه|متر|نموذج/,'📐 اختار العمارة ثم الدور ثم النموذج، والمساحة بتظهر جنب النموذج. أو قولّي كود الوحدة زي A-37-03-05.'],
+ [/خصم/,'💸 خانة «خصم اللونش» في شيت الإدخال. الخصم ليه حد أقصى حسب النظام، ولو عديته بيطلب موافقة.'],
+ [/اقتراح|مشكله|شكوي/,'💡 في آخر الصفحة صندوق «تحب تضيف حاجة تسهّل البيمنت؟» – اكتب فيه وهيوصل للإدارة على طول.'],
+ [/مغامره|لعبه|game/,'🕹️ زرار «مغامرة» تحت بيحوّل البرنامج للعبة، والشكل الرسمي بيرجع بزرار تاني.']
+];
+function kbAnswer(t){for(const [re,a] of KB)if(re.test(t))return a;return null}
+
+/* ===== المحادثة ===== */
+function merge(f){
+ if(f.reset){ST=S0();return}
+ for(const k of ['unit','bld','floor','model','sys','spYrs','bd','bdAmt','disc','mpct','freq','ym','y','shift','spStart','extra','keep','name','contract','dpPct','dpAmt','q'])if(f[k]!==undefined)ST[k]=f[k];
+ if(f.bldAmb&&!ST.bld)ST.bldAmb=f.bldAmb;
+ if(!ST.unit&&ST.bld&&ST.floor&&ST.model){const c=ST.bld+'-'+ST.floor+'-'+ST.model;if(BY[c])ST.unit=c;else ST.unitBad=c}
+ if(f.extraAmt)ST.extraAmt=f.extraAmt}
+const isSpecial=()=>ST.q!==undefined||ST.dpAmt!==undefined||ST.ym==='fix'||ST.ym==='auto'||ST.spStart!==undefined||ST.keep===false||(ST.dpPct!==undefined&&!['3','5'].includes(ST.sys||''));
+function nextQ(){
+ if(ST.unitBad){const c=ST.unitBad;delete ST.unitBad;return{q:`مش لاقي وحدة بالكود <b>${c}</b>. اكتب الكود صح (زي A-37-03-05).`}}
+ if(!ST.unit){const cur=($('code').value||'').trim().toUpperCase();
+  if(ST.bldAmb)return{q:'أنهي عمارة بالظبط؟',opts:ST.bldAmb.map(b=>[b,()=>{ST.bld=b;delete ST.bldAmb}])};
+  if(ST.bld&&!ST.floor)return{q:'الوحدة في أنهي دور؟',opts:[['أرضي','الدور الارضي'],['1','دور 1'],['2','دور 2'],['3','دور 3'],['4','دور 4'],['5','دور 5']]};
+  if(ST.bld&&ST.floor&&!ST.model){const ms=Object.keys(BY).filter(c=>c.startsWith(ST.bld+'-'+ST.floor+'-')).map(c=>c.split('-')[3]);return{q:'أنهي نموذج؟',opts:ms.slice(0,16).map(x=>[x,()=>{ST.model=x;merge({})}])}}
+  if(cur&&BY[cur])return{q:`نشتغل على الوحدة اللي مختارها <b>${cur}</b>؟`,opts:[['أيوه '+cur,()=>{ST.unit=cur}],['لأ، وحدة تانية',()=>{ST.askUnit=1}]]};
+  return{q:'كود الوحدة إيه؟ اكتبه زي <b>A-37-03-05</b> أو «عمارة 37 دور 3 نموذج 5».'}}
+ if(ST.bd){if(!ST.sys||!['6','8','10'].includes(ST.sys))return{q:'بالك ديل: أنهي نظام؟',opts:[['6 سنين',()=>{ST.sys='6'}],['8 سنين',()=>{ST.sys='8'}],['10 سنين',()=>{ST.sys='10'}]]};
+  if(ST.sys!=='6'&&!ST.bdAmt)return{q:'القسط الشهري 10 آلاف ولا 15 ألف؟',opts:[['10,000',()=>{ST.bdAmt=10000}],['15,000',()=>{ST.bdAmt=15000}]]};
+  if(ST.sys!=='6'&&!ST.freq)return{q:'هيدفع كل شهر ولا كل كوارتر؟',opts:[['كل شهر',()=>{ST.freq='m'}],['كل كوارتر (3 أضعاف)',()=>{ST.freq='q'}]]};
+  return null}
+ if(!ST.sys)return{q:'على أنهي نظام؟',opts:Object.keys(SYS).filter(k=>vis(k)&&!SYS[k].adm).map(k=>[sysName(k),()=>{ST.sys=k}])};
+ if(SYS[ST.sys].cash)return null;
+ if(ST.extraAmt&&ST.extraAmt.length){const v=ST.extraAmt[0];return{q:`مبلغ <b>${money(v)}</b> ده إيه بالظبط؟`,opts:[['قسط',()=>{ST.q=v;ST.extraAmt.shift()}],['مقدم',()=>{ST.dpAmt=v;ST.extraAmt.shift()}],['دفعة سنوية',()=>{ST.y=v;ST.ym='fix';ST.extraAmt.shift()}],['تجاهله',()=>{ST.extraAmt.shift()}]]}}
+ if(ST.q!==undefined&&!ST.freq)return{q:`القسط <b>${money(ST.q)}</b> ده كل كوارتر ولا كل شهر؟`,opts:[['كل كوارتر',()=>{ST.freq='q'}],['كل شهر',()=>{ST.freq='m'}]]};
+ if(ST.q!==undefined&&ST.spYrs===undefined)return{q:`القسط ده (${money(ST.q)}) لمدة قد إيه، وبعدها يرجع النظام طبيعي؟`,opts:[['أول سنة',()=>{ST.spYrs=1}],['أول سنتين',()=>{ST.spYrs=2}],['أول 3 سنين',()=>{ST.spYrs=3}],['أول 4 سنين',()=>{ST.spYrs=4}],['أول 5 سنين',()=>{ST.spYrs=5}],['طول المدة',()=>{ST.spYrs='all'}]]};
+ if(isSpecial()&&!ST.ym)return{q:'فيه دفعات آخر كل سنة؟',opts:[['لأ، من غير',()=>{ST.ym='none'}],['أيوه، احسبها تلقائي',()=>{ST.ym='auto'}],['أيوه، هقولك المبلغ',()=>{ST.ym='fix';ST.askY=1}]]};
+ if(ST.ym==='fix'&&!ST.y)return{q:'الدفعة السنوية كام؟ (اكتب المبلغ)'};
+ if(['3','5'].includes(ST.sys)&&ST.dpAmt===undefined&&ST.dpPct===undefined&&!(+$('dp').value))return{q:`نظام ${ST.sys} سنين المقدم بتحدده انت. العميل هيدفع مقدم كام؟ (مبلغ أو نسبة)`};
+ return null}
+function summary(){const L=[],s=ST;const sp=isSpecial();
+ L.push('🏠 الوحدة: <b>'+s.unit+'</b>');
+ if(s.name)L.push('👤 العميل: '+esc(s.name));
+ L.push('📅 النظام: <b>'+(s.bd?'بالك ديل – ':'')+sysName(s.sys)+'</b>'+(sp?' (اسبشيل)':''));
+ if(s.contract)L.push('🗓️ تاريخ التعاقد: '+s.contract);
+ if(s.disc!==undefined&&!s.bd)L.push('💸 خصم: '+s.disc+'%');
+ if(s.dpAmt!==undefined)L.push('💰 مقدم: '+money(s.dpAmt));else if(s.dpPct!==undefined)L.push('💰 مقدم: '+s.dpPct+'%');
+ if(s.bd&&s.sys!=='6')L.push('💳 القسط: '+(s.freq==='m'?money(s.bdAmt)+' كل شهر':money(s.bdAmt*3)+' كل كوارتر'));
+ if(s.q!==undefined)L.push('💳 القسط: <b>'+money(s.q)+'</b> '+(s.freq==='m'?'كل شهر':'كل كوارتر')+(s.spYrs==='all'?' طول المدة':' لأول '+s.spYrs+(s.spYrs==1?' سنة':' سنين')+' وبعدها النظام طبيعي'));
+ else if(sp&&s.freq==='m')L.push('💳 الأقساط شهرية');
+ if(s.ym==='none')L.push('📆 من غير دفعات سنوية');else if(s.ym==='auto')L.push('📆 دفعات سنوية بتتحسب تلقائي');else if(s.ym==='fix')L.push('📆 دفعة سنوية: '+money(s.y));
+ if(s.shift)L.push('⏩ أول قسط بعد '+s.shift+' شهور من التعاقد');
+ if(s.spStart)L.push('⏳ الاسبشيل يبدأ بعد '+s.spStart+' كوارتر');
+ if(s.extra)L.push((s.extra>0?'➕ زيادة ':'➖ نقص ')+Math.abs(s.extra)+' كوارتر');
+ if(s.keep===false)L.push('✂️ من غير دفعة الـ5% بعد 6 شهور');
+ if(s.mpct!==undefined&&!s.bd)L.push('🛠️ صيانة '+s.mpct+'%');
+ return L.join('<br>')}
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ===== تطبيق على البرنامج ===== */
+function setV(id,v){const e=$(id);if(!e)return;if(e.type==='checkbox')e.checked=!!v;else e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}))}
+function apply(){const s=ST;try{
+ if(AU.on)setUnitMode('res');
+ setV('code',s.unit);try{syncSel()}catch(e){}
+ if(s.name!==undefined)$('name').value=s.name;
+ if(s.contract)$('contract').value=s.contract;
+ if(!s.bd)$('disc').value=s.disc!==undefined?s.disc:($('disc').value||0);
+ NX=0;$('nxSel').value=0;
+ const sp=isSpecial();
+ if(s.bd||sp||s.mpct!==undefined){if(!SP.ok)spUnlock()}
+ if(SP.ok){BD.on=!!s.bd;$('spOn').checked=sp&&!s.bd}
+ if(s.bd){BD.amt=s.bdAmt||10000;BD.freq=s.freq||'m'}
+ const I0=BY[s.unit],gross=I0?(unitInfo()||{}).gross:0,net=gross*(1-((+$('disc').value||0)/100));
+ if(['3','5'].includes(s.sys)&&!sp){if(s.dpAmt!==undefined)$('dp').value=Math.round(s.dpAmt);else if(s.dpPct!==undefined)$('dp').value=Math.round(net*s.dpPct/100)}
+ if(sp){
+  $('spDp').value=s.dpAmt!==undefined?Math.round(s.dpAmt):s.dpPct!==undefined?Math.round(net*s.dpPct/100):'';
+  $('spFreq').value=s.freq==='m'?'m':'q';
+  $('spQ').value=s.q!==undefined?Math.round(s.q):'';
+  $('spStart').value=s.spStart||0;
+  $('spYm').value=s.ym==='fix'?'0':s.ym==='auto'?'1':'2';
+  $('spY').value=s.ym==='fix'?Math.round(s.y||0):'';
+  const yrs=s.spYrs==='all'?(SYS[s.sys]&&SYS[s.sys].n||13):(s.spYrs||3);$('spYrs').value=Math.min(13,Math.max(1,yrs));
+  $('spKeep').value=s.keep===false?'0':'1';
+  $('spExtra').value=Math.max(-8,Math.min(8,s.extra||0));
+ }else if(s.extra){NX=Math.max(-12,Math.min(12,s.extra));$('nxSel').value=NX}
+ if(s.mpct!==undefined&&!s.bd&&$('spMPct'))$('spMPct').value=s.mpct;
+ if(s.shift){const c=pd($('contract').value);if(c){firstTouched=true;$('first').value=iso(addM(c,s.shift))}}else{firstTouched=false}
+ window.BDNOASK=true;try{pick(s.sys)}finally{window.BDNOASK=false}
+ render();return report()}catch(e){return '⚠️ حصلت مشكلة وأنا بطبّق: '+esc(e.message)+'. جرّب تعدّل من الشيت بنفسك أو ابعت الحالة في صندوق الاقتراحات.'}}
+function report(){const P=$('planBody'),warns=[...P.querySelectorAll('.appr,.warn,.err')].map(e=>e.innerText.trim()).filter(Boolean).slice(0,3);
+ const snap=planSnapshot();if(!snap||!P.querySelector('.paper'))return warns.length?'✋ <b>ظبطت كل البيانات</b>، بس البيمنت محتاج تأكيد منك على الشيت قبل ما يظهر:<br><span class="botW">'+warns.map(esc).join('<br>')+'</span><br>علّم على التأكيد في الشيت تحت والورقة هتظهر على طول.':'⚠️ البيمنت ما ظهرش – بُص على الشيت وكمّل البيانات الناقصة.';
+ const p=snap.payload;const S=SYS[sel];let r=null;try{const I=unitInfo(),d=bdD()!==null?bdD():(+$('disc').value||0)/100;r=calc(sel,I.gross*(1-d),bdK(sel)?0:dpGet())}catch(e){}
+ let tot='';if(r){const sum=r.dp+(r.del||0)+(r.six||0)+(r.extra||0)+r.rows.reduce((a,b)=>a+b,0)+(r.ye||[]).reduce((a,b)=>a+b,0);tot=Math.abs(sum-p.net)<1?'✅ الإجمالي مظبوط 100%':''}
+ const L=['✅ <b>البيمنت جاهز</b> على الشيت:','💰 المقدم: <b>'+money(p.dp)+'</b>','💳 أول قسط: <b>'+money(p.firstInst)+'</b> • عدد الأقساط: '+p.installments];
+ if(r&&r.ye&&r.ye.length)L.push('📆 الدفعة السنوية: '+money(r.ye[0])+(r.ye.length>1?' × '+r.ye.length:''));
+ L.push('🏷️ السعر بعد الخصم: '+money(p.net));if(tot)L.push(tot);
+ if(warns.length)L.push('<span class="botW">⚠️ '+warns.map(esc).join('<br>⚠️ ')+'</span>');
+ L.push('بُص على الورقة تحت، ولو عاوز تغيّر حاجة قولّي (مثلًا «خلي القسط 50 الف» أو «زود 2 كوارتر»).');
+ return L.join('<br>')}
+
+/* ===== الواجهة ===== */
+const css=`.botFab{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 70px);z-index:60;border:0;border-radius:99px;padding:12px 18px;font:inherit;font-weight:800;font-size:14.5px;color:#fff;background:linear-gradient(135deg,#1c3456,#0f5c52);box-shadow:0 10px 26px -8px rgba(15,92,82,.7);cursor:pointer;display:flex;align-items:center;gap:8px}
+.botFab:hover{transform:translateY(-2px)}.botFab .dot{width:9px;height:9px;border-radius:50%;background:#5fe08f;box-shadow:0 0 0 3px rgba(95,224,143,.3)}
+#botW{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 70px);z-index:9998;width:min(400px,calc(100vw - 24px));height:min(620px,calc(100vh - 100px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 70px -20px rgba(0,0,0,.5);display:flex;flex-direction:column;overflow:hidden}
+#botW[hidden]{display:none}.botH{display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(135deg,#1c3456,#0f5c52);color:#fff}.botH b{font-size:15.5px;display:block}.botH small{font-size:11.5px;opacity:.85}.botH .x{margin-inline-start:auto;border:0;background:rgba(255,255,255,.15);color:#fff;width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:16px}.botH .nw{border:0;background:rgba(255,255,255,.15);color:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font:inherit;font-size:12px}
+.botL{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--chip)}.bm{max-width:88%;padding:9px 12px;border-radius:14px;line-height:1.75;font-size:14px;white-space:normal;overflow-wrap:anywhere}.bm.b{background:var(--card);border:1px solid var(--line);align-self:flex-start;border-top-right-radius:4px}.bm.u{background:#0f5c52;color:#fff;align-self:flex-end;border-top-left-radius:4px}
+.bq{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;max-width:95%}.bq button{border:1.5px solid #0f5c52;background:var(--card);color:var(--ink);border-radius:20px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.bq button:hover{background:#0f5c52;color:#fff}.bq button.go{background:#0f5c52;color:#fff}
+.botI{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:var(--card)}.botI textarea{flex:1;resize:none;height:44px;max-height:110px;font:inherit;font-size:14px;line-height:1.5;padding:10px;border-radius:12px}.botI button{border:0;border-radius:12px;padding:0 16px;background:#0f5c52;color:#fff;font:inherit;font-weight:800;cursor:pointer}.botW{color:#b4552c}
+@media print{.botFab,#botW{display:none!important}}
+@media (max-width:520px){#botW{right:0;left:0;bottom:0;width:100%;height:100%;border-radius:0}}`;
+const st=document.createElement('style');st.textContent=css;document.head.appendChild(st);
+const fab=document.createElement('button');fab.className='botFab noprint';fab.type='button';fab.innerHTML='<span class="dot"></span>🤖 مساعد البيمنت';document.body.appendChild(fab);
+const w=document.createElement('div');w.id='botW';w.hidden=true;w.setAttribute('role','dialog');w.setAttribute('aria-label','مساعد البيمنت');
+w.innerHTML='<div class="botH"><span style="font-size:24px">🤖</span><div><b>مساعد البيمنت</b><small>احكيلي العميل عاوز إيه وأنا أظبطهولك</small></div><button class="nw" type="button" id="botNew">من الأول</button><button class="x" type="button" id="botX" aria-label="إغلاق">✕</button></div><div class="botL" id="botL"></div><div class="botI"><textarea id="botT" placeholder="مثلًا: A-37-03-05 على 8 سنين، مقدم 300 الف، وأول 3 سنين 60 الف كل كوارتر وبعد كده عادي"></textarea><button type="button" id="botS">إرسال</button></div>';
+document.body.appendChild(w);
+const L=$('botL');
+function say(h,who){const d=document.createElement('div');d.className='bm '+(who||'b');d.innerHTML=h;L.appendChild(d);L.scrollTop=L.scrollHeight;return d}
+function opts(list){L.querySelectorAll('.bq').forEach(x=>x.remove());if(!list||!list.length)return;const d=document.createElement('div');d.className='bq';
+ list.forEach(([lab,act,cls])=>{const b=document.createElement('button');b.type='button';b.textContent=lab;if(cls)b.className=cls;b.onclick=()=>{d.remove();say(esc(lab),'u');if(typeof act==='function'){if(act()!=='stop')step()}else handle(String(act))};d.appendChild(b)});L.appendChild(d);L.scrollTop=L.scrollHeight}
+function hello(){L.innerHTML='';say('أهلًا 👋 أنا مساعد البيمنت.<br>احكيلي العميل عاوز إيه بكلامك العادي، وأنا هفهم وأسألك على أي حاجة ناقصة، وبعدين أطلّع البيمنت على الشيت.<br><br>أمثلة:<br>• <i>A-37-03-05 على 8 سنين، مقدم 300 الف، وأول 3 سنين 60 الف كل كوارتر وبعدها عادي</i><br>• <i>عمارة 42 دور 2 نموذج 3، 10 سنين، يشيل أول كوارتر ويبدأ بعد 6 شهور</i><br>• <i>بالك ديل 10 سنين 15 الف شهري</i><br>• أو اسألني: <i>إزاي أطبع؟</i>');
+ opts([['💡 مثال جاهز','A-42-00-03 على 8 سنين مقدم 300 الف واول 3 سنين 60 الف كل كوارتر وبعد كده عادي من غير دفعات سنويه'],['❓ إيه اللي تقدر تعمله؟','تقدر تعمل ايه']])}
+function logMiss(t){try{if(typeof apiCall==='function'&&apiUrl()&&sesOk())apiCall({action:'feedback',token:SES.token,type:'سؤال للمساعد',text:'[المساعد مافهمش] '+t.slice(0,900),unit:($('code').value||'')}).catch(()=>{})}catch(e){}}
+function step(){const q=nextQ();if(q){say(q.q);opts(q.opts||[]);return}
+ say('تمام، ده اللي فهمته:<br>'+summary());opts([['✅ طبّق البيمنت',()=>{const r=apply();ST.applied=true;say(r);opts([['✏️ عدّل حاجة',()=>{say('قولّي عاوز تغيّر إيه.');return 'stop'}],['🔄 بيمنت جديد',()=>{ST=S0();hello();return 'stop'}]]);return 'stop'},'go'],['✏️ عدّل حاجة',()=>{say('قولّي عاوز تغيّر إيه (مثلًا «القسط 50 الف» أو «من غير سنوي»).');return 'stop'}],['🔄 من الأول',()=>{ST=S0();hello();return 'stop'}]])}
+function handle(text){const raw=String(text||'').trim();if(!raw)return;
+ const t=norm(raw);
+ if(/^(تقدر تعمل ايه|بتعمل ايه|مساعده|help|ساعدني)$/.test(t)){say('أقدر:<br>• أعمل بيمنت عادي أو اسبشيل أو بالك ديل من كلامك<br>• أفهم المقدم (مبلغ أو نسبة)، القسط كل شهر أو كوارتر ولمدة قد إيه، الدفعات السنوية، الخصم، تأخير أول قسط، زيادة/نقص كوارترات، اسم العميل وتاريخ التعاقد<br>• أسألك على أي حاجة ناقصة أو مش واضحة<br>• أجاوب على أسئلة زي «إزاي أطبع» أو «يعني إيه بالك ديل»');return}
+ const f=parse(raw);
+ if(f.reset){ST=S0();hello();return}
+ if(ST.askY&&!f.y){const a=amounts(t);if(a.length){f.y=a[0].v;f.ym='fix'}}
+ if(['3','5'].includes(ST.sys||f.sys||'')&&f.dpAmt===undefined&&f.dpPct===undefined&&ST.unit&&!/قسط|كوارتر|شهر/.test(t)){const a=amounts(t);if(a.length===1&&f.q!==undefined){if(a[0].pct||/%/.test(t))f.dpPct=a[0].v;else f.dpAmt=a[0].v;delete f.q}}
+ delete ST.askY;
+ const keys=Object.keys(f).filter(k=>!['_t','question','bldAmb','extraAmt'].includes(k)&&f[k]!==undefined&&f[k]!==false||k==='keep'&&f.keep===false);
+ if(f.question||(!keys.length&&!f.bldAmb&&!f.extraAmt)){const a=kbAnswer(t);if(a){say(a);return}
+  if(!keys.length){say('معلش مش فاهم قصدك 🙏 جرّب تكتبها بشكل تاني، زي: «8 سنين مقدم 300 الف وقسط 60 الف كل كوارتر لأول 3 سنين».<br><small>(بعتّ سؤالك للإدارة علشان أتعلمه المرة الجاية)</small>');logMiss(raw);return}}
+ if(ST.applied&&((f.unit&&f.unit!==ST.unit)||f.bld||(f.bd&&!ST.bd)))ST=S0();delete ST.applied;
+ merge(f);
+ if(f.q!==undefined&&ST.sys&&SYS[ST.sys]&&ST.spYrs===undefined&&/طول|كل المده/.test(t))ST.spYrs='all';
+ step()}
+function send(){const t=$('botT').value;if(!t.trim())return;L.querySelectorAll('.bq').forEach(x=>x.remove());say(esc(t),'u');$('botT').value='';handle(t)}
+$('botS').onclick=send;$('botT').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+fab.onclick=()=>{w.hidden=false;fab.style.display='none';if(!L.children.length)hello();setTimeout(()=>$('botT').focus(),50)};
+$('botX').onclick=()=>{w.hidden=true;fab.style.display=''};
+$('botNew').onclick=()=>{ST=S0();hello()};
+window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
+})();
+
+</script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261108-095446";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261108-102847";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
