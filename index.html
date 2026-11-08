@@ -183,6 +183,7 @@ select:disabled{opacity:.5}
 #bdQ{position:fixed;inset:0;z-index:9999;background:rgba(10,18,32,.6);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:16px}.bdQb{width:min(460px,100%);background:var(--card);color:var(--ink);border-radius:20px;padding:20px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);border:1px solid var(--gold)}.bdQb h3{margin:0 0 4px;font-size:19px}.bdQb .q{margin-top:16px;font-weight:800}.bdQo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.bdQo button{padding:12px 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--chip);color:var(--ink);font:inherit;font-weight:800;cursor:pointer;line-height:1.4}.bdQo button small{display:block;font-weight:600;font-size:12px;color:var(--mut)}.bdQo button.on{border-color:var(--g1);background:var(--g1);color:#fff}.bdQo button.on small{color:#e3efe9}.bdQa{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
 .fbP{border:1.5px dashed var(--gold)}.fbH{display:flex;gap:12px;align-items:center}.fbI{font-size:34px}.fbT{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}.fbT button{padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;font-size:13.5px;cursor:pointer}.fbT button.on{background:var(--g1);border-color:var(--g1);color:#fff}#fbX{width:100%;resize:vertical;min-height:96px;font:inherit;line-height:1.7}.fbF{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}.fbOk{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(31,140,90,.12);color:var(--g1);font-weight:700}
 .recBar{display:flex;gap:8px;flex-wrap:wrap;margin:-4px 0 14px}.recB{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;font-size:14px;cursor:pointer;transition:.2s}.recB:hover{border-color:var(--gold);transform:translateY(-1px)}.recB.new{color:var(--g1)}.recB.arm{background:#b23b3b;color:#fff;border-color:#b23b3b}.recN{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--gold);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center}.recList{margin:-6px 0 14px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}.recIt{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line)}.recIt:last-of-type{border-bottom:0}.recIx{width:28px;height:28px;border-radius:50%;background:var(--chip);color:var(--g1);font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}.recTx{flex:1;min-width:0;line-height:1.5}.recTx b{font-size:14.5px}.recTx small{display:block;color:var(--mut);font-size:12px}.recGo{padding:7px 14px;font-size:13px}.recEm{padding:14px;color:var(--mut);text-align:center}.recFt{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--chip);font-size:12px;color:var(--mut)}.recFt button{border:0;background:none;color:#b23b3b;text-decoration:underline;cursor:pointer;font:inherit}
+.sk1W{display:flex!important;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;border:1px dashed var(--line);border-radius:14px;background:var(--chip);font-size:13.5px;line-height:1.7;cursor:pointer;color:var(--ink)}.sk1W[hidden]{display:none!important}.sk1W input{width:20px;height:20px;margin-top:3px;flex:none}.sk1W.on{border-style:solid;border-color:var(--gold)}
 .nxbox{display:none;margin-top:14px;padding:12px 14px;border:1px dashed var(--gold);border-radius:14px;background:var(--chip);align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.nxbox.on{display:flex}.nxl{display:flex;flex-direction:column;gap:3px}.nxl span{font-size:12.5px;color:var(--mut)}.nxc{display:flex;align-items:center;gap:6px}.nxc select{width:auto;min-width:130px;text-align:center;font-weight:700}.nxb{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--g1);font-size:22px;font-weight:800;cursor:pointer;line-height:1}.nxb:disabled{opacity:.35;cursor:default}.nxr{border:0;background:none;color:var(--mut);text-decoration:underline;cursor:pointer;font-size:13px}.nxbox.chg{border-style:solid;box-shadow:0 0 0 3px rgba(184,151,90,.18)}#nxNote{margin-top:8px;font-weight:700;color:var(--g1)}
 .foot{color:var(--mut);text-align:center;margin-top:26px;font-size:12.5px;letter-spacing:.04em}
 .paper.printing{width:733px;max-width:none;margin:0 auto;padding:10px 14px;border:0;box-shadow:none;font-size:13.5px}
@@ -428,6 +429,7 @@ select:disabled{opacity:.5}
 <div class="cards" id="cards"></div>
 <div id="nxBox" class="nxbox"><div class="nxl"><b>➕➖ تعديل عدد الكوارترات</b><span>زوّد أو نقّص لغاية 12 كوارتر على النظام – والباقي بيتوزع على الأقساط بالتساوي</span></div><div class="nxc"><button type="button" class="nxb" id="nxM" aria-label="نقص كوارتر">−</button><select id="nxSel"></select><button type="button" class="nxb" id="nxP" aria-label="زود كوارتر">+</button><button type="button" class="nxr" id="nxR">رجوع للنظام</button></div></div>
 <div id="nxNote" class="hint" style="display:none"></div>
+<label id="sk1W" class="sk1W" style="display:none"><input type="checkbox" id="sk1"> <span><b>⏭️ شيل أول كوارتر</b> – العميل مش هيدفعه وبيبدأ يدفع بعد 6 شهور، ومبلغه بيتوزع على باقي الأقساط (أو الدفعات السنوية لو الأقساط ثابتة)</span></label>
 </section>
 
 <section class="panel" id="plan"><div id="planBody"></div></section>
@@ -827,7 +829,18 @@ function fin(o){const ye=o.ye||[];let carry=0;const dp=r100(o.dp);if(!o.keepRem)
  const toYe=o.spTo==='ye'&&yeR.length>0,n=o.rows.length,rows=o.rows.map((a,i)=>{if(i==n-1&&!toYe)return a;const v=r100(a);carry+=a-v;return v});
  if(toYe)yeR[yeR.length-1]+=carry;else if(n)rows[n-1]=o.rows[n-1]+carry;
  return{...o,dp,del,six,ye:yeR,rows,rem:o.keepRem?o.rem:o.rem+(o.dp-dp)}}
-function calc(k,net,dpIn){return fin(calc0(k,net,dpIn))}
+let SKIP1=false;
+function skip1(o,k,net){const S=SYS[k];if(!S||S.cash||S.adm||S.semi||!o.rows||o.rows.length<2)return o;const st=Math.max(1,6-bdFO());
+ const rd=o.rd?o.rd.slice():o.rows.map((_,i)=>(S.step||3)*i),rl=o.rl?o.rl.slice():o.rows.map(()=>'');
+ const drop=o.rows.map((v,i)=>rd[i]<st&&rl[i]!=='s');if(!drop.some(Boolean)||drop.every(Boolean))return o;
+ const R=o.rows.reduce((a,v,i)=>a+(drop[i]?v:0),0);
+ const keep=o.rows.map((v,i)=>!drop[i]),rows=[],nrd=[],nrl=[],fixed=[];
+ o.rows.forEach((v,i)=>{if(drop[i])return;rows.push(v);nrd.push(rd[i]);nrl.push(rl[i]);
+  const five=rd[i]===st&&Math.abs(v-net*.05)<1,spFix=spAct()&&SP.q>0&&Math.abs(v-SP.q)<1,bdFix=o.bd&&o.A&&Math.abs(v-o.A)<1;fixed.push(rl[i]==='s'||five||spFix||bdFix)});
+ const flex=rows.map((v,i)=>i).filter(i=>!fixed[i]);let ye=o.ye?o.ye.slice():[];
+ if(flex.length){const a=R/flex.length;flex.forEach(i=>rows[i]+=a)}else if(ye.length){const a=R/ye.length;ye=ye.map(v=>v+a)}else{const a=R/rows.length;for(let i=0;i<rows.length;i++)rows[i]+=a}
+ return{...o,rows,rd:nrd,rl:nrl,ye,skip1:true,cmpRows:o.cmpRows!==undefined?Math.max(0,o.cmpRows-1):o.cmpRows}}
+function calc(k,net,dpIn){let o=calc0(k,net,dpIn);if(SKIP1&&!NONX)o=skip1(o,k,net);return fin(o)}
 function calc0(k,net,dpIn){
  const S=SYS[k],rows=[];let dp=S.dp==='manual'?Math.min(dpIn,net):(dpIn>0?Math.min(dpIn,net):net*S.dp);
  if(S.cash)return{dp:0,rows:[net],del:0,rem:net};
@@ -950,7 +963,7 @@ function render0(){
  else if(!AU.on&&$('code').value.trim()){const cv=$('code').value.trim();if(/^[A-Za-z]-\d{2}-\d{2}-[A-Za-z0-9]+$/.test(cv))ALN=['nf:'+cv,'errNF'];ch.insertAdjacentHTML('beforeend','<span class="chip err">الكود ده مش موجود في قائمة الوحدات</span>')}
  const net=I?I.gross*(1-disc):0;
  // cards
- $('nxBox').classList.remove('on');$('nxNote').style.display='none';
+ $('nxBox').classList.remove('on');$('nxNote').style.display='none';{const w=$('sk1W'),S0=SYS[sel];w.style.display='';w.hidden=!(sel&&S0&&!S0.cash&&!S0.adm&&!S0.semi);w.classList.toggle('on',SKIP1);$('sk1').checked=SKIP1}
  $('cards').innerHTML=Object.keys(SYS).filter(vis).sort((a,b)=>!!SYS[b].cash-!!SYS[a].cash).map(k=>{const S=SYS[k],r=I?calc(k,bdK(k)?I.gross*.85:net,bdK(k)?0:dpIn):null;
   const per=S.semi?'نصف سنوي':'ربع سنوي',sub=bdK(k)?(k=='6'?'خصم 15% • مقدم 5% • 5% بعد 6 شهور • 24 قسط ربع سنوي متساوي • 5% استلام':'خصم 15% • مقدم '+(k=='10'?'10%':'5%')+' • 5% بعد 6 شهور • '+(BD.amt&&BD.freq?(BD.freq==='m'?fmt(BD.amt)+' شهري':fmt(BD.amt*3)+' كل كوارتر'):'قسط 10 أو 15 ألف شهري / كوارتر')+' • دفعات سنوية • '+(k=='10'?'10%':'5%')+' استلام'):S.cash?'دفعة واحدة':S.adm?`مقدم ${S.dp*100}% • 5% بعد 6 شهور • 10% استلام • ${S.cnt+AU.extra} قسط ${per}`:S.dp==='manual'?`${nxC(S,1)} قسط ${per}`:`مقدم ${S.dp*100}% • ${nxC(S,2)} قسط ${per}`;
   return`<button class="card ${S.c} ${sel==k?'sel':''}" onclick="pick('${k}')"><div class="big">${S.cash?'CASH':S.adm?(auY(AU.extra))+'<small> سنين • إداري</small>':S.n+'<small> سنين'+(S.semi?' • نصف سنوي':'')+'</small>'}</div><div class="sub">${sub}</div>${S.appr?'<span class="tag">يحتاج موافقة أولًا</span>':''}${bdK(k)?'<span class="tag">🤝 بالك ديل</span>':''}${r?(bdK(k)&&k!='6'?(BD.amt&&BD.freq?`<div class="amt">الدفعة السنوية ≈ ${fmt(r.ye[0]||0)}</div>`:''):`<div class="amt">${S.cash?'الإجمالي':'القسط'} ≈ ${fmt(r.rows[S.semi?1:S.dp==='manual'?0:2]||r.rows[0])}</div>`):''}</button>`}).join('');
@@ -1026,6 +1039,7 @@ $('first').addEventListener('input',()=>{firstTouched=true;render()});
 ['name','code','disc','dp','spOn','spQ','spY','spYrs','spKeep','spExtra'].forEach(i=>$(i).addEventListener('input',render));
 ['spOn','spYrs','spKeep','spExtra','spFreq','spStart'].forEach(i=>$(i).addEventListener('change',render));
 $('nxSel').innerHTML=Array.from({length:25},(_,i)=>{const v=i-12;return'<option value="'+v+'"'+(v?'':' selected')+'>'+(v>0?'+'+v+' كوارتر':v<0?v+' كوارتر':'بدون تعديل (0)')+'</option>'}).join('');
+$('sk1').addEventListener('change',()=>{SKIP1=$('sk1').checked;render()});
 const nxSet=v=>{NX=Math.max(-12,Math.min(12,v|0));$('nxSel').value=NX;render()};$('nxSel').addEventListener('change',()=>nxSet(+$('nxSel').value));$('nxM').onclick=()=>nxSet(NX-1);$('nxP').onclick=()=>nxSet(NX+1);$('nxR').onclick=()=>nxSet(0);
 
 /* ===== بالك ديل – المستشارين ===== */
@@ -1062,7 +1076,7 @@ let recT=null,recBusy=false,RECDEF=null;
 function recCapDef(){if(RECDEF)return;RECDEF={};RECF.forEach(id=>RECDEF[id]=fv(id))}
 function recQueue(meta){if(recBusy)return;clearTimeout(recT);recT=setTimeout(()=>{try{recSave(meta)}catch(e){}},3500)}
 function recSave(m){const v={};RECF.forEach(id=>v[id]=fv(id));
- const e={t:Date.now(),unit:m.unit,sys:m.sys,sel:m.sel,name:m.name,amt:m.amt,au:AU.on,nx:NX,ft:firstTouched,sp:!!(SP.ok&&SP.on),bd:bdOn()?{amt:BD.amt,freq:BD.freq}:null,ct:!!CT.on,v};
+ const e={t:Date.now(),unit:m.unit,sys:m.sys,sel:m.sel,name:m.name,amt:m.amt,au:AU.on,nx:NX,sk1:SKIP1,ft:firstTouched,sp:!!(SP.ok&&SP.on),bd:bdOn()?{amt:BD.amt,freq:BD.freq}:null,ct:!!CT.on,v};
  let a=recGet();const k=x=>x.unit+'|'+x.sel;
  a=a.filter((x,i)=>!(k(x)===k(e)&&(x.name===e.name||(i===0&&e.t-x.t<10*60e3))));a.unshift(e);recPut(a);recDraw()}
 function recAgo(t){const d=Math.round((Date.now()-t)/60000);return d<1?'دلوقتي':d<60?'من '+d+' دقيقة':d<1440?'من '+Math.round(d/60)+' ساعة':new Date(t).toLocaleDateString('en-GB')}
@@ -1075,13 +1089,13 @@ function recOpen(i){const x=recGet()[i];if(!x)return;recBusy=true;try{
  setUnitMode(x.au?'adm':'res');recFill(x.v);
  if((x.sp||x.bd)&&!SP.ok){const v=$('spOn').checked;spUnlock();$('spOn').checked=v}
  if(x.bd){BD.on=true;BD.amt=x.bd.amt;BD.freq=x.bd.freq}else BD.on=false;
- if(!x.au)syncSel();NX=x.nx||0;$('nxSel').value=NX;firstTouched=!!x.ft;unlocked=null;
+ if(!x.au)syncSel();NX=x.nx||0;SKIP1=!!x.sk1;$('nxSel').value=NX;firstTouched=!!x.ft;unlocked=null;
  window.BDNOASK=true;try{if(x.sel&&SYS[x.sel])pick(x.sel);else{sel=null;render()}}finally{window.BDNOASK=false}
  $('recList').hidden=true;$('recBtn').setAttribute('aria-expanded','false');try{snd('ok')}catch(e){}
 }finally{setTimeout(()=>{recBusy=false},400)}}
 function recReset(){recCapDef();recBusy=true;try{clearTimeout(recT);setUnitMode('res');recFill(RECDEF);
  const t=new Date();const t0=new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()));$('contract').value=iso(t0);$('first').value=iso(addM(t0,3));
- $('code').value='';$('selB').value='';fillF('');fillM('','');NX=0;$('nxSel').value=0;BD.on=false;sel=null;approved=false;discAppr=null;unlocked=null;holdAck=null;holdShown=null;firstTouched=false;
+ $('code').value='';$('selB').value='';fillF('');fillM('','');NX=0;$('nxSel').value=0;SKIP1=false;BD.on=false;sel=null;approved=false;discAppr=null;unlocked=null;holdAck=null;holdShown=null;firstTouched=false;
  try{for(const k in OVR)delete OVR[k]}catch(e){}
  render();window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>$('selB').focus(),350);try{say('تمام – ابدأ بيمنت جديد من الأول')}catch(e){}
 }finally{setTimeout(()=>{recBusy=false},400)}}
@@ -1157,7 +1171,7 @@ let LASTSIG=null,LT=null,QBUSY=false;
 function planSnapshot(){const P=document.querySelector('#planBody .paper');if(!P||!sel)return null;const I=unitInfo();if(!I)return null;
  const disc=bdD()!==null?bdD():Math.max(0,+$('disc').value||0)/100,net=I.gross*(1-disc),dpIn=bdK(sel)?0:dpGet(),S=SYS[sel];let r=null;try{r=calc(sel,net,dpIn)}catch(e){}
  const q=I.u.code.split('-'),first=r?(r.rows[S.semi?1:S.dp==='manual'?0:2]||r.rows[0]):'';
- const payload={event:'plan',clientTime:new Date().toISOString(),unit:I.u.code,building:q[0]+'-'+q[1],floor:q[2],model:q[3],system:S.cash?'Cash':(S.adm?('Admin '+auY(AU.extra)+' years'):(S.n+' years'+(S.semi?' (semi-annual)':'')+(nxOK(S)&&NX?' '+(NX>0?'+':'')+NX+'Q':''))),client:($('name').value||'').trim(),contract:$('contract').value,first:$('first').value,discount:+(disc*100).toFixed(2),dp:r?Math.round(r.dp):'',net:Math.round(net*100)/100,firstInst:first===''?'':Math.round(first),installments:r?r.rows.length:'',mode:CT.on?'2MDY':'Normal',special:spAct()?('Q='+SP.q+' Y='+SP.y+' yrs='+SP.yrs+' extra='+SP.extra+' freq='+SP.freq+' start='+SP.start+' keep5='+(SP.keep?1:0)+' yauto='+(SP.ym?1:0)):'',drawing:DRAWON?(CT.on?'Contract':'Yes'):'No',approvals:[approved?'plan-approved':'',(S.adm&&AU.extra>0)?'admin-extension-own-responsibility':'',discAppr!==null?'discount-own-responsibility':'',spApprSig?'special-approved':'',unlocked?'status-unlocked':'',(mPctGet()!==10)?'maintenance-'+mPctGet()+'%':'',(holdAck&&I.u0&&holdAck===I.u.code)?'hold-unit-own-responsibility':'',(mAppr!==null&&SP.ok&&$('spMOn')&&$('spMOn').checked)?'maintenance-after-3y-own-responsibility':'',OVR[I.u0.code]?('manual-data '+JSON.stringify(OVR[I.u0.code])):''].filter(Boolean).join(', ')};
+ const payload={event:'plan',clientTime:new Date().toISOString(),unit:I.u.code,building:q[0]+'-'+q[1],floor:q[2],model:q[3],system:S.cash?'Cash':(S.adm?('Admin '+auY(AU.extra)+' years'):(S.n+' years'+(S.semi?' (semi-annual)':'')+(nxOK(S)&&NX?' '+(NX>0?'+':'')+NX+'Q':''))),client:($('name').value||'').trim(),contract:$('contract').value,first:$('first').value,discount:+(disc*100).toFixed(2),dp:r?Math.round(r.dp):'',net:Math.round(net*100)/100,firstInst:first===''?'':Math.round(first),installments:r?r.rows.length:'',mode:CT.on?'2MDY':'Normal',special:spAct()?('Q='+SP.q+' Y='+SP.y+' yrs='+SP.yrs+' extra='+SP.extra+' freq='+SP.freq+' start='+SP.start+' keep5='+(SP.keep?1:0)+' yauto='+(SP.ym?1:0)):'',drawing:DRAWON?(CT.on?'Contract':'Yes'):'No',approvals:[approved?'plan-approved':'',(S.adm&&AU.extra>0)?'admin-extension-own-responsibility':'',discAppr!==null?'discount-own-responsibility':'',spApprSig?'special-approved':'',unlocked?'status-unlocked':'',SKIP1?'skip-first-quarter':'',(mPctGet()!==10)?'maintenance-'+mPctGet()+'%':'',(holdAck&&I.u0&&holdAck===I.u.code)?'hold-unit-own-responsibility':'',(mAppr!==null&&SP.ok&&$('spMOn')&&$('spMOn').checked)?'maintenance-after-3y-own-responsibility':'',OVR[I.u0.code]?('manual-data '+JSON.stringify(OVR[I.u0.code])):''].filter(Boolean).join(', ')};
  const sig=JSON.stringify([JSON.stringify(OVR[I.u0.code]||{}),AU.on?[$('auArea').value,$('auPm').value,AU.extra]:0,payload.unit,payload.system,payload.client,payload.contract,payload.first,payload.discount,payload.dp,payload.mode,payload.special,payload.drawing]);return{sig,payload}}
 function logWatch(){if(!apiUrl()||!sesOk())return;clearTimeout(LT);const s=planSnapshot();if(!s||s.sig===LASTSIG)return;LT=setTimeout(()=>{const s2=planSnapshot();if(s2&&s2.sig!==LASTSIG){LASTSIG=s2.sig;sendLog(s2.payload)}},4000)}
 function logPrint(){if(!apiUrl()||!sesOk())return;const s=planSnapshot();if(!s)return;s.payload.event='print';sendLog(s.payload)}
@@ -2846,8 +2860,9 @@ function parse(raw){
  if(/(من غير|بدون|مفيش|ملهوش|مش عاوز)\s*(اي\s*)?(دفعات|دفعه)?\s*سنوي/.test(t))f.ym='none';
  else if(/سنوي(ه)?\s*(تلقائي|اوتوماتيك|اتوماتيك)|احسب(ها)?\s*(ال)?سنوي|سنويه تتحسب/.test(t))f.ym='auto';
  /* بداية الأقساط */
- if(/(يشيل|نشيل|شيل|من غير|بدون)\s*(اول|ال1)\s*(كوارتر|كورتر|كوتر|قسط)/.test(t))f.shift=6;
- m=t.match(/(يبدا|نبدا|تبدا|يبتدي|اول قسط|الاقساط|يقسط|التقسيط)[^.،,]{0,20}?بعد\s*(\d{1,2})\s*(شهور|شهر|اشهر)/);if(m&&!/اسبشيل|الاسبشيل/.test(m[0]))f.shift=+m[2];
+ if(/(شيل|اشيل|يشيل|نشيل|تشيل|مشلتش|متشيل|من غير|بدون|مش عاوز[^.،,]{0,15}|مش عايز[^.،,]{0,15}|مش هيدفع|مش هتدفع|ميدفعش|متدفعش|مش هيدفعو|يسقط|نسقط|تخطي|skip)\s*(ال)?(اول|ال1|1)\s*(كوارتر|كورتر|كوتر|قسط)/.test(t))f.skip1=true;
+ if(/(رجع|رجّع|خلي|حط|ضيف)\s*(ال)?اول\s*(كوارتر|كورتر|كوتر|قسط)/.test(t))f.skip1=false;
+ m=t.match(/(يبدا|نبدا|تبدا|يبتدي|اول قسط|الاقساط|يقسط|التقسيط|يدفع)[^.،,]{0,20}?بعد\s*(\d{1,2})\s*(شهور|شهر|اشهر)/);if(m&&!/اسبشيل|الاسبشيل/.test(m[0])){if(+m[2]===6)f.skip1=true;else f.shift=+m[2]}
  m=t.match(/(يبدا|نبدا|اول قسط|الاقساط|يقسط)[^.،,]{0,20}?بعد\s*(سنه|سنة)/);if(m)f.shift=12;
  m=t.match(/(الاسبشيل|السبشيل)[^.،,]{0,20}?بعد\s*(\d{1,2})\s*(كوارتر|كورتر|كوتر)/);if(m)f.spStart=Math.min(10,+m[2]);
  /* زيادة/نقص كوارتر */
@@ -2872,7 +2887,8 @@ function parse(raw){
   if(a.v>=1000){if(f.bd&&(a.v===10000||a.v===15000)){f.bdAmt=a.v;continue}
    if(f.q===undefined)f.q=a.v;else f.extraAmt=(f.extraAmt||[]).concat(a.v)}}
  /* أسئلة؟ */
- f.question=/(ازاي|ازay|ايه|اي هو|يعني ايه|فين|امتي|ليه|هل|ممكن اعرف|\?|؟)/.test(t)&&!f.unit&&!f.sys&&f.q===undefined&&f.dpAmt===undefined&&f.dpPct===undefined;
+ const slotKeys=Object.keys(f).filter(k=>f[k]!==undefined&&k!=='bldAmb');
+ f.question=/(ازاي|ايه|اي هو|يعني ايه|فين|امتي|هل|ممكن اعرف|\?|؟)/.test(t)&&!slotKeys.length;
  f._t=t;return f}
 
 /* ===== قاعدة معرفة ===== */
@@ -2881,6 +2897,7 @@ const KB=[
  [/اطبع|طباعه|pdf|بي دي اف/,'🖨️ زرار «طباعة / PDF» فوق ورقة البيمنت. لو البيمنت طويل بيطلع في كذا صفحة مليانة، والتوقيعات بتيجي بعد الجدول على طول.'],
  [/اكسل|excel/,'📊 زرار Excel جنب زرار الطباعة بيطلّع البيمنت كشيت.'],
  [/اسبشيل|سبشيل|special/,'⭐ <b>البيمنت الاسبشيل:</b> دوس «بيمنت اسبشيل» (من غير باسورد). تقدر تحدد مقدم بأي مبلغ، وقسط ثابت كل كوارتر أو كل شهر لأول كام سنة، وبعدها النظام يرجع طبيعي، ودفعات سنوية (أو من غيرها)، وتزود أو تنقص كوارترات. أو قولّي الكلام بلغتك: «مقدم 300 الف وأول 3 سنين 60 الف كل كوارتر وبعد كده عادي».'],
+ [/اول (كوارتر|كورتر|كوتر)/,'⏭️ علشان العميل مايدفعش أول كوارتر: علّم على «شيل أول كوارتر» تحت الكروت، أو قولّي «شيل أول كوارتر». مبلغه بيتوزع على باقي الأقساط والتواريخ مش بتتحرك. (الـ−1 كوارتر بيشيل من آخر البيمنت مش من أوله)'],
  [/كوارتر|كورتر|كوتر/,'➕➖ في البيمنت العادي تحت الكروت فيه «تعديل عدد الكوارترات» من −12 لـ +12، والأقساط بتتوزع بالتساوي. في الاسبشيل فيه خانة من −8 لـ +8.'],
  [/صيانه|مقايسات/,'🛠️ الصيانة والمقايسات 10% من سعر الوحدة (8% في بالك ديل). في الاسبشيل تقدر تغيّر النسبة وتقسّطها على قسطين أو 3.'],
  [/عقد|contract/,'📝 «وضع العقد» بيحط التوقيعات في آخر كل صفحة، وبيحتاج باسورد 2MDY من الإدارة.'],
@@ -2897,7 +2914,7 @@ function kbAnswer(t){for(const [re,a] of KB)if(re.test(t))return a;return null}
 /* ===== المحادثة ===== */
 function merge(f){
  if(f.reset){ST=S0();return}
- for(const k of ['unit','bld','floor','model','sys','spYrs','bd','bdAmt','disc','mpct','freq','ym','y','shift','spStart','extra','keep','name','contract','dpPct','dpAmt','q'])if(f[k]!==undefined)ST[k]=f[k];
+ for(const k of ['unit','bld','floor','model','sys','spYrs','bd','bdAmt','disc','mpct','freq','ym','y','shift','skip1','spStart','extra','keep','name','contract','dpPct','dpAmt','q'])if(f[k]!==undefined)ST[k]=f[k];
  if(f.bldAmb&&!ST.bld)ST.bldAmb=f.bldAmb;
  if(!ST.unit&&ST.bld&&ST.floor&&ST.model){const c=ST.bld+'-'+ST.floor+'-'+ST.model;if(BY[c])ST.unit=c;else ST.unitBad=c}
  if(f.extraAmt)ST.extraAmt=f.extraAmt}
@@ -2934,6 +2951,7 @@ function summary(){const L=[],s=ST;const sp=isSpecial();
  if(s.q!==undefined)L.push('💳 القسط: <b>'+money(s.q)+'</b> '+(s.freq==='m'?'كل شهر':'كل كوارتر')+(s.spYrs==='all'?' طول المدة':' لأول '+s.spYrs+(s.spYrs==1?' سنة':' سنين')+' وبعدها النظام طبيعي'));
  else if(sp&&s.freq==='m')L.push('💳 الأقساط شهرية');
  if(s.ym==='none')L.push('📆 من غير دفعات سنوية');else if(s.ym==='auto')L.push('📆 دفعات سنوية بتتحسب تلقائي');else if(s.ym==='fix')L.push('📆 دفعة سنوية: '+money(s.y));
+ if(s.skip1)L.push('⏭️ من غير أول كوارتر – أول دفعة بعد 6 شهور، ومبلغه بيتوزع على الباقي');
  if(s.shift)L.push('⏩ أول قسط بعد '+s.shift+' شهور من التعاقد');
  if(s.spStart)L.push('⏳ الاسبشيل يبدأ بعد '+s.spStart+' كوارتر');
  if(s.extra)L.push((s.extra>0?'➕ زيادة ':'➖ نقص ')+Math.abs(s.extra)+' كوارتر');
@@ -2969,6 +2987,7 @@ function apply(){const s=ST;try{
   $('spExtra').value=Math.max(-8,Math.min(8,s.extra||0));
  }else if(s.extra){NX=Math.max(-12,Math.min(12,s.extra));$('nxSel').value=NX}
  if(s.mpct!==undefined&&!s.bd&&$('spMPct'))$('spMPct').value=s.mpct;
+ SKIP1=!!s.skip1;
  if(s.shift){const c=pd($('contract').value);if(c){firstTouched=true;$('first').value=iso(addM(c,s.shift))}}else{firstTouched=false}
  window.BDNOASK=true;try{pick(s.sys)}finally{window.BDNOASK=false}
  render();return report()}catch(e){return '⚠️ حصلت مشكلة وأنا بطبّق: '+esc(e.message)+'. جرّب تعدّل من الشيت بنفسك أو ابعت الحالة في صندوق الاقتراحات.'}}
@@ -3015,7 +3034,7 @@ function handle(text){const raw=String(text||'').trim();if(!raw)return;
  if(ST.askY&&!f.y){const a=amounts(t);if(a.length){f.y=a[0].v;f.ym='fix'}}
  if(['3','5'].includes(ST.sys||f.sys||'')&&f.dpAmt===undefined&&f.dpPct===undefined&&ST.unit&&!/قسط|كوارتر|شهر/.test(t)){const a=amounts(t);if(a.length===1&&f.q!==undefined){if(a[0].pct||/%/.test(t))f.dpPct=a[0].v;else f.dpAmt=a[0].v;delete f.q}}
  delete ST.askY;
- const keys=Object.keys(f).filter(k=>!['_t','question','bldAmb','extraAmt'].includes(k)&&f[k]!==undefined&&f[k]!==false||k==='keep'&&f.keep===false);
+ const keys=Object.keys(f).filter(k=>!['_t','question','bldAmb','extraAmt'].includes(k)&&f[k]!==undefined&&f[k]!==false||(k==='keep'||k==='skip1')&&f[k]===false);
  if(f.question||(!keys.length&&!f.bldAmb&&!f.extraAmt)){const a=kbAnswer(t);if(a){say(a);return}
   if(!keys.length){say('معلش مش فاهم قصدك 🙏 جرّب تكتبها بشكل تاني، زي: «8 سنين مقدم 300 الف وقسط 60 الف كل كوارتر لأول 3 سنين».<br><small>(بعتّ سؤالك للإدارة علشان أتعلمه المرة الجاية)</small>');logMiss(raw);return}}
  if(ST.applied&&((f.unit&&f.unit!==ST.unit)||f.bld||(f.bd&&!ST.bd)))ST=S0();delete ST.applied;
@@ -3033,6 +3052,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261108-102847";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261108-104221";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
