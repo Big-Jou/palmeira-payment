@@ -1048,7 +1048,8 @@ function bdQ(k){const o0=document.getElementById('bdQ');if(o0)o0.remove();let a=
  $('fbT').querySelectorAll('button').forEach(t=>t.onclick=()=>{fbType=t.dataset.t;$('fbT').querySelectorAll('button').forEach(o=>o.classList.toggle('on',o===t))});
  x.addEventListener('input',()=>{c.textContent=x.value.length+' / 1000';b.disabled=!x.value.trim()});
  b.onclick=()=>{const t=x.value.trim();if(!t)return;let u='';try{const I=unitInfo();if(I)u=I.u.code}catch(e){}
-  sendLog({event:'feedback',clientTime:new Date().toISOString(),unit:u,system:fbType,client:t,note:t,mode:CT.on?'2MDY':'Normal',approvals:'feedback: '+fbType});
+  const fbLog=()=>sendLog({event:'feedback',clientTime:new Date().toISOString(),unit:u,system:fbType,client:t,note:t,mode:CT.on?'2MDY':'Normal',approvals:'feedback: '+fbType});
+  (async()=>{let ok=false;try{if(apiUrl()&&sesOk()){const r=await apiCall({action:'feedback',token:SES.token,type:fbType,text:t,unit:u,rep:((SES.name||'')+' <'+(SES.email||'')+'>').trim(),clientTime:new Date().toISOString()});ok=!!(r&&r.ok)}}catch(e){}if(!ok)fbLog()})();
   x.value='';c.textContent='0 / 1000';b.disabled=true;const o=$('fbOk');o.hidden=false;o.textContent=navigator.onLine===false?'✅ اتسجل – هيتبعت أول ما النت يرجع. شكرًا!':'✅ وصل! شكرًا على '+fbType+'ك – الإدارة هتشوفه.';try{snd('ok')}catch(e){}setTimeout(()=>{o.hidden=true},7000)}}
 
 /* ===== آخر 5 بيمنت + ابدأ من جديد ===== */
@@ -2780,6 +2781,6 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261108-094945";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261108-095446";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
