@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "analytics": {
+    "goatcounter": ""
+  },
+  "log": [],
+  "floors": [
+    {
+      "floor": 1,
+      "status": "open",
+      "rooms": [
+        {
+          "no": "101",
+          "type": "single",
+          "status": "available"
+        },
+        {
+          "no": "102",
+          "type": "suite",
+          "status": "available"
+        },
+        {
+          "no": "103",
+          "type": "double-king",
+          "status": "available"
+        },
+        {
+          "no": "104",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "105",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "106",
+          "type": "triple-quad",
+          "status": "available"
+        },
+        {
+          "no": "107",
+          "type": "single",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "floor": 2,
+      "status": "open",
+      "rooms": [
+        {
+          "no": "201",
+          "type": "single",
+          "status": "available"
+        },
+        {
+          "no": "202",
+          "type": "suite",
+          "status": "available"
+        },
+        {
+          "no": "203",
+          "type": "double-king",
+          "status": "available"
+        },
+        {
+          "no": "204",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "205",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "206",
+          "type": "triple-quad",
+          "status": "available"
+        },
+        {
+          "no": "207",
+          "type": "single",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "floor": 3,
+      "status": "open",
+      "rooms": [
+        {
+          "no": "301",
+          "type": "single",
+          "status": "available"
+        },
+        {
+          "no": "302",
+          "type": "suite",
+          "status": "available"
+        },
+        {
+          "no": "303",
+          "type": "double-king",
+          "status": "available"
+        },
+        {
+          "no": "304",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "305",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "306",
+          "type": "triple-quad",
+          "status": "available"
+        },
+        {
+          "no": "307",
+          "type": "single",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "floor": 4,
+      "status": "open",
+      "rooms": [
+        {
+          "no": "401",
+          "type": "single",
+          "status": "available"
+        },
+        {
+          "no": "402",
+          "type": "double-king",
+          "status": "available"
+        },
+        {
+          "no": "403",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "404",
+          "type": "double",
+          "status": "available"
+        },
+        {
+          "no": "405",
+          "type": "triple-quad",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "floor": 5,
+      "status": "open",
+      "rooms": [
+        {
+          "no": "501",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "502",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "503",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "504",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "505",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "506",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "507",
+          "type": "unset",
+          "status": "available"
+        },
+        {
+          "no": "508",
+          "type": "unset",
+          "status": "available"
+        }
+      ]
+    },
+    {
+      "floor": 6,
+      "status": "preparing",
+      "rooms": []
+    }
+  ]
+}
