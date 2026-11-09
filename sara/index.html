@@ -11,7 +11,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Reem+Kufi:wght@500;700&display=swap">
 <style>
 /* Layout: one full-screen "drawing sheet" on pink drafting paper; scenes flip in and out of it like turned sheets, petals fall over everything. */
 :root{
@@ -25,6 +25,7 @@
   --f-display:"Reem Kufi","Segoe UI","Tahoma",sans-serif;
   --f-body:"IBM Plex Sans Arabic","Segoe UI","Tahoma",sans-serif;
   --f-script:"Aref Ruqaa","Amiri","Times New Roman",serif;
+  --f-num:"Cairo","Segoe UI","Tahoma",sans-serif;
   color-scheme:light;
 }
 html,body{height:100%}
@@ -103,17 +104,29 @@ body{
 
 /* counter */
 .thanks{font-size:clamp(3.2rem,15vw,7rem);margin:0}
-.num{
-  font-family:var(--f-display);font-weight:700;font-size:clamp(4.5rem,24vw,10.5rem);
-  line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;display:inline-block;
+.flip{display:flex;gap:clamp(8px,2.5vw,14px);perspective:600px}
+.tile{
+  position:relative;width:clamp(68px,22vw,112px);aspect-ratio:3/4;max-width:100%;
+  display:grid;place-items:center;border-radius:14px;
+  background:linear-gradient(180deg,#ffffff 0 50%,#fff1f6 50% 100%);
+  border:1.5px solid rgba(217,58,120,.28);
+  box-shadow:0 2px 0 rgba(217,58,120,.18),0 14px 30px rgba(217,58,120,.22);
+  font-family:var(--f-num);font-weight:900;font-size:clamp(3.4rem,15vw,6.2rem);line-height:1;
+  color:var(--pink);transform-style:preserve-3d;overflow:hidden;
 }
+.tile::after{content:"";position:absolute;inset:50% 0 auto;height:1.5px;background:rgba(217,58,120,.22)}
+.tile::before,.tile i{content:"";position:absolute;top:calc(50% - 5px);width:6px;height:10px;border-radius:3px;background:rgba(217,58,120,.3)}
+.tile::before{right:-3px}.tile i{left:-3px}
+.tile span{position:relative;top:-.06em}
+.tile.lead span{color:rgba(217,58,120,.2)}
+.dwg{font-family:var(--f-num);font-weight:700;font-size:13px;color:rgba(91,22,54,.6)}
 .label{font-family:var(--f-display);font-size:clamp(1.1rem,4.4vw,1.6rem);font-weight:500}
 .scale{width:min(440px,100%);display:flex;flex-direction:column;gap:6px}
 .bar{height:12px;border:1.5px solid var(--ink);position:relative;overflow:hidden;
   background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 1.5px), rgba(91,22,54,.35) calc(10% - 1.5px) 10%)}
 .fill{position:absolute;inset:0 0 0 auto;width:0;background:var(--pink)}
-.ticks{display:flex;justify-content:space-between;font-size:12px;color:rgba(91,22,54,.65);font-variant-numeric:tabular-nums}
-.done{font-family:var(--f-display);font-weight:700;color:var(--pink);border:2.5px solid var(--pink);border-radius:8px;padding:4px 16px;--r:-5deg;animation:stamp .5s cubic-bezier(.3,1.6,.5,1) both}
+.ticks{display:flex;justify-content:space-between;font-family:var(--f-num);font-weight:700;font-size:12px;color:rgba(91,22,54,.65);font-variant-numeric:tabular-nums}
+.done{font-family:var(--f-num);font-weight:700;color:var(--pink);border:2.5px solid var(--pink);border-radius:8px;padding:4px 16px;--r:-5deg;animation:stamp .5s cubic-bezier(.3,1.6,.5,1) both}
 
 /* final */
 .card{
@@ -233,7 +246,7 @@ body{
 
   /* ---------- counter ---------- */
   function count(el, from, to, dur, ease, t){
-    const num = el.querySelector('.num'), fill = el.querySelector('.fill');
+    const fill = el.querySelector('.fill');
     const start = performance.now(); let last = -1;
     return new Promise((res, rej) => {
       function step(now){
@@ -241,9 +254,8 @@ body{
         const p = Math.min(1, (now - start)/dur);
         const n = Math.round(from + (to - from)*ease(p));
         if(n !== last){
-          last = n; num.textContent = ar(n);
+          last = n; setTiles(el, n);
           fill.style.width = (n/500*100) + '%';
-          if(!reduce) num.animate([{transform:'perspective(400px) rotateX(80deg)'},{transform:'none'}],{duration:160});
           if(Math.random() < (n < 30 ? 1 : .35)) spawn('word', Math.random()*W, -20);
         }
         p < 1 ? requestAnimationFrame(step) : res();
@@ -251,9 +263,22 @@ body{
       requestAnimationFrame(step);
     });
   }
+  const digits = n => String(n).padStart(3,'0').split('').map(d => (+d).toLocaleString('ar-EG'));
+  function setTiles(el, n){
+    const ds = digits(n), lead = String(n).length;
+    el.querySelectorAll('.tile').forEach((t, i) => {
+      const sp = t.querySelector('span');
+      t.classList.toggle('lead', i < 3 - lead);
+      if(sp.textContent !== ds[i]){
+        sp.textContent = ds[i];
+        if(!reduce) t.animate([{transform:'rotateX(-90deg)'},{transform:'rotateX(12deg)',offset:.75},{transform:'none'}],{duration:220,easing:'ease-out'});
+      }
+    });
+  }
+  const tilesHTML = n => digits(n).map((d,i) => `<div class="tile${i < 3 - String(n).length ? ' lead' : ''}"><i></i><span>${d}</span></div>`).join('');
   const counterHTML = (from, label) => `
     <h2 class="thanks script">شكراً</h2>
-    <div class="num">${ar(from)}</div>
+    <div class="flip" dir="ltr" aria-hidden="true">${tilesHTML(from)}</div>
     <div class="label">${label}</div>
     <div class="scale" aria-hidden="true">
       <div class="bar"><div class="fill" style="width:${from/500*100}%"></div></div>
