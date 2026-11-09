@@ -773,11 +773,11 @@ function ppar(k,net,D){const S=SYS[k];if(S.dp==='manual')return{q:(net-D)/S.cnt,
 function sugRun(){const d0=Math.max(0,+$('disc').value||0)/100;SUG.all=false;let res=[],meta='';
  if(SUG.tab==='A'){const B=+$('saBudget').value||0;if(!B){$('sugOut').innerHTML='<div class="empty">اكتب الميزانية الأول</div>';return}
   const up=+$('saUp').value||0,dn=+$('saDn').value||0,cash=$('saCash').checked,d=cash?Math.max(0,+$('saCashD').value||0)/100:d0;
-  res=sugUnits().map(x=>({...x,net:x.gross*(1-d)})).filter(x=>x.net>=B-dn&&x.net<=B+up).sort((a,b)=>Math.abs(a.net-B)-Math.abs(b.net-B)).map(x=>({...x,B}));
+  res=sugUnits().map(x=>({...x,net:flr(x.gross*(1-d))})).filter(x=>x.net>=B-dn&&x.net<=B+up).sort((a,b)=>Math.abs(a.net-B)-Math.abs(b.net-B)).map(x=>({...x,B}));
   meta=`الميزانية ${fmt(B)} (من ${fmt(B-dn)} لحد ${fmt(B+up)}) • الأسعار بعد خصم ${+(d*100).toFixed(2)}%${cash?' (كاش)':''}`}
  else{const D=+$('sbDp').value||0,Q=+$('sbQ').value||0,flex=+$('sbFlex').value||0;if(!Q){$('sugOut').innerHTML='<div class="empty">اكتب القسط الربع سنوي المناسب للعميل</div>';return}
   const ks=[...document.querySelectorAll('.sbSys:checked')].map(c=>c.value).filter(visR);
-  sugUnits().forEach(({u,gross,tA})=>{const net=gross*(1-d0);ks.forEach(k=>{if(D>net)return;const a=ppar(k,net,D);let tier=0,dpU=D;
+  sugUnits().forEach(({u,gross,tA})=>{const net=flr(gross*(1-d0));ks.forEach(k=>{if(D>net)return;const a=ppar(k,net,D);let tier=0,dpU=D;
    if(a.q<=Q+.5)tier=1;else if(flex>0){const dm=Math.ceil(a.dmin(Q)/100)*100;if(dm>D&&dm<=D+flex+.5&&dm<=net){tier=2;dpU=dm}}
    if(!tier)return;const b=ppar(k,net,dpU);res.push({u,tA,k,net,tier,dpU,q:b.q,five:b.five,del:b.del,std:b.std})})});
   res.sort((a,b)=>a.tier-b.tier||b.net-a.net||SYS[a.k].n-SYS[b.k].n);
@@ -808,7 +808,7 @@ function auInit(){$('auExtra').innerHTML=Array.from({length:21},(_,n)=>'<option 
 function auSync(){AU.extra=Math.min(20,Math.max(0,+$('auExtra').value||0));if(!AU.on)return;const t='سعر المتر الأساسي للدور: '+fmt(AUDEF[$('auFloor').value]||0)+' – تقدر تعدّله من خانة «سعر المتر».',h=$('auHint');if(h._t!==t){h._t=t;h.textContent=t}}
 function auResetPm(){$('auPm').value=AUDEF[$('auFloor').value];render()}
 function auUnit(){const ty=$('auType').value,fl=$('auFloor').value,ua=+$('auArea').value||0,pm=+$('auPm').value||0;if(!(ua>0&&pm>0))return null;
- const u={code:'ADM-'+ty.toUpperCase()+'-'+fl.toUpperCase(),st:'Available',type:ty,spec:'',bld:'ADM',fl:fl,ua:ua,pm:pm,ga:0,gp:0,ra:0,rp:0,price:ua*pm,bad:0},unitP=ua*pm;
+ const u={code:'ADM-'+ty.toUpperCase()+'-'+fl.toUpperCase(),st:'Available',type:ty,spec:'',bld:'ADM',fl:fl,ua:ua,pm:pm,ga:0,gp:0,ra:0,rp:0,price:ua*pm,bad:0},unitP=flr(ua*pm);
  return{u,u0:u,unitP,gr:0,gross:unitP,gArea:0,gPm:0,tArea:ua,au:true}}
 function setUnitMode(m){const on=m==='adm';if(AU.on===on)return;AU.on=on;
  $('utRes').classList.toggle('on',!on);$('utAdm').classList.toggle('on',on);
@@ -818,10 +818,10 @@ function curUnitLabel(){return AU.on?(AUTY[$('auType').value][1]+' '+AUFL[$('auF
 function unitInfo(){
  window.BADU=null;if(AU.on)return auUnit();const u0=BY[$('code').value.trim().toUpperCase()];if(!u0)return null;if(u0.bad){window.BADU=u0;return null}
  const u=Object.assign({},u0,OVR[u0.code]||{});
- const unitP=u.ua*u.pm, gr=u.ga*u.gp+u.ra*u.rp;
+ const unitP=flr(u.ua*u.pm), gr=flr(u.ga*u.gp+u.ra*u.rp);
  return{u,u0,unitP,gr,gross:unitP+gr,gArea:u.ga+u.ra,gPm:u.gp+u.rp,tArea:u.ua+u.ga+u.ra};
 }
-const r100=x=>Math.round(x/100)*100;
+const r100=x=>Math.round(x/100)*100,flr=x=>Math.floor((+x||0)+1e-6);
 let NODD=false,NX=0,NONX=false;const nxOK=S=>!NONX&&!spAct()&&!(typeof BD!=='undefined'&&BD.on&&SP.ok)&&!S.bd&&!AU.on&&!S.cash&&!S.semi&&!S.adm,nxC=(S,mn)=>nxOK(S)?Math.max(mn,S.cnt+NX):S.cnt;const ddOn=S=>S.dp==='manual'&&!S.cash&&!NODD&&(CT.on||!spAct());
 function fin(o){const ye=o.ye||[];let carry=0;const dp=r100(o.dp);if(!o.keepRem)carry+=o.dp-dp;
  const del=r100(o.del);carry+=o.del-del;const six=o.six?r100(o.six):0;if(o.six)carry+=o.six-six;
@@ -840,7 +840,7 @@ function skip1(o,k,net){const S=SYS[k];if(!S||S.cash||S.adm||S.semi||!o.rows||o.
  const flex=rows.map((v,i)=>i).filter(i=>!fixed[i]);let ye=o.ye?o.ye.slice():[];
  if(flex.length){const a=R/flex.length;flex.forEach(i=>rows[i]+=a)}else if(ye.length){const a=R/ye.length;ye=ye.map(v=>v+a)}else{const a=R/rows.length;for(let i=0;i<rows.length;i++)rows[i]+=a}
  return{...o,rows,rd:nrd,rl:nrl,ye,skip1:true,cmpRows:o.cmpRows!==undefined?Math.max(0,o.cmpRows-1):o.cmpRows}}
-function calc(k,net,dpIn){let o=calc0(k,net,dpIn);if(SKIP1&&!NONX)o=skip1(o,k,net);return fin(o)}
+function calc(k,net,dpIn){net=flr(net);let o=calc0(k,net,dpIn);if(SKIP1&&!NONX)o=skip1(o,k,net);return fin(o)}
 function calc0(k,net,dpIn){
  const S=SYS[k],rows=[];let dp=S.dp==='manual'?Math.min(dpIn,net):(dpIn>0?Math.min(dpIn,net):net*S.dp);
  if(S.cash)return{dp:0,rows:[net],del:0,rem:net};
@@ -959,10 +959,10 @@ function render0(){
   if(u.bad)ch.insertAdjacentHTML('beforeend',`<span class="chip err">بيانات المساحة في الشيت الأصلي فيها خطأ – اتحسب السعر من خانة Unit Price</span>`);}
  else if(window.BADU){ALN=['bad:'+window.BADU.code,'errBad'];ch.insertAdjacentHTML('beforeend','<span class="chip err">بيانات الوحدة دي غلطانة في الشيت الأصلي (المساحة اتحولت لتاريخ) – صلّحها في الشيت الأول</span>')}
  else if(!AU.on&&$('code').value.trim()){const cv=$('code').value.trim();if(/^[A-Za-z]-\d{2}-\d{2}-[A-Za-z0-9]+$/.test(cv))ALN=['nf:'+cv,'errNF'];ch.insertAdjacentHTML('beforeend','<span class="chip err">الكود ده مش موجود في قائمة الوحدات</span>')}
- const net=I?I.gross*(1-disc):0;
+ const net=I?flr(I.gross*(1-disc)):0;
  // cards
  $('nxBox').classList.remove('on');$('nxNote').style.display='none';{const w=$('sk1W'),S0=SYS[sel];w.style.display='';w.hidden=!(sel&&S0&&!S0.cash&&!S0.adm&&!S0.semi);w.classList.toggle('on',SKIP1);$('sk1').checked=SKIP1}
- $('cards').innerHTML=Object.keys(SYS).filter(vis).sort((a,b)=>!!SYS[b].cash-!!SYS[a].cash).map(k=>{const S=SYS[k],r=I?calc(k,bdK(k)?I.gross*.85:net,bdK(k)?0:dpIn):null;
+ $('cards').innerHTML=Object.keys(SYS).filter(vis).sort((a,b)=>!!SYS[b].cash-!!SYS[a].cash).map(k=>{const S=SYS[k],r=I?calc(k,bdK(k)?flr(I.gross*.85):net,bdK(k)?0:dpIn):null;
   const per=S.semi?'نصف سنوي':'ربع سنوي',sub=bdK(k)?(k=='6'?'خصم 15% • 24 قسط متساوي: أولهم عند التعاقد والباقي كل كوارتر • من غير دفعة استلام':'خصم 15% • مقدم '+(k=='10'?'10%':'5%')+' • 5% بعد 6 شهور • '+(BD.amt&&BD.freq?(BD.freq==='m'?fmt(BD.amt)+' شهري':fmt(BD.amt*3)+' كل كوارتر'):'قسط 10 أو 15 ألف شهري / كوارتر')+' • دفعات سنوية • '+(k=='10'?'10%':'5%')+' استلام'):S.cash?'دفعة واحدة':S.adm?`مقدم ${S.dp*100}% • 5% بعد 6 شهور • 10% استلام • ${S.cnt+AU.extra} قسط ${per}`:S.dp==='manual'?`${nxC(S,1)} قسط ${per}`:`مقدم ${S.dp*100}% • ${nxC(S,2)} قسط ${per}`;
   return`<button class="card ${S.c} ${sel==k?'sel':''}" onclick="pick('${k}')"><div class="big">${S.cash?'CASH':S.adm?(auY(AU.extra))+'<small> سنين • إداري</small>':S.n+'<small> سنين'+(S.semi?' • نصف سنوي':'')+'</small>'}</div><div class="sub">${sub}</div>${S.appr?'<span class="tag">يحتاج موافقة أولًا</span>':''}${bdK(k)?'<span class="tag">🤝 بالك ديل</span>':''}${r?(bdK(k)&&k!='6'?(BD.amt&&BD.freq?`<div class="amt">الدفعة السنوية ≈ ${fmt(r.ye[0]||0)}</div>`:''):`<div class="amt">${S.cash?'الإجمالي':'القسط'} ≈ ${fmt(r.rows[S.semi?1:S.dp==='manual'?0:2]||r.rows[0])}</div>`):''}</button>`}).join('');
  // plan
@@ -985,7 +985,7 @@ function render0(){
   if(low&&!ok){ALN=['cmp:'+sig,'warnCmp'];P.innerHTML=box;return}
   cmpHTML=box}
  const c0=pd($('contract').value||iso(t0)),f0=pd($('first').value||iso(addM(t0,3)));
- const mPct=mPctGet(),maint=I.gross*mPct/100,total=net+maint,disc$=I.gross*disc;
+ const mPct=mPctGet(),maint=flr(I.gross*mPct/100),total=net+maint,disc$=I.gross-net;
  const yd0=(SP.ok&&spAct()&&$('spYd').value)?pd($('spYd').value):null,yW=(yd0&&yd0<c0)?'<div class="appr noprint err">تاريخ أول دفعة سنوية قبل تاريخ التعاقد – عدّله</div>':'';
  const step=S.step||3,ct53=ddOn(S),den=ct53?r.rem:net,netShow=ct53?net-r.extra:net;
  let body='';
@@ -1167,7 +1167,7 @@ function authInit(){if(!apiUrl())return;if(sesOk()){applySession();flushQueue()}
 /* --- تسجيل الخطط --- */
 let LASTSIG=null,LT=null,QBUSY=false;
 function planSnapshot(){const P=document.querySelector('#planBody .paper');if(!P||!sel)return null;const I=unitInfo();if(!I)return null;
- const disc=bdD()!==null?bdD():Math.max(0,+$('disc').value||0)/100,net=I.gross*(1-disc),dpIn=bdK(sel)?0:dpGet(),S=SYS[sel];let r=null;try{r=calc(sel,net,dpIn)}catch(e){}
+ const disc=bdD()!==null?bdD():Math.max(0,+$('disc').value||0)/100,net=flr(I.gross*(1-disc)),dpIn=bdK(sel)?0:dpGet(),S=SYS[sel];let r=null;try{r=calc(sel,net,dpIn)}catch(e){}
  const q=I.u.code.split('-'),first=r?(r.rows[S.semi?1:S.dp==='manual'?0:2]||r.rows[0]):'';
  const payload={event:'plan',clientTime:new Date().toISOString(),unit:I.u.code,building:q[0]+'-'+q[1],floor:q[2],model:q[3],system:S.cash?'Cash':(S.adm?('Admin '+auY(AU.extra)+' years'):(S.n+' years'+(S.semi?' (semi-annual)':'')+(nxOK(S)&&NX?' '+(NX>0?'+':'')+NX+'Q':''))),client:($('name').value||'').trim(),contract:$('contract').value,first:$('first').value,discount:+(disc*100).toFixed(2),dp:r?Math.round(r.dp):'',net:Math.round(net*100)/100,firstInst:first===''?'':Math.round(first),installments:r?r.rows.length:'',mode:CT.on?'2MDY':'Normal',special:spAct()?('Q='+SP.q+' Y='+SP.y+' yrs='+SP.yrs+' extra='+SP.extra+' freq='+SP.freq+' start='+SP.start+' keep5='+(SP.keep?1:0)+' yauto='+(SP.ym?1:0)):'',drawing:DRAWON?(CT.on?'Contract':'Yes'):'No',approvals:[approved?'plan-approved':'',(S.adm&&AU.extra>0)?'admin-extension-own-responsibility':'',discAppr!==null?'discount-own-responsibility':'',spApprSig?'special-approved':'',unlocked?'status-unlocked':'',SKIP1?'skip-first-quarter':'',(mPctGet()!==10)?'maintenance-'+mPctGet()+'%':'',(holdAck&&I.u0&&holdAck===I.u.code)?'hold-unit-own-responsibility':'',(mAppr!==null&&SP.ok&&$('spMOn')&&$('spMOn').checked)?'maintenance-after-3y-own-responsibility':'',OVR[I.u0.code]?('manual-data '+JSON.stringify(OVR[I.u0.code])):''].filter(Boolean).join(', ')};
  const sig=JSON.stringify([JSON.stringify(OVR[I.u0.code]||{}),AU.on?[$('auArea').value,$('auPm').value,AU.extra]:0,payload.unit,payload.system,payload.client,payload.contract,payload.first,payload.discount,payload.dp,payload.mode,payload.special,payload.drawing]);return{sig,payload}}
@@ -2971,7 +2971,7 @@ function apply(){const s=ST;try{
  if(s.bd||sp||s.mpct!==undefined){if(!SP.ok)spUnlock()}
  if(SP.ok){BD.on=!!s.bd;$('spOn').checked=sp&&!s.bd}
  if(s.bd){BD.amt=s.bdAmt||10000;BD.freq=s.freq||'m'}
- const I0=BY[s.unit],gross=I0?(unitInfo()||{}).gross:0,net=gross*(1-((+$('disc').value||0)/100));
+ const I0=BY[s.unit],gross=I0?(unitInfo()||{}).gross:0,net=flr(gross*(1-((+$('disc').value||0)/100)));
  if(['3','5'].includes(s.sys)&&!sp){if(s.dpAmt!==undefined)$('dp').value=Math.round(s.dpAmt);else if(s.dpPct!==undefined)$('dp').value=Math.round(net*s.dpPct/100)}
  if(sp){
   $('spDp').value=s.dpAmt!==undefined?Math.round(s.dpAmt):s.dpPct!==undefined?Math.round(net*s.dpPct/100):'';
@@ -2991,7 +2991,7 @@ function apply(){const s=ST;try{
  render();return report()}catch(e){return '⚠️ حصلت مشكلة وأنا بطبّق: '+esc(e.message)+'. جرّب تعدّل من الشيت بنفسك أو ابعت الحالة في صندوق الاقتراحات.'}}
 function report(){const P=$('planBody'),warns=[...P.querySelectorAll('.appr,.warn,.err')].map(e=>e.innerText.trim()).filter(Boolean).slice(0,3);
  const snap=planSnapshot();if(!snap||!P.querySelector('.paper'))return warns.length?'✋ <b>ظبطت كل البيانات</b>، بس البيمنت محتاج تأكيد منك على الشيت قبل ما يظهر:<br><span class="botW">'+warns.map(esc).join('<br>')+'</span><br>علّم على التأكيد في الشيت تحت والورقة هتظهر على طول.':'⚠️ البيمنت ما ظهرش – بُص على الشيت وكمّل البيانات الناقصة.';
- const p=snap.payload;const S=SYS[sel];let r=null;try{const I=unitInfo(),d=bdD()!==null?bdD():(+$('disc').value||0)/100;r=calc(sel,I.gross*(1-d),bdK(sel)?0:dpGet())}catch(e){}
+ const p=snap.payload;const S=SYS[sel];let r=null;try{const I=unitInfo(),d=bdD()!==null?bdD():(+$('disc').value||0)/100;r=calc(sel,flr(I.gross*(1-d)),bdK(sel)?0:dpGet())}catch(e){}
  let tot='';if(r){const sum=r.dp+(r.del||0)+(r.six||0)+(r.extra||0)+r.rows.reduce((a,b)=>a+b,0)+(r.ye||[]).reduce((a,b)=>a+b,0);tot=Math.abs(sum-p.net)<1?'✅ الإجمالي مظبوط 100%':''}
  const L=['✅ <b>البيمنت جاهز</b> على الشيت:','💰 المقدم: <b>'+money(p.dp)+'</b>','💳 أول قسط: <b>'+money(p.firstInst)+'</b> • عدد الأقساط: '+p.installments];
  if(r&&r.ye&&r.ye.length)L.push('📆 الدفعة السنوية: '+money(r.ye[0])+(r.ye.length>1?' × '+r.ye.length:''));
@@ -3050,6 +3050,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261108-173749";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261109-095522";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
