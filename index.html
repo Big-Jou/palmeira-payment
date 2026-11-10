@@ -1666,7 +1666,7 @@ window.exportXlsx=function(){if(!(typeof CT!=='undefined'&&CT.on)){say('تحمي
 #hvLayer{position:fixed;inset:0;z-index:140;pointer-events:none;overflow:hidden}
 #hvLayer canvas{position:absolute}
 .hv-sp{position:absolute;width:6px;height:6px;border-radius:50%;background:#d9bd80;box-shadow:0 0 8px #ffe9a8;pointer-events:none}
-.hero .logo,.prepLogo,.jlogo,.paper .plogos img{transition:opacity .25s,transform .5s cubic-bezier(.2,1.6,.4,1),filter .4s;cursor:pointer}
+.hero .logo,.prepLogo,.jlogo{transition:opacity .25s,transform .5s cubic-bezier(.2,1.6,.4,1),filter .4s;cursor:pointer}
 /* العنوان */
 html:not(.pm) .ttl h1{transition:letter-spacing .6s cubic-bezier(.2,1,.3,1),transform .6s cubic-bezier(.2,1.5,.4,1)}
 html:not(.pm) .ttl h1:hover{letter-spacing:.09em;transform:scale(1.04);animation-duration:1.3s}
@@ -1735,7 +1735,7 @@ function reform(img){if(rm||img._busy||Date.now()-(img._t||0)<2200)return;const 
   if(t<END)requestAnimationFrame(fr);else{img.style.opacity='';cv.style.transition='opacity .3s';cv.style.opacity=0;setTimeout(()=>cv.remove(),320);img._busy=0;sparks(r,10)}})(T0)}
 function sparks(r,n){for(let i=0;i<n;i++){const s=D.createElement('div');s.className='hv-sp';s.style.left=(r.left+Math.random()*r.width)+'px';s.style.top=(r.top+Math.random()*r.height)+'px';L.appendChild(s);
  s.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:'translate('+((Math.random()-.5)*80-50)+'%,'+(-60-Math.random()*90)+'px) scale(0)',opacity:0}],{duration:700+Math.random()*400,easing:'ease-out'}).onfinish=()=>s.remove()}}
-const LOGOSEL='.hero .logo,.prepLogo,.jlogo,.paper .plogos img';
+const LOGOSEL='.hero .logo,.prepLogo,.jlogo';
 D.addEventListener('mouseover',e=>{const im=e.target.closest&&e.target.closest(LOGOSEL);if(im&&!(e.relatedTarget&&im.contains(e.relatedTarget)))reform(im)},{passive:true});
 D.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;const im=e.target.closest&&e.target.closest(LOGOSEL);if(im)reform(im)},{passive:true});
 /* ---- كشاف البانلز ---- */
@@ -3089,6 +3089,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261110-143723";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261110-144713";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
