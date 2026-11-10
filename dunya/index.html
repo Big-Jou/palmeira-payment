@@ -1,0 +1,1183 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4A1322">
+<meta name="robots" content="noindex">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>مكتب الأستاذة دنيا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;500;600;700;800;900&display=swap">
+<style>
+/* Layout: one narrow column of official "papers" on a cream office floor; a dark chocolate quiet band for the confession; loader, gate and doors as fullscreen layers on top. Single committed look (paper office), so one palette. */
+:root{
+  --burgundy:#7A2236; --burgundy-deep:#4A1322; --wine:#A94A5E;
+  --rose:#D6A3A1; --rose-soft:#F2DCD6;
+  --cream:#F5EADC; --paper:#FFFAF3; --wall:#F2E3D2;
+  --gold:#C29A52; --gold-soft:#EAD7AA; --gold-deep:#8E6C33;
+  --choc:#3A231E; --choc-deep:#24150F; --ink:#2C1915; --muted:#7A5F57; --line:#E3CDBE;
+  --ok:#2E6A50; --ok-soft:#DCEBE2; --warn:#7A5410; --warn-soft:#F6E6C4;
+  --quiet-fg:#F3E6D8; --quiet-muted:#BFA597;
+  --f-display:"Aref Ruqaa","Cairo",serif;
+  --f-body:"Cairo","Tajawal","Segoe UI",Tahoma,sans-serif;
+  color-scheme:light;
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--cream);
+  background-image:radial-gradient(rgba(122,34,54,.055) 1px, transparent 1.2px);
+  background-size:22px 22px;
+  color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--burgundy-deep)}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+p{margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55em;min-height:52px;padding:.6em 1.4em;border-radius:14px;border:0;font-weight:800;font-size:1.05rem;line-height:1.4;transition:transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s}
+.btn svg{width:1.15em;height:1.15em;flex:none}
+.btn-primary{background:var(--burgundy);color:var(--paper);box-shadow:0 5px 0 var(--burgundy-deep),0 14px 26px -12px rgba(74,19,34,.6)}
+.btn-primary:hover{background:#86283D}
+.btn-primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--burgundy-deep)}
+.btn-ghost{background:transparent;border:2px solid var(--burgundy);color:var(--burgundy);min-height:46px;font-size:.95rem;padding:.45em 1.1em}
+.btn-ghost:hover{background:var(--rose-soft)}
+.btn-ghost:active{transform:scale(.96)}
+.btn[disabled]{cursor:default}
+
+/* ---------- stamps ---------- */
+.stamp{--r:-8deg;--c:var(--burgundy);display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:.3em .9em;border:3px solid var(--c);outline:1.5px solid var(--c);outline-offset:3px;border-radius:8px;color:var(--c);font-weight:900;line-height:1.35;transform:rotate(var(--r));opacity:.88;mix-blend-mode:multiply;background:transparent;white-space:normal}
+.stamp.round{border-radius:999px;padding:.35em 1.1em}
+.stamp.ok{--c:var(--ok)}
+.stamp.gold{--c:var(--gold-deep)}
+.stamp.pending{visibility:hidden}
+.stamp.slam{animation:slam .5s cubic-bezier(.2,1.5,.45,1) both}
+@keyframes slam{0%{transform:scale(2.6) rotate(var(--r));opacity:0}55%{opacity:.95}100%{transform:scale(1) rotate(var(--r));opacity:.88}}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:100;background:var(--burgundy-deep);color:var(--gold-soft);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center;padding:24px;transition:opacity .6s ease, visibility .6s}
+.loader.done{opacity:0;visibility:hidden}
+.ld-pad{position:relative;width:170px;height:150px}
+.ld-paper{position:absolute;left:20px;right:20px;bottom:0;height:78px;background:var(--paper);border-radius:4px;transform:rotate(-3deg);box-shadow:0 10px 20px -8px rgba(0,0,0,.5);overflow:hidden}
+.ld-paper i{position:absolute;right:14px;height:4px;border-radius:2px;background:var(--line)}
+.ld-paper i:nth-child(1){top:14px;width:60%}.ld-paper i:nth-child(2){top:26px;width:42%}.ld-paper i:nth-child(3){top:38px;width:52%}
+.ld-mark{position:absolute;left:22px;bottom:12px;width:42px;height:42px;border-radius:50%;border:3px solid var(--burgundy);color:var(--burgundy);font-size:.6rem;font-weight:900;display:grid;place-items:center;opacity:0;animation:mark .9s infinite}
+@keyframes mark{0%,44%{opacity:0;transform:scale(1.3)}50%,100%{opacity:.85;transform:scale(1)}}
+.ld-tool{position:absolute;left:26px;top:0;width:52px;animation:tool .9s infinite cubic-bezier(.5,0,.5,1)}
+.ld-tool .knob{width:30px;height:30px;border-radius:50%;background:var(--gold);margin:0 auto;box-shadow:inset -4px -4px 0 rgba(0,0,0,.15)}
+.ld-tool .neck{width:12px;height:22px;background:var(--gold-soft);margin:0 auto}
+.ld-tool .base{height:14px;border-radius:4px;background:var(--burgundy);box-shadow:0 3px 0 #2A0A12}
+@keyframes tool{0%,100%{transform:translateY(0)}45%,55%{transform:translateY(42px)}}
+.ld-line{font-weight:700;font-size:1.05rem;min-height:1.8em}
+.ld-bar{width:min(240px,70vw);height:6px;border-radius:3px;background:rgba(234,215,170,.18);overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:3px;animation:fill 2.4s ease-out forwards}
+@keyframes fill{to{width:100%}}
+.ld-skip{font-size:.8rem;opacity:.6}
+
+/* ---------- sound button ---------- */
+.sound{position:fixed;z-index:90;top:calc(env(safe-area-inset-top,0px) + 9px);left:max(14px,env(safe-area-inset-left,0px));width:40px;height:40px;border-radius:50%;border:1.5px solid var(--gold);background:var(--burgundy);color:var(--gold-soft);display:grid;place-items:center;box-shadow:0 6px 16px -6px rgba(0,0,0,.45);transition:transform .15s}
+.sound:active{transform:scale(.9)}
+.sound svg{width:20px;height:20px}
+.sound .on{display:none}.sound[aria-pressed="true"] .on{display:block}.sound[aria-pressed="true"] .off{display:none}
+.sound[aria-pressed="true"]{background:var(--gold);color:var(--burgundy-deep)}
+
+/* ---------- intro gate ---------- */
+.intro{position:fixed;inset:0;z-index:60;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(130% 75% at 50% 0%, var(--rose-soft), var(--cream) 62%)}
+.intro-inner{min-height:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding-block:calc(env(safe-area-inset-top,0px) + 62px) calc(env(safe-area-inset-bottom,0px) + 30px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.facade{width:min(100%,330px);height:auto;display:block;animation:rise .9s .1s cubic-bezier(.2,.8,.2,1) both}
+.facade .flag{transform-origin:180px 9px;animation:flag 2.4s ease-in-out infinite}
+@keyframes flag{0%,100%{transform:skewY(0)}50%{transform:skewY(-9deg) scaleX(.92)}}
+.facade .win{animation:win 4s ease-in-out infinite}
+@keyframes win{0%,100%{opacity:.25}50%{opacity:.6}}
+.org{margin:0;display:flex;flex-direction:column;align-items:center;gap:2px;animation:rise .8s .35s both}
+.org span{font-family:var(--f-display);font-weight:700;font-size:clamp(2.1rem,10vw,2.9rem);line-height:1.25;color:var(--burgundy-deep)}
+.org small{font-weight:800;font-size:clamp(1rem,4.6vw,1.2rem);color:var(--burgundy)}
+.org em{font-style:normal}
+.case-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;animation:rise .8s .55s both}
+.case-strip span{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:.15em .8em;font-size:.82rem;font-weight:700;color:var(--choc)}
+.case-strip b{color:var(--burgundy)}
+.notice{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px 16px 18px;box-shadow:0 14px 30px -20px rgba(58,35,30,.5);display:flex;flex-direction:column;gap:8px;animation:rise .8s .7s both;position:relative}
+.notice::before{content:"";position:absolute;inset:0 0 auto;height:5px;border-radius:10px 10px 0 0;background:repeating-linear-gradient(-45deg,var(--burgundy) 0 10px,var(--gold-soft) 10px 20px)}
+.alert{font-weight:900;color:var(--burgundy);font-size:1.15rem;min-height:1.75em;margin-top:4px}
+.notice .strong{font-weight:800;color:var(--burgundy-deep)}
+.later{opacity:0;transform:translateY(10px);transition:opacity .7s ease, transform .7s ease;pointer-events:none}
+.later.show{opacity:1;transform:none;pointer-events:auto}
+.enter-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;width:100%}
+.btn.big{min-height:62px;font-size:1.2rem;width:min(100%,360px);border-radius:16px}
+.enter-wrap .btn.big{animation:breathe 2.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{box-shadow:0 5px 0 var(--burgundy-deep),0 0 0 0 rgba(122,34,54,.35)}50%{box-shadow:0 5px 0 var(--burgundy-deep),0 0 0 12px rgba(122,34,54,0)}}
+.ticket{display:flex;align-items:center;gap:10px;background:var(--gold-soft);color:var(--choc);border-radius:6px;padding:6px 14px;font-size:.82rem;font-weight:700;position:relative;-webkit-mask:radial-gradient(circle 6px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 6px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat}
+.ticket b{font-size:1.15rem;color:var(--burgundy);font-variant-numeric:tabular-nums}
+#enterStamp{position:absolute;top:2px;font-size:1.25rem;background:rgba(255,250,243,.6);--r:-10deg;pointer-events:none}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ---------- doors ---------- */
+.doors{position:fixed;inset:0;z-index:80;perspective:1500px;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .35s ease, visibility .35s}
+.doors.show{opacity:1;visibility:visible}
+.door{position:absolute;top:0;bottom:0;width:50.4%;background:linear-gradient(90deg,#6A1C2E,var(--burgundy) 40%,#6A1C2E);transition:transform 1.15s cubic-bezier(.7,0,.25,1);display:flex;flex-direction:column;justify-content:center;gap:4vh;padding:8vh 7%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.door.l{left:0;transform-origin:left center;border-right:2px solid var(--burgundy-deep)}
+.door.r{right:0;transform-origin:right center;border-left:2px solid var(--burgundy-deep)}
+.doors.open .door.l{transform:rotateY(100deg)}
+.doors.open .door.r{transform:rotateY(-100deg)}
+.door .pane{flex:1;border:2px solid var(--gold);border-radius:6px;box-shadow:inset 0 0 0 6px rgba(0,0,0,.12)}
+.door .lbl{font-family:var(--f-display);font-size:clamp(1.6rem,8vw,2.6rem);color:var(--gold-soft);text-align:center;line-height:1.3}
+.door .knob{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--gold-soft);box-shadow:0 0 0 4px var(--gold-deep)}
+.door.l .knob{right:12%}.door.r .knob{left:12%}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--burgundy-deep);color:var(--gold-soft);box-shadow:0 6px 18px -10px rgba(0,0,0,.5)}
+.topbar .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;min-height:58px;padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:calc(max(14px,env(safe-area-inset-left,0px)) + 50px)}
+.topbar .brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:inherit;text-align:start;min-width:0}
+.topbar .brand svg{width:34px;height:34px;flex:none}
+.topbar .brand b{font-family:var(--f-display);font-size:1.2rem;line-height:1.2;display:block;white-space:nowrap}
+.topbar .brand small{font-size:.72rem;opacity:.8;display:block;line-height:1.3}
+.topbar .pct{margin-inline-start:auto;font-size:.78rem;font-weight:800;background:rgba(234,215,170,.14);padding:.15em .7em;border-radius:999px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.topbar .bar{height:3px;background:rgba(234,215,170,.16)}
+.topbar .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold-soft));transition:width .9s cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- sections ---------- */
+main{overflow-x:hidden}
+section{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 66px)}
+.wrap{max-width:680px;margin:0 auto;padding-block:52px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{display:inline-flex;align-items:center;gap:.5em;font-size:.8rem;font-weight:800;color:var(--burgundy);background:var(--rose-soft);padding:.15em .85em;border-radius:999px;font-variant-numeric:tabular-nums}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem,8vw,2.7rem);line-height:1.35;color:var(--burgundy-deep);margin:.3em 0 .15em;text-wrap:balance}
+.sub{color:var(--muted);margin-bottom:22px;max-width:60ch}
+.paper{background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:0 1px 0 #fff inset,0 16px 32px -20px rgba(58,35,30,.5);position:relative}
+.js-reveal .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1)}
+.js-reveal .reveal.in{opacity:1;transform:none}
+.divider{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--gold)}
+.divider::before,.divider::after{content:"";height:1px;width:min(28vw,160px);background:linear-gradient(90deg,transparent,var(--gold))}
+.divider::after{transform:scaleX(-1)}
+.divider svg{width:22px;height:22px}
+
+/* ---------- dashboard ---------- */
+.dash{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.tile{padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile.full{grid-column:1/-1}
+.k{font-size:.8rem;font-weight:700;color:var(--muted)}
+.v{font-weight:800;font-size:1.08rem;color:var(--ink);line-height:1.5}
+.case-tile{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;overflow:hidden;background:linear-gradient(135deg,var(--paper),var(--rose-soft))}
+.case-no{font-weight:900;font-size:clamp(3.4rem,16vw,4.6rem);line-height:1;color:var(--burgundy);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.case-tile .stamp{font-size:.95rem;--r:-12deg}
+.person{flex-direction:row;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--f-display);font-size:1.35rem;line-height:1}
+.av.y{background:var(--gold-soft);color:var(--choc)}
+.av.d{background:var(--burgundy);color:var(--gold-soft)}
+.person .v{font-size:1rem}
+.chip{display:inline-flex;align-items:center;gap:.45em;padding:.15em .8em;border-radius:999px;font-weight:800;font-size:.86rem;width:max-content;max-width:100%;line-height:1.6}
+.chip::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.chip.wait{background:var(--warn-soft);color:var(--warn)}
+.chip.wait::before{animation:pulse 1.4s infinite}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.hot{background:var(--rose-soft);color:var(--burgundy)}
+@keyframes pulse{50%{opacity:.25}}
+.gauge{width:100%;max-width:260px;margin:4px auto 0;display:block;overflow:visible}
+.needle{transform-origin:100px 104px;transform:rotate(calc(var(--a,0) * -1deg));transition:transform 1.8s cubic-bezier(.3,1.4,.4,1)}
+.wob{transform-origin:100px 104px;animation:wob 1.3s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+.gauge-ends{display:flex;justify-content:space-between;font-size:.74rem;font-weight:700;color:var(--muted);max-width:260px;margin:0 auto;width:100%}
+.level{text-align:center;font-weight:900;font-size:1.25rem;color:var(--burgundy)}
+.steps{list-style:none;margin:4px 0 0;padding:0;display:grid}
+.step button{width:100%;display:flex;align-items:center;gap:12px;background:none;border:0;padding:7px 2px;text-align:start;border-radius:8px}
+.step button:hover{background:var(--rose-soft)}
+.dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);background:var(--paper);display:grid;place-items:center;font-size:.78rem;font-weight:800;color:var(--muted);flex:none;position:relative;transition:background .4s, border-color .4s, color .4s;font-variant-numeric:tabular-nums}
+.step:not(:last-child) .dot::after{content:"";position:absolute;top:calc(100% + 2px);left:50%;width:2px;height:14px;margin-left:-1px;background:var(--line)}
+.step.done .dot{background:var(--burgundy);border-color:var(--burgundy);color:var(--paper)}
+.step.done:not(:last-child) .dot::after{background:var(--rose)}
+.step .lb{font-weight:700;font-size:.95rem}
+.step .st{margin-inline-start:auto;font-size:.78rem;color:var(--muted);font-weight:600}
+.step.done .st{color:var(--ok);font-weight:800}
+.steps-sum{font-size:.85rem;color:var(--muted);font-weight:700}
+.note{position:relative;border:0;background:#F3CCC6;color:var(--burgundy-deep);padding:22px 16px 16px;border-radius:2px 2px 14px 2px;font-weight:800;font-size:1rem;line-height:1.6;text-align:start;transform:rotate(-2deg);box-shadow:0 12px 20px -12px rgba(74,19,34,.55);transition:transform .25s ease}
+.note:hover{transform:rotate(-.5deg) translateY(-3px)}
+.note:active{transform:rotate(0) scale(.97)}
+.note::before{content:"";position:absolute;top:-6px;left:50%;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--gold);box-shadow:inset -3px -3px 0 rgba(0,0,0,.2),0 3px 4px rgba(0,0,0,.25)}
+.note small{display:block;font-weight:600;font-size:.78rem;opacity:.75;margin-top:4px}
+.found-row{display:flex;align-items:center;gap:8px}
+.found-row i{width:14px;height:14px;border-radius:4px;border:2px dashed var(--rose);transform:rotate(45deg);transition:background .3s}
+.found-row i.on{background:var(--burgundy);border:2px solid var(--burgundy)}
+.found-row b{font-variant-numeric:tabular-nums}
+
+/* ---------- case file ---------- */
+.folder{position:relative;perspective:1600px;margin-top:30px}
+.folder-tab{position:absolute;top:-26px;right:18px;z-index:4;background:#DDBF83;color:var(--choc);font-weight:800;font-size:.82rem;padding:3px 16px 2px;border-radius:8px 8px 0 0;font-variant-numeric:tabular-nums}
+.cover{position:absolute;inset:0;z-index:3;width:100%;border:0;border-radius:6px;background:linear-gradient(165deg,#E9D19E,#D6B677);color:var(--choc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;transform-origin:right center;transition:transform 1.05s cubic-bezier(.6,.05,.3,1), opacity .35s .85s;box-shadow:0 18px 34px -18px rgba(58,35,30,.7), inset 0 0 0 1px rgba(255,255,255,.35)}
+.cover::after{content:"";position:absolute;inset:12px;border:1.5px dashed rgba(58,35,30,.3);border-radius:4px;pointer-events:none}
+.folder.open .cover{transform:rotateY(170deg);opacity:0;pointer-events:none}
+.cover .t1{font-family:var(--f-display);font-size:clamp(1.8rem,8vw,2.4rem);line-height:1.3;color:var(--burgundy-deep)}
+.cover .t2{font-weight:700;font-size:.9rem;opacity:.8}
+.cover .stamp{font-size:1rem;--r:6deg;opacity:.55}
+.cover .tap{display:inline-flex;align-items:center;gap:8px;background:var(--burgundy);color:var(--paper);font-weight:800;padding:.45em 1.1em;border-radius:999px;font-size:.95rem;animation:nudge 1.6s ease-in-out infinite}
+.cover .tap svg{width:18px;height:18px}
+@keyframes nudge{50%{transform:translateY(-4px)}}
+.file-paper{padding:20px 18px 22px;min-height:440px}
+.lh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:12px;border-bottom:2px double var(--line);margin-bottom:14px}
+.lh .r{display:flex;align-items:center;gap:10px}
+.lh svg{width:40px;height:40px;flex:none}
+.lh b{display:block;font-family:var(--f-display);font-size:1.15rem;line-height:1.3;color:var(--burgundy-deep)}
+.lh small{display:block;font-size:.74rem;color:var(--muted);font-weight:700}
+.lh .meta{font-size:.74rem;color:var(--muted);font-weight:700;text-align:end;line-height:1.6;font-variant-numeric:tabular-nums}
+.file-title{font-weight:900;font-size:1.3rem;text-align:center;color:var(--burgundy);margin-bottom:12px}
+.fields{margin:0;display:grid;gap:0}
+.fields>div{display:grid;grid-template-columns:7.2em 1fr;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.fields dt{font-weight:800;color:var(--muted);font-size:.9rem}
+.fields dd{margin:0;font-weight:700;min-width:0}
+.redact{display:inline-flex;gap:5px;vertical-align:middle;margin-inline-end:6px}
+.redact i{display:inline-block;height:12px;background:var(--choc);border-radius:2px}
+.file-stamps{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px 22px;margin-top:22px}
+.file-stamps .stamp{font-size:1rem}
+.file-stamps .long{font-size:.92rem;max-width:16em}
+.file-foot{display:flex;justify-content:center;margin-top:20px}
+.mini-btn{display:inline-flex;align-items:center;gap:6px;background:var(--choc);color:var(--gold-soft);border:0;border-radius:999px;padding:.4em 1em;font-weight:800;font-size:.85rem;transition:transform .15s}
+.mini-btn:active{transform:scale(.94)}
+.mini-btn svg{width:16px;height:16px}
+.mini-btn.found{background:var(--ok)}
+
+/* ---------- chat ---------- */
+.chatbox{border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 36px -22px rgba(58,35,30,.6);background:#EFE2D4}
+.chat-head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--burgundy);color:var(--paper)}
+.chat-head .avs{display:flex}
+.chat-head .av{width:36px;height:36px;font-size:1.1rem;border:2px solid var(--burgundy)}
+.chat-head .av+.av{margin-inline-start:-10px}
+.chat-head b{display:block;font-weight:800;line-height:1.4}
+.chat-head small{display:block;font-size:.74rem;opacity:.8}
+.chat-body{padding:16px 12px 18px;display:flex;flex-direction:column;gap:8px;background-image:radial-gradient(rgba(122,34,54,.07) 1px,transparent 1.2px);background-size:16px 16px}
+.row{position:relative;display:flex}
+.row.y{justify-content:flex-start}
+.row.d{justify-content:flex-end}
+.msg{max-width:82%;padding:7px 12px 5px;border-radius:16px;font-size:.98rem;line-height:1.65;visibility:hidden;box-shadow:0 2px 0 rgba(58,35,30,.08)}
+.row.shown .msg{visibility:visible;animation:pop .38s cubic-bezier(.2,1.4,.4,1) both}
+.row.y .msg{background:var(--paper);border-start-start-radius:4px}
+.row.d .msg{background:var(--burgundy);color:var(--paper);border-start-end-radius:4px}
+.msg .who{display:block;font-size:.72rem;font-weight:800;opacity:.7}
+.msg .meta{display:block;font-size:.66rem;opacity:.65;text-align:end;font-weight:600}
+@keyframes pop{from{opacity:0;transform:scale(.7) translateY(8px)}to{opacity:1;transform:none}}
+.typing{position:absolute;top:0;display:none;align-items:center;gap:4px;padding:10px 14px;border-radius:16px}
+.row.y .typing{inset-inline-start:0;background:var(--paper)}
+.row.d .typing{inset-inline-end:0;background:var(--burgundy)}
+.row.typing-on .typing{display:flex}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce 1s infinite}
+.row.d .typing i{background:var(--rose)}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.chat-stamp{display:flex;justify-content:center;padding-top:14px}
+.chat-stamp .stamp{font-size:1rem;max-width:17em;background:rgba(255,250,243,.55)}
+.chat-ctrl{display:flex;justify-content:center;gap:10px;margin-top:14px;min-height:46px}
+
+/* ---------- requests ---------- */
+.req-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.urgent{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--burgundy);color:var(--paper);font-weight:900;font-size:.85rem;border-radius:6px;padding:.35em .9em;transform:rotate(3deg);box-shadow:0 4px 0 var(--burgundy-deep);animation:alarm 2.6s ease-in-out infinite;margin-top:.6em}
+.urgent::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold-soft);animation:pulse 1s infinite}
+.urgent.found{background:var(--ok);box-shadow:0 4px 0 #1C4433;animation:none}
+@keyframes alarm{0%,86%,100%{transform:rotate(3deg)}90%{transform:rotate(-3deg)}94%{transform:rotate(5deg)}}
+.reqs{display:grid;gap:16px}
+.req{padding:18px 16px 16px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.req::before{content:"";position:absolute;top:0;bottom:0;right:0;width:6px;background:repeating-linear-gradient(180deg,var(--rose) 0 8px,transparent 8px 14px)}
+.req-top{display:flex;justify-content:space-between;gap:10px;font-size:.76rem;font-weight:800;color:var(--muted);border-bottom:1px dashed var(--line);padding-bottom:8px;font-variant-numeric:tabular-nums}
+.req h3{margin:0;font-size:1.15rem;font-weight:900;color:var(--burgundy-deep);line-height:1.5}
+.req .why{font-size:.96rem}
+.req .why b{color:var(--muted);font-size:.85rem;display:block}
+.req .fee{font-size:.85rem;color:var(--muted);font-weight:700}
+.req .fee span{color:var(--choc)}
+.req-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:4px}
+.req .stamp{position:absolute;left:14px;top:46%;font-size:.95rem;max-width:12em;--r:-14deg;background:rgba(255,250,243,.6);pointer-events:none}
+.req.sent .btn-primary{background:var(--ok);box-shadow:0 2px 0 #1C4433}
+
+/* ---------- confession (quiet) ---------- */
+.quiet{background:var(--choc-deep);color:var(--quiet-fg);background-image:radial-gradient(120% 60% at 50% 0%, rgba(194,154,82,.12), transparent 70%)}
+.quiet .eyebrow{background:rgba(234,215,170,.12);color:var(--gold-soft)}
+.quiet h2{color:var(--gold-soft)}
+.confess{position:relative;font-size:1.12rem;line-height:2.15;margin-top:18px}
+.confess p{margin:0 0 1.05em;max-width:60ch}
+.confess .ghost{visibility:hidden}
+.confess .typed{position:absolute;inset:0}
+.confess .typed p.cur::after{content:"";display:inline-block;width:2px;height:1.05em;background:var(--gold);vertical-align:-.2em;margin-inline-start:3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sign{font-family:var(--f-display);font-size:1.8rem;color:var(--gold-soft);opacity:0;transition:opacity 1.2s ease}
+.sign.show{opacity:1}
+.confess .last{font-weight:800;color:var(--gold-soft)}
+.quiet .btn-ghost{border-color:var(--quiet-muted);color:var(--quiet-fg)}
+.quiet .btn-ghost:hover{background:rgba(255,255,255,.06)}
+
+/* ---------- envelope ---------- */
+.env-stage{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:12px}
+.envelope{position:relative;width:min(100%,340px);aspect-ratio:1.55;border:0;padding:0;background:none;perspective:900px;transition:transform .25s ease}
+.envelope:not(.open):hover{transform:translateY(-4px) rotate(-1deg)}
+.envelope:not(.open){animation:float 3.2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+.env-back{position:absolute;inset:0;border-radius:8px;background:#E6D1B5;box-shadow:0 22px 34px -18px rgba(58,35,30,.65)}
+.env-letter{position:absolute;left:7%;right:7%;top:8%;height:80%;z-index:2;background:var(--paper);border-radius:4px;transition:transform .9s .45s cubic-bezier(.2,.8,.2,1);background-image:repeating-linear-gradient(180deg,transparent 0 17px,var(--line) 17px 18px)}
+.env-front{position:absolute;inset:0;z-index:3;border-radius:8px;background:#F2E2CB;clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:60%;z-index:4;background:#E9D4B6;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;transition:transform .65s ease, z-index 0s .32s;border-radius:8px 8px 0 0}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1}
+.envelope.open .env-letter{transform:translateY(-44%)}
+.wax{position:absolute;z-index:5;left:50%;top:60%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:radial-gradient(circle at 38% 35%,#A8364F,var(--burgundy) 55%,#561626);display:grid;place-items:center;color:var(--gold-soft);font-family:var(--f-display);font-size:1.4rem;box-shadow:0 3px 6px rgba(0,0,0,.3);transition:transform .4s ease, opacity .4s ease}
+.envelope.open .wax{transform:scale(1.5) rotate(25deg);opacity:0}
+.env-to{position:absolute;z-index:5;right:7%;bottom:10%;text-align:start;font-size:.78rem;font-weight:700;color:var(--choc);line-height:1.7}
+.env-to b{color:var(--burgundy)}
+.env-mark{position:absolute;z-index:5;left:7%;bottom:12%;font-size:.8rem;--r:-10deg}
+.envelope.open .env-to,.envelope.open .env-mark{opacity:0;transition:opacity .3s}
+.env-hint{font-weight:700;color:var(--muted);font-size:.9rem}
+.letter{padding:26px 20px 24px;background-image:repeating-linear-gradient(180deg,transparent 0 37px,rgba(214,163,161,.35) 37px 38px);background-position:0 18px;transform-origin:top center;animation:unfold .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes unfold{from{opacity:0;transform:perspective(900px) rotateX(-70deg) scaleY(.6)}to{opacity:1;transform:none}}
+.letter p{font-size:1.07rem;line-height:2.15;margin-bottom:.4em;max-width:60ch}
+.letter .hi{font-family:var(--f-display);font-size:1.6rem;color:var(--burgundy-deep)}
+.letter .sig{margin-top:16px;display:flex;flex-direction:column;align-items:flex-end;gap:0}
+.letter .sig small{font-size:.8rem;color:var(--muted);font-weight:700}
+.letter .sig b{font-family:var(--f-display);font-size:1.7rem;color:var(--burgundy);line-height:1.4}
+.letter .sig em{font-style:normal;font-size:.72rem;color:var(--muted);background:var(--rose-soft);border-radius:999px;padding:0 .7em}
+
+/* ---------- decision ---------- */
+.office{position:relative;max-width:470px;margin:8px auto 0}
+.office svg{display:block;width:100%;height:auto}
+.plate{position:absolute;left:50%;bottom:39%;transform:translateX(-50%);z-index:2;width:max-content;max-width:62%;background:linear-gradient(180deg,#F0DBA8,#C9A25C 60%,#B38A44);color:var(--choc-deep);padding:6px 18px 4px;border-radius:5px;text-align:center;box-shadow:0 4px 0 var(--gold-deep),0 10px 16px -6px rgba(0,0,0,.45)}
+.plate b{display:block;font-family:var(--f-display);font-size:clamp(1rem,4.6vw,1.3rem);line-height:1.35;white-space:nowrap}
+.plate small{display:block;font-weight:800;font-size:clamp(.66rem,2.8vw,.8rem);line-height:1.5}
+.steam{animation:steam 2.6s ease-in-out infinite;opacity:0}
+.steam.s2{animation-delay:1.1s}
+@keyframes steam{0%{opacity:0;transform:translateY(4px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-10px)}}
+.lead{font-size:1.12rem;font-weight:700;text-align:center;margin:22px auto 0;max-width:34ch;text-wrap:balance;color:var(--choc)}
+.choices{display:grid;gap:14px;margin:22px auto 0;max-width:440px}
+.choice{min-height:68px;font-size:1.15rem;border-radius:18px;width:100%}
+.choice.no{background:var(--paper);color:var(--burgundy-deep);border:2px solid var(--rose);box-shadow:0 5px 0 var(--rose)}
+.choice.no:hover{background:var(--rose-soft)}
+.choice.no:active{transform:translateY(4px);box-shadow:0 1px 0 var(--rose)}
+.verdict{max-width:480px;margin:24px auto 0;display:flex;flex-direction:column;gap:16px;align-items:center}
+.decree{width:100%;padding:22px 18px;text-align:center;overflow:hidden}
+.decree h3{margin:0 0 8px;font-weight:900;font-size:1.25rem;color:var(--burgundy);font-variant-numeric:tabular-nums}
+.decree p{margin-bottom:.7em;font-weight:600;line-height:1.95}
+.decree .stamps{display:flex;justify-content:center;flex-wrap:wrap;gap:16px 24px;margin-top:10px}
+.decree .stamps .stamp{font-size:1.1rem}
+.congrats{font-family:var(--f-display);font-size:clamp(1.5rem,7vw,2rem);color:var(--burgundy-deep);text-align:center;line-height:1.5;text-wrap:balance}
+.next-step{background:var(--gold-soft);border-radius:10px;padding:10px 16px;font-weight:800;text-align:center;color:var(--choc)}
+.gentle{width:100%;background:var(--choc);color:var(--quiet-fg);border-radius:12px;padding:20px 18px;text-align:center;line-height:2}
+.gentle b{font-family:var(--f-display);font-size:1.5rem;color:var(--gold-soft);display:block;margin-top:6px;font-weight:400}
+.v-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.fadein{opacity:0;transform:translateY(10px);transition:opacity .7s ease, transform .7s ease}
+.fadein.show{opacity:1;transform:none}
+.confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+
+/* ---------- footer, fab, modal ---------- */
+footer{background:var(--burgundy-deep);color:var(--gold-soft)}
+footer .wrap{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-block:40px calc(env(safe-area-inset-bottom,0px) + 40px)}
+footer svg{width:56px;height:56px}
+footer p{max-width:36ch;font-weight:600;opacity:.9}
+footer small{opacity:.6;font-size:.78rem}
+footer .btn-ghost{border-color:var(--gold);color:var(--gold-soft)}
+footer .btn-ghost:hover{background:rgba(234,215,170,.1)}
+.fab{position:fixed;z-index:35;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);left:max(16px,env(safe-area-inset-left,0px));width:46px;height:46px;border-radius:50%;border:0;background:var(--burgundy);color:var(--gold-soft);display:grid;place-items:center;box-shadow:0 10px 20px -8px rgba(74,19,34,.7);opacity:0;transform:translateY(16px) scale(.8);pointer-events:none;transition:opacity .3s, transform .3s}
+.fab.show{opacity:1;transform:none;pointer-events:auto}
+.fab svg{width:22px;height:22px}
+.modal{position:fixed;inset:0;z-index:95;display:grid;place-items:center;background:rgba(36,21,15,.58);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding-block:calc(env(safe-area-inset-top,0px) + 20px) calc(env(safe-area-inset-bottom,0px) + 20px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));animation:fade .25s ease both}
+@keyframes fade{from{opacity:0}}
+.memo{width:min(100%,420px);padding:22px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;animation:memoIn .5s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes memoIn{from{opacity:0;transform:translateY(30px) rotate(-3deg) scale(.9)}}
+.memo-head{display:flex;align-items:center;gap:10px;width:100%;border-bottom:2px double var(--line);padding-bottom:10px}
+.memo-head svg{width:36px;height:36px}
+.memo-head b{display:block;font-family:var(--f-display);font-size:1.1rem;color:var(--burgundy-deep);line-height:1.3;text-align:start}
+.memo-head small{display:block;font-size:.74rem;color:var(--muted);font-weight:700;text-align:start}
+.memo h3{margin:4px 0 0;font-size:1.2rem;font-weight:900;color:var(--burgundy)}
+.memo p{font-weight:700;font-size:1.05rem;line-height:1.95}
+.memo .stamp{font-size:1.05rem}
+.memo .count{font-size:.85rem;color:var(--muted);font-weight:700}
+
+@media (min-width:720px){
+  .dash{grid-template-columns:repeat(4,1fr)}
+  .dash .case-tile{grid-column:span 2}
+  .dash .gauge-tile{grid-column:span 2;grid-row:span 2}
+  .dash .status-tile{grid-column:span 2}
+  .dash .steps-tile{grid-column:span 2;grid-row:span 2}
+  .dash .note-tile{grid-column:span 2}
+  .reqs{grid-template-columns:1fr}
+  .choices{grid-template-columns:1fr 1fr;max-width:560px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="seal" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="48" fill="#7A2236"/>
+      <circle cx="50" cy="50" r="44" fill="none" stroke="#EAD7AA" stroke-width="1.6"/>
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#C29A52" stroke-width=".9" stroke-dasharray="2 2.2"/>
+      <g id="laurel" fill="#C29A52"></g>
+      <g stroke="#EAD7AA" stroke-width="2.2" stroke-linecap="round" fill="none">
+        <path d="M50 27V66"/><path d="M31 35H69"/>
+        <path d="M31 35L25 50M31 35L37 50"/><path d="M69 35L63 50M69 35L75 50"/>
+      </g>
+      <path d="M23 50Q31 59 39 50Z" fill="#EAD7AA"/>
+      <path d="M61 50Q69 59 77 50Z" fill="#EAD7AA"/>
+      <path d="M31 48.5C25.5 45 26.4 40.6 29 41.1C30 41.3 30.8 42.1 31 43C31.2 42.1 32 41.3 33 41.1C35.6 40.6 36.5 45 31 48.5Z" fill="#D6A3A1"/>
+      <rect x="65" y="42.5" width="8.5" height="6.5" rx=".8" fill="#FFFAF3" transform="rotate(-8 69 46)"/>
+      <path d="M66.5 44.5h5M66.5 46.5h3.5" stroke="#7A2236" stroke-width=".8" transform="rotate(-8 69 46)"/>
+      <rect x="41" y="65" width="18" height="4.5" rx="1.5" fill="#EAD7AA"/>
+      <circle cx="50" cy="26" r="2.8" fill="#EAD7AA"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 013 0V10m0-1.5a1.5 1.5 0 013 0V11m0-1a1.5 1.5 0 013 0v4.5A6.5 6.5 0 0111.5 21h-.3a6 6 0 01-4.6-2.2L3.8 15.4a1.6 1.6 0 012.3-2.2L9 15.5V11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader" dir="rtl" role="status" aria-live="polite">
+  <div class="ld-pad" aria-hidden="true">
+    <div class="ld-paper"><i></i><i></i><i></i><span class="ld-mark">معتمد</span></div>
+    <div class="ld-tool"><div class="knob"></div><div class="neck"></div><div class="base"></div></div>
+  </div>
+  <p class="ld-line" id="loaderLine">جاري تجهيز أوراق القضية…</p>
+  <div class="ld-bar"><i></i></div>
+  <p class="ld-skip">اضغطي في أي مكان للتخطي</p>
+</div>
+
+<button class="sound" id="soundBtn" type="button" aria-pressed="false" aria-label="تشغيل الصوت">
+  <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5m0-5l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 010 6M18 6.5a7.5 7.5 0 010 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+
+<!-- ============ INTRO GATE ============ -->
+<div class="intro" id="intro" dir="rtl">
+  <div class="intro-inner">
+    <svg class="facade" viewBox="0 0 360 240" role="img" aria-label="مبنى مكتب الأستاذة دنيا">
+      <ellipse cx="180" cy="233" rx="172" ry="7" fill="#E3CDBE"/>
+      <rect x="70" y="222" width="220" height="10" rx="2" fill="#E3CDBE"/>
+      <rect x="86" y="213" width="188" height="10" rx="2" fill="#EAD7AA"/>
+      <rect x="36" y="200" width="288" height="14" rx="2" fill="#D9C2A8"/>
+      <rect x="48" y="96" width="264" height="104" fill="#F2E3D2"/>
+      <g fill="#4A1322"><path d="M84 152v-22a8 8 0 0116 0v22z"/><path d="M260 152v-22a8 8 0 0116 0v22z"/></g>
+      <g class="win" fill="#EAD7AA"><path d="M86 150v-20a6 6 0 0112 0v20z"/><path d="M262 150v-20a6 6 0 0112 0v20z"/></g>
+      <g stroke="#4A1322" stroke-width="1.4"><path d="M92 122v30M84 138h16M268 122v30M260 138h16"/></g>
+      <path d="M148 200V148a32 32 0 0164 0V200z" fill="#C29A52"/>
+      <path d="M154 200V149a26 26 0 0152 0V200z" fill="#7A2236"/>
+      <path d="M180 123V200" stroke="#4A1322" stroke-width="2"/>
+      <g fill="none" stroke="#A94A5E" stroke-width="1.2"><rect x="159" y="152" width="16" height="20" rx="2"/><rect x="185" y="152" width="16" height="20" rx="2"/><rect x="159" y="178" width="16" height="16" rx="2"/><rect x="185" y="178" width="16" height="16" rx="2"/></g>
+      <circle cx="175.5" cy="174.5" r="2.2" fill="#EAD7AA"/><circle cx="184.5" cy="174.5" r="2.2" fill="#EAD7AA"/>
+      <rect x="144" y="100" width="72" height="13" rx="3" fill="#FFFAF3" stroke="#C29A52"/>
+      <text x="180" y="109.6" text-anchor="middle" font-family="Cairo, sans-serif" font-size="7.6" font-weight="800" fill="#7A2236">شباك الاعتذارات</text>
+      <g>
+        <g fill="#FFFAF3"><rect x="58" y="100" width="22" height="96"/><rect x="104" y="100" width="22" height="96"/><rect x="234" y="100" width="22" height="96"/><rect x="280" y="100" width="22" height="96"/></g>
+        <g stroke="#E3CDBE" stroke-width="1.3"><path d="M65 102v92M69 102v92M73 102v92M111 102v92M115 102v92M119 102v92M241 102v92M245 102v92M249 102v92M287 102v92M291 102v92M295 102v92"/></g>
+        <g fill="#EAD7AA"><rect x="55" y="96" width="28" height="6" rx="1"/><rect x="101" y="96" width="28" height="6" rx="1"/><rect x="231" y="96" width="28" height="6" rx="1"/><rect x="277" y="96" width="28" height="6" rx="1"/><rect x="55" y="194" width="28" height="6" rx="1"/><rect x="101" y="194" width="28" height="6" rx="1"/><rect x="231" y="194" width="28" height="6" rx="1"/><rect x="277" y="194" width="28" height="6" rx="1"/></g>
+      </g>
+      <rect x="40" y="80" width="280" height="17" fill="#7A2236"/>
+      <rect x="40" y="93" width="280" height="3" fill="#C29A52"/>
+      <g fill="#EAD7AA"><circle cx="60" cy="87" r="1.6"/><circle cx="90" cy="87" r="1.6"/><circle cx="120" cy="87" r="1.6"/><circle cx="150" cy="87" r="1.6"/><circle cx="210" cy="87" r="1.6"/><circle cx="240" cy="87" r="1.6"/><circle cx="270" cy="87" r="1.6"/><circle cx="300" cy="87" r="1.6"/></g>
+      <path d="M30 81L180 24L330 81Z" fill="#4A1322"/>
+      <path d="M60 76L180 33L300 76Z" fill="none" stroke="#C29A52" stroke-width="1.5"/>
+      <use href="#seal" x="163" y="45" width="34" height="34"/>
+      <path d="M180 25V4" stroke="#3A231E" stroke-width="2"/>
+      <path class="flag" d="M181 5L200 9.5L181 14Z" fill="#D6A3A1"/>
+      <path d="M8 216h20l-3 16h-14z" fill="#7A2236"/><circle cx="18" cy="205" r="10" fill="#7F8B5B"/><circle cx="11" cy="210" r="6.5" fill="#95A16C"/><circle cx="25" cy="210" r="6.5" fill="#95A16C"/>
+      <path d="M332 216h20l-3 16h-14z" fill="#7A2236"/><circle cx="342" cy="205" r="10" fill="#7F8B5B"/><circle cx="335" cy="210" r="6.5" fill="#95A16C"/><circle cx="349" cy="210" r="6.5" fill="#95A16C"/>
+    </svg>
+
+    <h1 class="org"><span>مكتب الأستاذة دنيا</span><small>لشؤون التصالح والمصالحة <em>😂</em></small></h1>
+    <div class="case-strip">
+      <span>القضية رقم <b>001</b></span>
+      <span>المتهم: <b>الأستاذ يوسف</b></span>
+      <span>صاحبة القرار: <b>الأستاذة دنيا</b></span>
+    </div>
+
+    <div class="notice">
+      <p class="alert" id="alertLine" aria-live="polite"></p>
+      <p id="introP1" class="later">تم تسجيل قضية جديدة ضد الأستاذ يوسف، ونظراً لخطورة الموقف فقد تقرر إحالة الملف مباشرة إلى الأستاذة دنيا.</p>
+      <p id="introP2" class="later strong">برجاء من سيادة الأستاذة الدخول لمراجعة أوراق القضية.</p>
+    </div>
+
+    <div class="enter-wrap later" id="enterWrap">
+      <button class="btn btn-primary big" id="enterBtn" type="button">دخول مكتب الأستاذة دنيا</button>
+      <div class="ticket" aria-label="رقم الدور 001">رقم دورك <b>001</b> · مفيش حد قبلك يا أستاذة</div>
+      <span class="stamp" id="enterStamp" hidden>تم التصريح بالدخول</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DOORS ============ -->
+<div class="doors" id="doors" aria-hidden="true">
+  <div class="door r"><div class="pane"></div><div class="lbl">تفضلي</div><div class="pane"></div><span class="knob"></span></div>
+  <div class="door l"><div class="pane"></div><div class="lbl">يا أستاذة</div><div class="pane"></div><span class="knob"></span></div>
+</div>
+
+<!-- ============ APP ============ -->
+<header class="topbar" id="topbar" dir="rtl" hidden>
+  <div class="in">
+    <button class="brand" type="button" id="brandBtn" aria-label="الرجوع لأول الصفحة">
+      <svg aria-hidden="true"><use href="#seal"/></svg>
+      <span><b>مكتب الأستاذة دنيا</b><small>القضية رقم 001</small></span>
+    </button>
+    <span class="pct" id="pctText">0 من 7</span>
+  </div>
+  <div class="bar"><i id="progFill"></i></div>
+</header>
+
+<main id="app" dir="rtl" hidden>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 1 من 7 · استلام القضية</span>
+      <h2>لوحة متابعة القضية</h2>
+      <p class="sub">النظام الإلكتروني الموحد لمتابعة زعل الأستاذة دنيا. يتم تحديث البيانات لحظياً كلما تقدمت سيادتك في مراجعة الأوراق.</p>
+
+      <div class="dash">
+        <div class="tile paper case-tile full reveal">
+          <div>
+            <div class="k">القضية رقم</div>
+            <div class="case-no">001</div>
+          </div>
+          <span class="stamp round" id="caseStamp">قيد النظر</span>
+        </div>
+
+        <div class="tile paper person reveal">
+          <span class="av y" aria-hidden="true">ي</span>
+          <div><div class="k">المتهم</div><div class="v">الأستاذ يوسف</div></div>
+        </div>
+        <div class="tile paper person reveal">
+          <span class="av d" aria-hidden="true">د</span>
+          <div><div class="k">صاحبة القرار</div><div class="v">الأستاذة دنيا</div></div>
+        </div>
+
+        <div class="tile paper full gauge-tile reveal">
+          <div class="k">درجة خطورة الزعل</div>
+          <svg class="gauge" viewBox="0 0 200 118" aria-hidden="true">
+            <g id="gaugeArcs" fill="none" stroke-width="18"></g>
+            <g class="needle" id="needle"><g class="wob">
+              <path d="M100 104L166 104" stroke="#3A231E" stroke-width="4.5" stroke-linecap="round"/>
+              <circle cx="100" cy="104" r="8" fill="#3A231E"/><circle cx="100" cy="104" r="3.2" fill="#C29A52"/>
+            </g></g>
+          </svg>
+          <div class="gauge-ends"><span>زعل خفيف</span><span>زعل تاريخي</span></div>
+          <div class="level" id="levelText">مرتفعة جداً 😂</div>
+        </div>
+
+        <div class="tile paper full status-tile reveal">
+          <div class="k">حالة القضية</div>
+          <span class="chip wait" id="caseChip">قيد النظر</span>
+          <div class="k" style="margin-top:8px">حالة طلب التصالح</div>
+          <span class="chip hot" id="reconChip">في انتظار موافقة الأستاذة</span>
+          <div class="k" style="margin-top:8px">عدد محاولات المتهم للصلح</div>
+          <div class="v">لا يُحصى، والعداد لسه شغال</div>
+        </div>
+
+        <div class="tile paper full steps-tile reveal">
+          <div class="k">مراحل مراجعة القضية</div>
+          <ol class="steps" id="steps"></ol>
+          <div class="steps-sum" id="stepsSum">تم إنجاز 0 من أصل 7 مراحل</div>
+        </div>
+
+        <div class="tile full note-tile reveal" style="padding:6px 4px 0">
+          <button class="note" type="button" data-surprise="secret" id="noteBtn">
+            اضغطي هنا للحصول على معلومة سرية
+            <small>ورقة ملزوقة على شاشة النظام من الموظف المختص</small>
+          </button>
+          <div class="found-row" style="margin-top:14px">
+            <span class="k">مفاجآت مستخبية في المكتب:</span>
+            <i data-f="0"></i><i data-f="1"></i><i data-f="2"></i>
+            <b id="foundText">0 من 3</b>
+          </div>
+          <p class="k" id="foundHint" style="font-weight:600">في 3 مفاجآت مستخبية في الصفحة، دوري عليهم.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg><use href="#seal"/></svg></div>
+
+  <!-- CASE FILE -->
+  <section id="file">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 2 من 7 · فتح الملف</span>
+      <h2>ملف القضية</h2>
+      <p class="sub">الملف وصل من الأرشيف مختوم ومتربط بالدوبارة. يُفتح بمعرفة الأستاذة دنيا شخصياً.</p>
+
+      <div class="folder reveal" id="folder">
+        <span class="folder-tab">ملف رقم 001</span>
+        <button class="cover" id="cover" type="button" aria-label="فتح ملف القضية">
+          <span class="t2">مكتب الأستاذة دنيا · قسم القضايا الحساسة</span>
+          <span class="t1">ملف القضية رقم 001</span>
+          <span class="stamp">سري للغاية</span>
+          <span class="tap"><svg aria-hidden="true"><use href="#i-hand"/></svg>اضغطي لفتح الملف</span>
+        </button>
+
+        <div class="paper file-paper">
+          <div class="lh">
+            <div class="r">
+              <svg aria-hidden="true"><use href="#seal"/></svg>
+              <div><b>مكتب الأستاذة دنيا</b><small>لشؤون التصالح والمصالحة</small></div>
+            </div>
+            <div class="meta">رقم القيد: 001<br>سنة: 2026</div>
+          </div>
+          <div class="file-title">ملف القضية رقم 001</div>
+          <dl class="fields">
+            <div><dt>التهمة</dt><dd>التسبب في زعل الأستاذة دنيا.</dd></div>
+            <div><dt>المتهم</dt><dd>الأستاذ يوسف.</dd></div>
+            <div><dt>المجني عليها</dt><dd>الأستاذة دنيا.</dd></div>
+            <div><dt>جهة الاختصاص</dt><dd>مكتب الأستاذة دنيا.</dd></div>
+            <div><dt>الأدلة</dt><dd><span class="redact" aria-hidden="true"><i style="width:38px"></i><i style="width:22px"></i><i style="width:30px"></i></span>تحتفظ بها الأستاذة دنيا ولا يحق للمتهم الاطلاع عليها دون إذن 😂</dd></div>
+            <div><dt>الحكم</dt><dd id="verdictText">لم يصدر حتى الآن.</dd></div>
+          </dl>
+          <div class="file-stamps" id="fileStamps">
+            <span class="stamp pending" style="--r:-9deg">سري للغاية</span>
+            <span class="stamp pending gold round" style="--r:6deg">قيد التحقيق</span>
+            <span class="stamp pending long" style="--r:-4deg">لا يتم التصالح إلا بموافقة الأستاذة دنيا</span>
+          </div>
+          <div class="file-foot">
+            <button class="mini-btn" type="button" data-surprise="reveal"><svg aria-hidden="true"><use href="#i-search"/></svg>كشف مفاجئ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="chat">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 3 من 7 · سماع الأقوال</span>
+      <h2>محضر سماع الأقوال</h2>
+      <p class="sub">نسخة طبق الأصل من المحادثة الرسمية بين الطرفين، مرفقة بالملف بناءً على طلب المحكمة.</p>
+
+      <div class="chatbox reveal">
+        <div class="chat-head">
+          <span class="avs" aria-hidden="true"><span class="av y">ي</span><span class="av d">د</span></span>
+          <div><b>الأستاذ يوسف والأستاذة دنيا</b><small>آخر ظهور: من ساعة رسمية</small></div>
+        </div>
+        <div class="chat-body" id="chatBody" aria-live="polite"></div>
+      </div>
+      <div class="chat-ctrl">
+        <button class="btn btn-ghost" type="button" id="chatSkip" hidden>اعرضي المحادثة كاملة</button>
+        <button class="btn btn-ghost" type="button" id="chatReplay" hidden>إعادة عرض المحادثة</button>
+        <button class="btn btn-primary" type="button" id="chatPlay">ابدئي سماع الأقوال</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg><use href="#seal"/></svg></div>
+
+  <!-- REQUESTS -->
+  <section id="requests">
+    <div class="wrap">
+      <div class="req-head">
+        <span class="eyebrow">المرحلة 4 من 7 · فحص الطلبات</span>
+        <button class="urgent" type="button" data-surprise="urgent">طلب عاجل</button>
+      </div>
+      <h2>طلبات الأستاذ يوسف</h2>
+      <p class="sub">ثلاثة طلبات رسمية مقدمة بكل أدب واحترام. المراجعة لا تعني الموافقة، القرار للأستاذة وحدها.</p>
+
+      <div class="reqs" id="reqs"></div>
+    </div>
+  </section>
+
+  <!-- CONFESSION -->
+  <section id="confession" class="quiet">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 5 من 7</span>
+      <h2>بعيداً عن التحقيقات يا أستاذة دنيا...</h2>
+      <div class="confess" id="confess">
+        <div class="ghost" id="confGhost" aria-hidden="true"></div>
+        <div class="typed" id="confTyped" aria-live="off"></div>
+      </div>
+      <div class="sign" id="confSign">يوسف</div>
+      <div style="margin-top:18px"><button class="btn btn-ghost" type="button" id="confSkip">اعرضي الكلام كله مرة واحدة</button></div>
+    </div>
+  </section>
+
+  <!-- ENVELOPE -->
+  <section id="envelope">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 6 من 7 · الظرف السري</span>
+      <h2>الظرف السري</h2>
+      <p class="sub">وصل المكتب ظرف مختوم بالشمع الأحمر. يُفتح بمعرفة الأستاذة فقط.</p>
+
+      <div class="env-stage reveal">
+        <button class="envelope" id="envBtn" type="button" aria-label="فتح الظرف السري">
+          <span class="env-back"></span>
+          <span class="env-letter"></span>
+          <span class="env-front"></span>
+          <span class="env-flap"></span>
+          <span class="wax" aria-hidden="true">ي</span>
+          <span class="env-to">من: <b>الأستاذ يوسف</b><br>إلى: <b>الأستاذة دنيا</b></span>
+          <span class="stamp env-mark">خاص وسري</span>
+        </button>
+        <p class="env-hint" id="envHint">اضغطي على الظرف لفتحه</p>
+      </div>
+
+      <div class="paper letter" id="letter" hidden>
+        <p class="hi">يا أستاذة دنيا...</p>
+        <p>أنا عارف إن الألقاب الرسمية دي مش أحسن وضع وصلناله 😂</p>
+        <p>بس كان نفسي أعمل حاجة تخليكي تبتسمي ولو للحظة.</p>
+        <p>أنا مش طالب غير فرصة إننا نتكلم ونفهم بعض، ولو لسه زعلانة فده حقك.</p>
+        <p>بس أحب أقولك إن الأستاذ يوسف مستعد يتنازل عن كل الألقاب والمناصب، بشرط واحد...</p>
+        <p><b>يرجع يوسف العادي اللي يعرف يتكلم مع دنيا العادية ❤️</b></p>
+        <div class="sig"><small>توقيع:</small><b>الأستاذ يوسف</b><em>لقب مؤقت لحين صدور القرار</em></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true"><svg><use href="#seal"/></svg></div>
+
+  <!-- DECISION -->
+  <section id="decision">
+    <div class="wrap">
+      <span class="eyebrow">المرحلة 7 من 7 · القرار</span>
+      <h2>القرار النهائي</h2>
+
+      <div class="office reveal">
+        <svg viewBox="0 0 360 200" aria-hidden="true">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="0%" r="80%"><stop offset="0" stop-color="#EAD7AA" stop-opacity=".55"/><stop offset="1" stop-color="#EAD7AA" stop-opacity="0"/></radialGradient>
+            <linearGradient id="tea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D0803C"/><stop offset="1" stop-color="#8A3E16"/></linearGradient>
+          </defs>
+          <ellipse cx="180" cy="196" rx="168" ry="5" fill="#E3CDBE"/>
+          <path d="M318 62L282 122H354Z" fill="url(#glow)"/>
+          <g>
+            <rect x="34" y="104" width="54" height="14" rx="1" fill="#F2E3D2" transform="rotate(-3 61 111)"/>
+            <rect x="32" y="98" width="54" height="12" rx="1" fill="#FFFAF3" transform="rotate(2 59 104)"/>
+            <rect x="35" y="92" width="52" height="10" rx="1" fill="#FFFAF3" stroke="#E3CDBE" transform="rotate(-2 61 97)"/>
+            <circle cx="72" cy="96" r="5" fill="none" stroke="#7A2236" stroke-width="1.6" opacity=".8"/>
+          </g>
+          <g>
+            <rect x="92" y="110" width="20" height="8" rx="2" fill="#7A2236"/>
+            <rect x="99" y="98" width="6" height="12" fill="#C29A52"/>
+            <circle cx="102" cy="95" r="6" fill="#EAD7AA"/>
+          </g>
+          <g>
+            <ellipse cx="294" cy="118" rx="15" ry="3" fill="#EAD7AA"/>
+            <path d="M285 92L303 92L300 117L288 117Z" fill="url(#tea)" opacity=".92"/>
+            <path d="M285 92L303 92" stroke="#FFFAF3" stroke-width="1.5"/>
+            <path d="M286.5 92.5L289 116" stroke="#FFFAF3" stroke-width="1.2" opacity=".6"/>
+            <path class="steam" d="M290 86q-3-5 0-9t0-9" fill="none" stroke="#B9A091" stroke-width="1.6" stroke-linecap="round"/>
+            <path class="steam s2" d="M297 86q3-5 0-9t0-9" fill="none" stroke="#B9A091" stroke-width="1.6" stroke-linecap="round"/>
+          </g>
+          <g>
+            <ellipse cx="333" cy="118" rx="12" ry="3.5" fill="#3A231E"/>
+            <path d="M333 117L328 80L318 64" fill="none" stroke="#3A231E" stroke-width="3" stroke-linecap="round"/>
+            <path d="M304 68L326 54L334 68Z" fill="#7A2236"/>
+            <circle cx="319" cy="66" r="3" fill="#EAD7AA"/>
+          </g>
+          <rect x="8" y="118" width="344" height="13" rx="3" fill="#5A3A2F"/>
+          <rect x="22" y="131" width="316" height="62" fill="#3A231E"/>
+          <g fill="none" stroke="#C29A52" stroke-width="1.2" opacity=".75">
+            <rect x="34" y="141" width="92" height="20" rx="2"/><rect x="34" y="166" width="92" height="20" rx="2"/>
+            <rect x="234" y="141" width="92" height="20" rx="2"/><rect x="234" y="166" width="92" height="20" rx="2"/>
+          </g>
+          <g fill="#C29A52"><circle cx="80" cy="151" r="2.4"/><circle cx="80" cy="176" r="2.4"/><circle cx="280" cy="151" r="2.4"/><circle cx="280" cy="176" r="2.4"/></g>
+          <path d="M140 145H220" stroke="#C29A52" stroke-width="1" opacity=".5"/>
+        </svg>
+        <div class="plate"><b>مكتب الأستاذة دنيا</b><small>رئيسة لجنة التصالح</small></div>
+      </div>
+
+      <p class="lead">بعد الاطلاع على ملف القضية، والاستماع إلى دفاع الأستاذ يوسف، أصبح القرار الآن في يد سيادتكم.</p>
+
+      <div class="choices" id="choices">
+        <button class="btn btn-primary choice" type="button" id="yesBtn">قبول التصالح ❤️</button>
+        <button class="btn choice no" type="button" id="noBtn">لسه زعلانة يا أستاذ يوسف 😂</button>
+      </div>
+
+      <div class="verdict" id="verdictYes" hidden>
+        <div class="paper decree">
+          <h3>قرار رقم 001</h3>
+          <p>وافقت الأستاذة دنيا على منح الأستاذ يوسف فرصة جديدة للعودة إلى المحادثات العادية.</p>
+          <p>مع احتفاظ الأستاذة دنيا بحقها الكامل في التريقة على الأستاذ يوسف وتذكيره بالقضية عند اللزوم 😂❤️</p>
+          <div class="stamps">
+            <span class="stamp ok pending round" style="--r:-10deg">موافقة</span>
+            <span class="stamp pending" style="--r:7deg">تم التصالح</span>
+          </div>
+        </div>
+        <p class="congrats fadein" id="congrats">مبروك يا أستاذ يوسف... تم تخفيف العقوبة.</p>
+        <p class="next-step fadein" id="nextStep">الإجراء التالي: فك الحظر وإبلاغ المتهم بالقرار فوراً 😂</p>
+        <div class="v-actions fadein" id="yesActions">
+          <button class="btn btn-ghost" type="button" data-back>الرجوع للاختيارات</button>
+        </div>
+      </div>
+
+      <div class="verdict" id="verdictNo" hidden>
+        <div class="paper decree">
+          <h3>قرار لجنة التصالح</h3>
+          <p>تقرر تأجيل البت في القضية لحين تحسن الظروف النفسية للأستاذة دنيا.</p>
+          <p>وعلى المتهم الالتزام بالصبر وعدم الإلحاح.</p>
+          <div class="stamps"><span class="stamp gold pending" style="--r:-8deg">مؤجل لحين إشعار آخر</span></div>
+        </div>
+        <div class="gentle fadein" id="gentle">
+          حاضر يا أستاذة دنيا، خدي وقتك براحتك، ومش هضغط عليكي.<br>المهم تكوني بخير.
+          <b>يوسف</b>
+        </div>
+        <div class="v-actions fadein" id="noActions">
+          <button class="btn btn-ghost" type="button" data-back>الرجوع للاختيارات</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <svg aria-hidden="true"><use href="#seal"/></svg>
+      <p>تم إنشاء هذا المكتب خصيصاً لموظفة واحدة فقط: الأستاذة دنيا. لا توجد فروع أخرى.</p>
+      <button class="btn btn-ghost" type="button" id="restartBtn">إعادة التجربة من البداية</button>
+      <small>جميع الحقوق محفوظة للأستاذة دنيا · القضية رقم 001</small>
+    </div>
+  </footer>
+</main>
+
+<button class="fab" id="fab" type="button" aria-label="الرجوع لأعلى الصفحة"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+<div class="modal" id="modal" hidden dir="rtl" role="dialog" aria-modal="true" aria-labelledby="memoTitle">
+  <div class="paper memo">
+    <div class="memo-head"><svg aria-hidden="true"><use href="#seal"/></svg><div><b>مذكرة داخلية</b><small>مكتب الأستاذة دنيا · للاطلاع فقط</small></div></div>
+    <h3 id="memoTitle"></h3>
+    <p id="memoText"></p>
+    <span class="stamp" id="memoStamp"></span>
+    <p class="count" id="memoCount"></p>
+    <button class="btn btn-primary" type="button" id="memoClose">تم الاطلاع</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function wait(ms){return new Promise(function(r){setTimeout(r,RM?Math.min(ms,40):ms)})}
+document.documentElement.lang='ar';document.documentElement.dir='rtl';
+
+/* ---------- local state (this browser only) ---------- */
+var KEY='dunya-office-v1',saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}}
+function vibrate(ms){try{if(navigator.vibrate)navigator.vibrate(ms)}catch(e){}}
+
+/* ---------- seal laurels ---------- */
+(function(){var g=$('#laurel');if(!g)return;var ns='http://www.w3.org/2000/svg';
+  for(var side=0;side<2;side++){for(var i=0;i<6;i++){var deg=112+i*19,a=deg*Math.PI/180;
+    var x=50+35.5*Math.cos(a),y=50+35.5*Math.sin(a),rot=deg+90+28;
+    if(side){x=100-x;rot=180-rot}
+    var e=document.createElementNS(ns,'ellipse');e.setAttribute('cx',x.toFixed(2));e.setAttribute('cy',y.toFixed(2));
+    e.setAttribute('rx','4.4');e.setAttribute('ry','1.9');e.setAttribute('transform','rotate('+rot.toFixed(1)+' '+x.toFixed(2)+' '+y.toFixed(2)+')');g.appendChild(e)}}
+})();
+
+/* ---------- audio (WebAudio, only after a tap) ---------- */
+var S={sound:false},ac=null,master=null,musicGain=null,musicTimer=null,nb=null;
+function ensureAC(){
+  if(!ac){var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;
+    ac=new AC();master=ac.createGain();master.gain.value=.9;master.connect(ac.destination);
+    musicGain=ac.createGain();musicGain.gain.value=.5;musicGain.connect(master)}
+  if(ac.state==='suspended'){try{ac.resume()}catch(e){}}
+  return ac}
+function noise(){if(nb)return nb;var len=ac.sampleRate;nb=ac.createBuffer(1,len,ac.sampleRate);var d=nb.getChannelData(0);for(var i=0;i<len;i++)d[i]=Math.random()*2-1;return nb}
+function env(g,t,peak,dur){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+dur)}
+function sfxStamp(){if(!S.sound||!ensureAC())return;var t=ac.currentTime;
+  var o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+.2);env(g,t,.75,.26);o.connect(g);g.connect(master);o.start(t);o.stop(t+.3);
+  var n=ac.createBufferSource(),f=ac.createBiquadFilter(),ng=ac.createGain();n.buffer=noise();f.type='lowpass';f.frequency.value=1100;env(ng,t,.45,.11);n.connect(f);f.connect(ng);ng.connect(master);n.start(t);n.stop(t+.14)}
+function sfxPaper(){if(!S.sound||!ensureAC())return;var t=ac.currentTime;
+  var n=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();n.buffer=noise();f.type='bandpass';f.Q.value=1.2;
+  f.frequency.setValueAtTime(900,t);f.frequency.exponentialRampToValueAtTime(3800,t+.35);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.28,t+.08);g.gain.exponentialRampToValueAtTime(.0001,t+.42);
+  n.connect(f);f.connect(g);g.connect(master);n.start(t);n.stop(t+.45)}
+function sfxDoor(){if(!S.sound||!ensureAC())return;var t=ac.currentTime;
+  var n=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();n.buffer=noise();f.type='lowpass';
+  f.frequency.setValueAtTime(500,t);f.frequency.exponentialRampToValueAtTime(140,t+1);
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.32,t+.15);g.gain.exponentialRampToValueAtTime(.0001,t+1.1);
+  n.connect(f);f.connect(g);g.connect(master);n.start(t);n.stop(t+1.15)}
+function tone(freq,t,dur,vol,type,dest){var o=ac.createOscillator(),g=ac.createGain();o.type=type||'triangle';o.frequency.value=freq;env(g,t,vol,dur);o.connect(g);g.connect(dest||master);o.start(t);o.stop(t+dur+.05)}
+function mtof(m){return 440*Math.pow(2,(m-69)/12)}
+function sfxPop(){if(!S.sound||!ensureAC())return;var t=ac.currentTime;tone(740,t,.12,.12,'sine');tone(1110,t+.05,.1,.07,'sine')}
+function sfxChime(){if(!S.sound||!ensureAC())return;var t=ac.currentTime;[72,76,79,84,88].forEach(function(m,i){tone(mtof(m),t+i*.11,.7,.16,'triangle')})}
+var SEQ=[76,79,84,79,81,79,76,74,76,79,81,84,83,79,76,null,74,77,81,77,79,77,74,72,74,76,79,76,74,72,null,null],
+    BASS=[48,48,45,45,50,50,43,43],step=0,nextT=0;
+function schedule(){while(nextT<ac.currentTime+.3){var m=SEQ[step%SEQ.length];
+  if(m){tone(mtof(m),nextT,.55,.06,'triangle',musicGain);tone(mtof(m+12),nextT,.25,.012,'sine',musicGain)}
+  if(step%4===0)tone(mtof(BASS[(step/4|0)%BASS.length]),nextT,1.1,.05,'sine',musicGain);
+  nextT+=.3;step++}}
+function startMusic(){if(!ac||musicTimer)return;nextT=ac.currentTime+.1;musicTimer=setInterval(schedule,90)}
+function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
+function duck(on){if(!musicGain)return;var t=ac.currentTime;musicGain.gain.cancelScheduledValues(t);musicGain.gain.setTargetAtTime(on?.14:.5,t,.6)}
+var soundBtn=$('#soundBtn');
+soundBtn.addEventListener('click',function(){
+  S.sound=!S.sound;
+  if(S.sound){if(!ensureAC()){S.sound=false;return}startMusic();sfxPop()}else stopMusic();
+  soundBtn.setAttribute('aria-pressed',S.sound?'true':'false');
+  soundBtn.setAttribute('aria-label',S.sound?'إيقاف الصوت':'تشغيل الصوت')});
+
+/* ---------- loader ---------- */
+var LINES=['جاري تجهيز أوراق القضية…','جاري تلميع مكتب الأستاذة…','جاري تحبير الأختام…','جاري عمل كوباية شاي للأستاذة…','جاري تهدئة المتهم 😂'],li=0;
+var lineEl=$('#loaderLine'),liv=setInterval(function(){li=(li+1)%LINES.length;lineEl.textContent=LINES[li]},560);
+var loaderDone=false;
+function finishLoader(){if(loaderDone)return;loaderDone=true;clearInterval(liv);$('#loader').classList.add('done');runIntro()}
+setTimeout(finishLoader,RM?300:2700);
+$('#loader').addEventListener('click',finishLoader);
+
+/* ---------- intro ---------- */
+async function typeInto(el,text,speed){var ch=Array.from(text),s='';for(var i=0;i<ch.length;i++){s+=ch[i];el.textContent=s;await wait(speed)}}
+async function runIntro(){
+  await wait(700);await typeInto($('#alertLine'),'تنبيه هام...',85);
+  await wait(250);$('#introP1').classList.add('show');
+  await wait(1500);$('#introP2').classList.add('show');
+  await wait(700);$('#enterWrap').classList.add('show')}
+
+var entered=false;
+$('#enterBtn').addEventListener('click',enter);
+async function enter(){
+  if(entered)return;entered=true;
+  sfxStamp();vibrate(30);
+  var st=$('#enterStamp');st.hidden=false;st.classList.add('slam');
+  await wait(700);
+  var d=$('#doors');d.classList.add('show');
+  await wait(380);
+  $('#intro').hidden=true;document.body.classList.remove('locked');
+  $('#app').hidden=false;$('#topbar').hidden=false;window.scrollTo(0,0);
+  initReveal();initWatchers();
+  await wait(80);
+  d.classList.add('open');sfxDoor();
+  markStage('receive');
+  setTimeout(function(){setGauge(saved.decision==='yes'?18:164)},700);
+  await wait(1300);
+  d.hidden=true;d.classList.remove('show','open')}
+document.body.classList.add('locked');
+
+/* ---------- reveal on scroll ---------- */
+function initReveal(){
+  if(RM||!('IntersectionObserver' in window))return;
+  document.body.classList.add('js-reveal');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -6% 0px'});
+  $$('.reveal').forEach(function(el){io.observe(el)})}
+
+/* ---------- stages ---------- */
+var STAGES=[
+  {id:'receive',label:'استلام القضية',target:'dashboard'},
+  {id:'file',label:'فتح الملف',target:'file'},
+  {id:'chat',label:'سماع الأقوال',target:'chat'},
+  {id:'requests',label:'فحص الطلبات',target:'requests'},
+  {id:'confess',label:'الاعتراف',target:'confession'},
+  {id:'envelope',label:'الظرف السري',target:'envelope'},
+  {id:'decision',label:'القرار',target:'decision'}];
+var done={};
+(function buildSteps(){var ol=$('#steps');STAGES.forEach(function(s,i){
+  var li=document.createElement('li');li.className='step';li.dataset.id=s.id;
+  li.innerHTML='<button type="button"><span class="dot">'+(i+1)+'</span><span class="lb">'+s.label+'</span><span class="st">في الانتظار</span></button>';
+  li.querySelector('button').addEventListener('click',function(){var t=document.getElementById(s.target);if(t)t.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})});
+  ol.appendChild(li)})})();
+function markStage(id,off){if(off)delete done[id];else done[id]=true;renderStages()}
+function renderStages(){
+  var n=0;STAGES.forEach(function(s,i){var li=$('.step[data-id="'+s.id+'"]'),on=!!done[s.id];if(on)n++;
+    li.classList.toggle('done',on);li.querySelector('.st').textContent=on?'تم':'في الانتظار';
+    li.querySelector('.dot').innerHTML=on?'<svg width="14" height="14" aria-hidden="true"><use href="#i-check"/></svg>':String(i+1)});
+  $('#progFill').style.width=(n/7*100)+'%';
+  $('#pctText').textContent=n+' من 7';
+  $('#stepsSum').textContent=n===7?'تمت مراجعة القضية بالكامل. شكراً لسيادتك.':'تم إنجاز '+n+' من أصل 7 مراحل'}
+
+/* ---------- gauge ---------- */
+(function(){var g=$('#gaugeArcs'),ns='http://www.w3.org/2000/svg',cols=['#F2DCD6','#D6A3A1','#A94A5E','#7A2236'];
+  function p(a){a=a*Math.PI/180;return [(100+78*Math.cos(a)).toFixed(1),(104-78*Math.sin(a)).toFixed(1)]}
+  [[0,44],[46,89],[91,134],[136,180]].forEach(function(s,i){var a=p(s[0]),b=p(s[1]),e=document.createElementNS(ns,'path');
+    e.setAttribute('d','M'+a[0]+' '+a[1]+' A78 78 0 0 0 '+b[0]+' '+b[1]);e.setAttribute('stroke',cols[i]);g.appendChild(e)})})();
+function setGauge(a){$('#needle').style.setProperty('--a',a)}
+
+/* ---------- case file ---------- */
+$('#cover').addEventListener('click',async function(){
+  var f=$('#folder');if(f.classList.contains('open'))return;f.classList.add('open');sfxPaper();markStage('file');
+  await wait(950);
+  var sts=$$('#fileStamps .stamp');for(var i=0;i<sts.length;i++){sts[i].classList.remove('pending');sts[i].classList.add('slam');sfxStamp();vibrate(18);await wait(560)}});
+
+/* ---------- chat ---------- */
+var CHAT=[
+  ['y','مساء الخير يا أستاذة دنيا.'],
+  ['d','مساء النور يا أستاذ يوسف.'],
+  ['y','هو إحنا وصلنا للمرحلة دي بجد؟ 😂'],
+  ['d','برجاء الالتزام بالمسميات الرسمية.'],
+  ['y','حاضر يا فندم، هل يمكن تقديم طلب استثناء؟'],
+  ['d','يرجى تقديم الطلب إلى الجهة المختصة.'],
+  ['y','يعني لحضرتك؟ 😂'],
+  ['d','تم استلام الرسالة.'],
+  ['y','حتى كلمة حاضر بقت محتاجة موافقة رسمية 😂']];
+var chatBody=$('#chatBody'),chatRun=0,rows=[],chatStamp;
+(function buildChat(){CHAT.forEach(function(m){
+  var r=document.createElement('div');r.className='row '+m[0];
+  r.innerHTML='<div class="msg"><span class="who">'+(m[0]==='y'?'الأستاذ يوسف':'الأستاذة دنيا')+'</span>'+m[1]+'<span class="meta">'+(m[0]==='y'?'مُرسلة بكل أدب':'رسمياً ✓✓')+'</span></div><div class="typing" aria-hidden="true"><i></i><i></i><i></i></div>';
+  chatBody.appendChild(r);rows.push(r)});
+  var w=document.createElement('div');w.className='chat-stamp';
+  w.innerHTML='<span class="stamp pending" style="--r:-6deg">تم اعتماد نظام الأستاذ والأستاذة حتى إشعار آخر</span>';
+  chatBody.appendChild(w);chatStamp=w.querySelector('.stamp')})();
+function resetChat(){rows.forEach(function(r){r.classList.remove('shown','typing-on')});chatStamp.classList.add('pending');chatStamp.classList.remove('slam')}
+async function playChat(){
+  var run=++chatRun;resetChat();
+  $('#chatPlay').hidden=true;$('#chatReplay').hidden=true;$('#chatSkip').hidden=false;
+  for(var i=0;i<rows.length;i++){
+    if(run!==chatRun)return;
+    rows[i].classList.add('typing-on');
+    await wait(650+Math.min(CHAT[i][1].length*20,850));
+    if(run!==chatRun)return;
+    rows[i].classList.remove('typing-on');rows[i].classList.add('shown');sfxPop();
+    await wait(380)}
+  finishChat(run)}
+function skipChat(){var run=++chatRun;rows.forEach(function(r){r.classList.remove('typing-on');r.classList.add('shown')});finishChat(run)}
+async function finishChat(run){
+  $('#chatSkip').hidden=true;await wait(450);if(run!==chatRun)return;
+  chatStamp.classList.remove('pending');chatStamp.classList.add('slam');sfxStamp();vibrate(25);
+  markStage('chat');$('#chatReplay').hidden=false}
+$('#chatPlay').addEventListener('click',playChat);
+$('#chatReplay').addEventListener('click',playChat);
+$('#chatSkip').addEventListener('click',skipChat);
+
+/* ---------- requests ---------- */
+var REQS=[
+  {n:'1/أ',t:'طلب إعادة النظر في لقب الأستاذ يوسف.',w:'هذا اللقب تسبب في أضرار نفسية ومهنية جسيمة للمتهم، الذي كان يتمنى العودة إلى اسمه الأول فقط 😂',f:'كوباية شاي بالنعناع للأستاذة'},
+  {n:'2/ب',t:'طلب تخفيف العقوبة.',w:'المتهم أبدى ندمه الشديد، ويرجو من سيادة الأستاذة مراعاة حسن النية.',f:'اعتذار مكتوب بخط اليد عند الطلب'},
+  {n:'3/ج',t:'طلب فتح باب المحادثة.',w:'المتهم يشتاق إلى الكلام العادي دون ألقاب رسمية أو مخاطبات حكومية.',f:'ولا مليم، المتهم صرف كل حاجة على الموقع ده 😂'}];
+var reqDone=0;
+(function buildReqs(){var host=$('#reqs');REQS.forEach(function(r,i){
+  var a=document.createElement('article');a.className='paper req reveal';
+  a.innerHTML='<div class="req-top"><span>نموذج طلب رقم '+r.n+'</span><span>مقدم الطلب: الأستاذ يوسف</span></div>'+
+    '<h3>'+r.t+'</h3><p class="why"><b>المبررات:</b>'+r.w+'</p>'+
+    '<p class="fee">رسوم الدمغة: <span>'+r.f+'</span></p>'+
+    '<div class="req-foot"><span class="chip wait">لم يُراجع بعد</span><button class="btn btn-primary" type="button">مراجعة الطلب</button></div>'+
+    '<span class="stamp pending">تم تحويل الطلب إلى مكتب الأستاذة دنيا</span>';
+  var b=a.querySelector('button');
+  b.addEventListener('click',function(){
+    if(a.classList.contains('sent'))return;a.classList.add('sent');
+    var s=a.querySelector('.stamp');s.classList.remove('pending');s.classList.add('slam');sfxStamp();vibrate(20);
+    var c=a.querySelector('.chip');c.className='chip hot';c.textContent='محوّل للأستاذة · لم يُبت فيه';
+    b.disabled=true;b.innerHTML='<svg aria-hidden="true"><use href="#i-check"/></svg>تم التحويل';
+    reqDone++;if(reqDone===REQS.length)markStage('requests')});
+  host.appendChild(a)})})();
+
+/* ---------- confession ---------- */
+var CONF=[
+  'أنا عارف إنك زعلانة مني، ومش عايز أتعامل مع زعلك على إنه مجرد موقف ونعديه.',
+  'أنا آسف لو ضايقتك أو جرحتك بأي تصرف، ومش هحاول أبرر لنفسي أو أقلل من اللي حسيتي بيه.',
+  'يمكن كان المفروض أكون أهدى أو أفهمك أكتر، ويمكن في حاجات أنا محتاج أراجع نفسي فيها.',
+  'أنا مش عامل الموقع ده علشان أضغط عليكي أو أخليكي تسامحيني بالعافية.',
+  'أنا عملته لأنك تستاهلي إني أحاول أصالحك بطريقة مختلفة، ولأن اعتذاري ليكي مهم عندي.',
+  'حقك عليا يا دنيا.'];
+(function(){var g=$('#confGhost');CONF.forEach(function(t,i){var p=document.createElement('p');p.textContent=t;if(i===CONF.length-1)p.className='last';g.appendChild(p)})})();
+var confStarted=false,confSkip=false,confFinished=false;
+async function typeConfession(){
+  if(confStarted)return;confStarted=true;var host=$('#confTyped');
+  for(var i=0;i<CONF.length&&!confSkip;i++){
+    var p=document.createElement('p');if(i===CONF.length-1)p.className='last';p.classList.add('cur');host.appendChild(p);
+    var ch=Array.from(CONF[i]),s='';
+    for(var j=0;j<ch.length;j++){if(confSkip)break;s+=ch[j];p.textContent=s;await wait(ch[j]===' '?22:40)}
+    p.classList.remove('cur');if(!confSkip)await wait(420)}
+  endConfession()}
+function endConfession(){
+  if(confFinished)return;confFinished=true;
+  var host=$('#confTyped');host.innerHTML='';
+  CONF.forEach(function(t,i){var p=document.createElement('p');p.textContent=t;if(i===CONF.length-1)p.className='last';host.appendChild(p)});
+  $('#confSkip').hidden=true;$('#confSign').classList.add('show');markStage('confess')}
+$('#confSkip').addEventListener('click',function(){confSkip=true;if(!confStarted){confStarted=true;endConfession()}else setTimeout(endConfession,60)});
+
+/* ---------- envelope ---------- */
+$('#envBtn').addEventListener('click',async function(){
+  var e=$('#envBtn');if(e.classList.contains('open'))return;e.classList.add('open');sfxPaper();vibrate(15);
+  $('#envHint').textContent='تم فض الختم بمعرفة الأستاذة';
+  await wait(1350);var l=$('#letter');l.hidden=false;sfxPaper();markStage('envelope');
+  await wait(200);l.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})});
+
+/* ---------- surprises ---------- */
+var SURP={
+  secret:{t:'معلومة سرية للغاية',x:'الأستاذ يوسف اعترف أن الأستاذة دنيا دائماً صاحبة الكلمة الأخيرة 😂',s:'سري',c:''},
+  urgent:{t:'قرار إداري عاجل',x:'نظراً لظروف القضية، تقرر مد فترة تقديم الاعتذار حتى إشعار آخر، مع السماح للأستاذ يوسف بالمحاولة مرة أخرى.',s:'عاجل',c:'gold'},
+  reveal:{t:'تقرير لجنة التفتيش',x:'تم اكتشاف أن المتهم لا يزال يريد الصلح رغم جميع العقوبات الإدارية الصادرة بحقه.',s:'تم الكشف',c:'ok'}};
+var ORDER=['secret','urgent','reveal'],found={};(saved.found||[]).forEach(function(k){found[k]=true});
+var lastFocus=null;
+function renderFound(){var n=ORDER.filter(function(k){return found[k]}).length;
+  $$('.found-row i').forEach(function(i,idx){i.classList.toggle('on',idx<n)});
+  $('#foundText').textContent=n+' من 3';
+  $('#foundHint').textContent=n===3?'لقيتي كل المفاجآت. الأستاذة دنيا مش بيفوتها حاجة 😂':'في 3 مفاجآت مستخبية في الصفحة، دوري عليهم.';
+  $$('[data-surprise]').forEach(function(b){b.classList.toggle('found',!!found[b.dataset.surprise])});return n}
+function openSurprise(k){var d=SURP[k];if(!d)return;
+  found[k]=true;saved.found=Object.keys(found);save();var n=renderFound();
+  lastFocus=document.activeElement;
+  $('#memoTitle').textContent=d.t;$('#memoText').textContent=d.x;
+  var st=$('#memoStamp');st.className='stamp '+d.c;st.textContent=d.s;st.style.setProperty('--r',(k==='urgent'?'7deg':'-9deg'));
+  $('#memoCount').textContent=n===3?'كده لقيتي التلات مفاجآت كلهم':'مفاجآت مكتشفة: '+n+' من 3';
+  $('#modal').hidden=false;sfxPaper();
+  void st.offsetWidth;st.classList.add('slam');setTimeout(function(){sfxStamp();vibrate(20)},120);
+  $('#memoClose').focus()}
+function closeModal(){$('#modal').hidden=true;if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+$$('[data-surprise]').forEach(function(b){b.addEventListener('click',function(){openSurprise(b.dataset.surprise)})});
+$('#memoClose').addEventListener('click',closeModal);
+$('#modal').addEventListener('click',function(e){if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#modal').hidden)closeModal()});
+renderFound();
+
+/* ---------- decision ---------- */
+function setStatus(kind){
+  var cs=$('#caseChip'),rc=$('#reconChip'),vt=$('#verdictText'),stp=$('#caseStamp'),lv=$('#levelText');
+  if(kind==='yes'){cs.className='chip ok';cs.textContent='صدر القرار: تصالح';rc.className='chip ok';rc.textContent='تمت الموافقة ❤️';
+    vt.textContent='قبول التصالح، مع حق التريقة مدى الحياة 😂';stp.textContent='تم التصالح';stp.classList.add('ok');lv.textContent='خفيفة جداً، الحمد لله 😂';setGauge(18)}
+  else if(kind==='no'){cs.className='chip hot';cs.textContent='مؤجلة لحين إشعار آخر';rc.className='chip wait';rc.textContent='مؤجل، والمتهم ملتزم بالصبر';
+    vt.textContent='مؤجل لحين تحسن الظروف النفسية للأستاذة.';stp.textContent='مؤجلة';stp.classList.remove('ok');lv.textContent='مرتفعة جداً 😂';setGauge(164)}
+  else{cs.className='chip wait';cs.textContent='قيد النظر';rc.className='chip hot';rc.textContent='في انتظار موافقة الأستاذة';
+    vt.textContent='لم يصدر حتى الآن.';stp.textContent='قيد النظر';stp.classList.remove('ok');lv.textContent='مرتفعة جداً 😂';setGauge(164)}}
+var decideRun=0;
+async function decide(kind,instant){
+  var run=++decideRun;saved.decision=kind;save();
+  $('#choices').hidden=true;
+  var v=kind==='yes'?$('#verdictYes'):$('#verdictNo'),other=kind==='yes'?$('#verdictNo'):$('#verdictYes');
+  other.hidden=true;v.hidden=false;
+  $$('.stamp',v).forEach(function(s){s.classList.add('pending');s.classList.remove('slam')});
+  $$('.fadein',v).forEach(function(f){f.classList.remove('show')});
+  setStatus(kind);markStage('decision');
+  if(!instant)v.scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  if(kind==='yes'&&!instant){confetti();sfxChime();vibrate([30,40,30])}
+  await wait(instant?0:500);
+  var sts=$$('.stamp',v);for(var i=0;i<sts.length;i++){if(run!==decideRun)return;sts[i].classList.remove('pending');sts[i].classList.add('slam');if(!instant){sfxStamp();vibrate(20)}await wait(instant?0:550)}
+  var fs=$$('.fadein',v);for(var j=0;j<fs.length;j++){if(run!==decideRun)return;await wait(instant?0:(j?600:900));fs[j].classList.add('show')}}
+$('#yesBtn').addEventListener('click',function(){decide('yes')});
+$('#noBtn').addEventListener('click',function(){decide('no')});
+$$('[data-back]').forEach(function(b){b.addEventListener('click',function(){
+  decideRun++;saved.decision=null;save();$('#verdictYes').hidden=true;$('#verdictNo').hidden=true;$('#choices').hidden=false;
+  setStatus(null);markStage('decision',true);$('#decision').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'})})});
+if(saved.decision==='yes'||saved.decision==='no')decide(saved.decision,true);
+
+/* ---------- confetti with small hearts ---------- */
+function confetti(){
+  if(RM)return;var c=document.createElement('canvas');c.className='confetti';document.body.appendChild(c);
+  var dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;c.width=W*dpr;c.height=H*dpr;
+  var x=c.getContext('2d');x.scale(dpr,dpr);
+  var cols=['#7A2236','#D6A3A1','#C29A52','#EAD7AA','#F2DCD6','#4A1322'],P=[];
+  for(var i=0;i<170;i++){var heart=i<30,fromSide=i%3;
+    var sx=fromSide===0?W/2:(fromSide===1?-10:W+10),sy=fromSide===0?H*.6:H*.75;
+    var vx=fromSide===0?(Math.random()-.5)*12:(fromSide===1?1:-1)*(Math.random()*9+4);
+    P.push({x:sx,y:sy,vx:vx,vy:-(Math.random()*13+7),g:.26+Math.random()*.12,r:Math.random()*6,vr:(Math.random()-.5)*.35,
+      s:heart?10+Math.random()*7:5+Math.random()*6,c:heart?(Math.random()<.6?'#B23A52':'#D6A3A1'):cols[i%cols.length],h:heart})}
+  function hp(s){x.beginPath();x.moveTo(0,s*.3);x.bezierCurveTo(0,0,-s*.5,0,-s*.5,s*.3);x.bezierCurveTo(-s*.5,s*.62,0,s*.8,0,s);
+    x.bezierCurveTo(0,s*.8,s*.5,s*.62,s*.5,s*.3);x.bezierCurveTo(s*.5,0,0,0,0,s*.3);x.fill()}
+  var t0=performance.now();
+  (function frame(now){var el=now-t0;x.clearRect(0,0,W,H);
+    P.forEach(function(p){p.vx*=.985;p.vy=p.vy*.985+p.g;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+      x.save();x.translate(p.x,p.y);x.globalAlpha=Math.max(0,Math.min(1,(4600-el)/900));x.fillStyle=p.c;
+      if(p.h){x.rotate(Math.sin(p.r)*.4);x.translate(0,-p.s/2);hp(p.s)}else{x.rotate(p.r);x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2)}
+      x.restore()});
+    if(el<4600)requestAnimationFrame(frame);else c.remove()})(t0)}
+
+/* ---------- watchers: chat autoplay, confession typing, music duck, fab ---------- */
+function initWatchers(){
+  if('IntersectionObserver' in window){
+    var chatIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&chatRun===0){chatIO.disconnect();playChat()}})},{threshold:.35});
+    chatIO.observe($('#chatBody'));
+    var cIO=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){cIO.disconnect();typeConfession()}})},{threshold:.3});
+    cIO.observe($('#confess'));
+    var dIO=new IntersectionObserver(function(es){es.forEach(function(e){duck(e.isIntersecting)})},{threshold:.25});
+    dIO.observe($('#confession'))}
+  else{typeConfession()}}
+var fab=$('#fab');
+window.addEventListener('scroll',function(){fab.classList.toggle('show',window.scrollY>700)},{passive:true});
+function toTop(){window.scrollTo({top:0,behavior:RM?'auto':'smooth'})}
+fab.addEventListener('click',toTop);$('#brandBtn').addEventListener('click',toTop);
+$('#restartBtn').addEventListener('click',function(){try{localStorage.removeItem(KEY)}catch(e){}stopMusic();location.reload()});
+})();
+</script>
+
+</body>
+</html>
