@@ -3,418 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>كشف حساب الأستاذة مرفت</title>
-<meta property="og:title" content="إيصال استلام شكر — أ. مرفت 🧾">
-<meta property="og:description" content="مستند رسمي من حسابات القلب، يُرجى التوقيع بالاستلام">
+<title>شكرًا أستاذة مرفت</title>
+<meta property="og:title" content="شكرًا أستاذة مرفت">
+<meta property="og:description" content="كلمة شكر بسيطة">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Reem+Kufi:wght@500;700&family=Aref+Ruqaa:wght@700&family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --felt:#0f3b2c;--felt2:#08241a;--gold:#d4ad55;--gold2:#a8842f;
-  --paper:#fbf8ef;--ink:#1d2b3a;--line:#b9d3ea;--margin:#e08a8a;
-  --red:#b8322a;--green:#1f7a4d;--muted:#6b7480;
-}
+:root{--bg:#f3f1ea;--card:#fff;--ink:#22303c;--muted:#7a8590;--accent:#1f6b4f;--line:#e6e2d6}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:'Cairo',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
-  background:
-    radial-gradient(circle at 50% -10%,#1b5c45 0,transparent 55%),
-    repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0 2px,transparent 2px 6px),
-    linear-gradient(180deg,var(--felt),var(--felt2));
-  background-attachment:fixed;
-}
-button{font-family:inherit;cursor:pointer;border:0}
-
-/* ===== Cover ===== */
-.cover{position:fixed;inset:0;display:grid;place-items:center;padding:20px;z-index:20;transition:opacity .6s,transform .6s}
-.cover.out{opacity:0;transform:scale(1.05);pointer-events:none}
-.envelope{
-  width:min(420px,100%);background:#efe4c8;border-radius:10px;padding:34px 24px 26px;text-align:center;position:relative;
-  box-shadow:0 30px 60px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.06);
-  background-image:linear-gradient(160deg,rgba(255,255,255,.35),transparent 60%);
-}
-.envelope:before{content:"";position:absolute;inset:0 0 auto 0;height:90px;
-  background:linear-gradient(to bottom right,transparent 49.5%,rgba(0,0,0,.07) 50%) left/50% 100% no-repeat,
-             linear-gradient(to bottom left,transparent 49.5%,rgba(0,0,0,.07) 50%) right/50% 100% no-repeat;border-radius:10px 10px 0 0}
-.env-top{display:inline-block;font-family:'Reem Kufi';font-size:13px;letter-spacing:1px;color:var(--red);border:2px solid var(--red);padding:2px 12px;border-radius:4px;transform:rotate(-4deg);margin-bottom:22px;position:relative}
-.to small{display:block;color:var(--muted);font-size:14px}
-.to h1{font-family:'Reem Kufi';font-size:42px;color:var(--felt);line-height:1.3;margin:6px 0 2px}
-.to p{font-weight:600;color:var(--gold2)}
-.seal{width:74px;height:74px;border-radius:50%;margin:22px auto;display:grid;place-items:center;
-  background:radial-gradient(circle at 35% 30%,#d9483e,#8e1d17);color:#fde7c8;font-family:'Reem Kufi';font-size:15px;
-  box-shadow:0 6px 14px rgba(0,0,0,.3),inset 0 -4px 8px rgba(0,0,0,.3)}
-.btn{background:var(--felt);color:#fff;font-weight:800;font-size:18px;padding:14px 28px;border-radius:999px;box-shadow:0 8px 20px rgba(15,59,44,.4);transition:transform .15s}
-.btn:active{transform:scale(.96)}
-.btn.gold{background:linear-gradient(180deg,#e7c46e,var(--gold2));color:#2a1e05;box-shadow:0 10px 26px rgba(212,173,85,.35)}
-.hint{margin-top:12px;font-size:13px;color:var(--muted)}
-
-/* ===== Layout ===== */
-main{max-width:640px;margin:0 auto;padding:28px 16px 80px}
-.sec{margin:0 0 70px}
-.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s,transform .9s}
-.reveal.in{opacity:1;transform:none}
-
-/* ===== Printer + Receipt ===== */
-.receipt-sec{display:flex;flex-direction:column;align-items:center;min-height:90vh}
-.printer{width:min(360px,100%);height:58px;border-radius:14px 14px 6px 6px;position:relative;z-index:2;
-  background:linear-gradient(180deg,#3b4248,#1f2428);box-shadow:0 12px 24px rgba(0,0,0,.4)}
-.printer .slot{position:absolute;left:22px;right:22px;bottom:10px;height:8px;border-radius:4px;background:#0b0d0e;box-shadow:inset 0 2px 3px #000}
-.printer .led{position:absolute;top:12px;left:18px;width:8px;height:8px;border-radius:50%;background:#2ecc71;box-shadow:0 0 8px #2ecc71}
-.printer .brand{position:absolute;top:8px;right:18px;color:#8b949c;font-size:11px;font-family:'Reem Kufi';letter-spacing:1px}
-.printer.busy .led{animation:blink .25s infinite alternate}
-@keyframes blink{to{opacity:.2}}
-.receipt{
-  width:min(310px,88%);margin-top:-18px;padding:26px 18px 30px;background:#fff;position:relative;
-  font-family:'Noto Kufi Arabic','Cairo',monospace;font-size:13.5px;color:#222;
-  box-shadow:0 18px 30px rgba(0,0,0,.35);
-  --z:10px;
-  mask: conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--z) 51% repeat-x, linear-gradient(#000 0 0) top/100% calc(100% - var(--z)*.5) no-repeat;
-  -webkit-mask: conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/var(--z) 51% repeat-x, linear-gradient(#000 0 0) top/100% calc(100% - var(--z)*.5) no-repeat;
-  background-image:linear-gradient(180deg,rgba(0,0,0,.05),transparent 30px);
-}
-.rl{display:flex;justify-content:space-between;gap:10px;line-height:1.9;animation:feed .28s ease-out}
-.rl.center{justify-content:center;text-align:center}
-.rl.big{font-size:19px;font-weight:700;font-family:'Reem Kufi'}
-.rl.small{font-size:12px;color:#555}
-.rl.bold{font-weight:700;font-size:15px}
-.rl b{font-weight:700;white-space:nowrap}
-.rl.inf b{font-size:17px;color:var(--green)}
-.rl.dash{border-top:2px dashed #999;margin:8px 0;height:0;line-height:0}
-.rl .dots{flex:1;border-bottom:2px dotted #bbb;margin-bottom:9px}
-.barcode{height:46px;margin:14px auto 6px;width:85%;animation:feed .3s;
-  background:repeating-linear-gradient(90deg,#111 0 2px,transparent 2px 4px,#111 4px 5px,transparent 5px 8px,#111 8px 11px,transparent 11px 12px,#111 12px 13px,transparent 13px 17px)}
-@keyframes feed{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
-.scroll-hint{margin-top:26px;color:#e7d6a8;font-weight:600;opacity:0;transition:opacity .6s;animation:bob 1.6s infinite}
-.scroll-hint.show{opacity:1}
-@keyframes bob{50%{transform:translateY(6px)}}
-
-/* ===== Documents ===== */
-.doc{background:var(--paper);border-radius:6px;padding:26px 20px 24px;position:relative;box-shadow:0 22px 40px rgba(0,0,0,.4)}
-.doc:after{content:"";position:absolute;top:-10px;left:50%;width:90px;height:22px;transform:translateX(-50%) rotate(-2deg);background:rgba(255,255,230,.55);box-shadow:0 2px 4px rgba(0,0,0,.1)}
-.doc-head{text-align:center;margin-bottom:18px}
-.tag{display:inline-block;font-size:12px;color:var(--muted);border:1px solid #ccc;border-radius:20px;padding:1px 10px}
-.doc-head h2{font-family:'Reem Kufi';font-size:30px;color:var(--felt);margin:6px 0 2px}
-.doc-head p{font-size:14px;color:var(--muted)}
-
-/* ledger */
-.ledger{
-  background-color:var(--paper);
-  background-image:linear-gradient(90deg,transparent calc(100% - 34px),var(--margin) calc(100% - 34px),var(--margin) calc(100% - 32px),transparent calc(100% - 32px)),
-                   repeating-linear-gradient(180deg,transparent 0 35px,var(--line) 35px 36px);
-}
-.ledger table{width:100%;border-collapse:collapse;font-size:15px}
-.ledger th{font-size:13px;color:var(--red);font-weight:700;padding:6px 4px;border-bottom:2px solid var(--ink);text-align:right}
-.ledger th:last-child,.ledger td:last-child{text-align:left;width:78px}
-.ledger td{padding:10px 4px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.6}
-.ledger td small{display:block;font-size:11.5px;color:var(--muted)}
-.ledger td.cr{font-size:22px;color:var(--green);font-weight:800}
-.ledger tr.zero td.cr{font-size:15px;color:var(--red);font-family:'Noto Kufi Arabic'}
-.ledger tbody tr{opacity:0;transform:translateX(-20px);transition:all .5s}
-.in .ledger tbody tr{opacity:1;transform:none}
-.calc{margin-top:22px;background:#2b2f33;border-radius:14px;padding:14px;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.08),0 10px 18px rgba(0,0,0,.25)}
-.calc-label{font-size:13px;color:#b8c0c8;margin-bottom:8px}
-.lcd{background:#a9b89a;color:#1e2a19;border-radius:6px;padding:8px 12px;font-family:'Courier New',monospace;font-weight:700;font-size:32px;text-align:left;direction:ltr;min-height:56px;letter-spacing:2px;box-shadow:inset 0 3px 6px rgba(0,0,0,.35);overflow:hidden;white-space:nowrap}
-.lcd.err{animation:shake .4s}
-.lcd.inf{font-size:42px;line-height:1;text-align:center}
-@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.calc-note{font-size:13.5px;color:#e7d6a8;margin-top:8px;min-height:22px;text-align:center}
-
-/* balance sheet */
-.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.bs-col h3{font-family:'Reem Kufi';color:var(--felt);font-size:18px;border-bottom:2px solid var(--felt);padding-bottom:4px;margin-bottom:6px}
-.li{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px dashed #d5cfbf;font-size:14px;line-height:1.6}
-.li b{color:var(--green);font-size:18px}
-.tot{display:flex;justify-content:space-between;padding:10px 0 4px;font-weight:800;border-bottom:4px double var(--ink);margin-top:4px}
-.tot b{color:var(--green);font-size:20px}
-.balanced{margin-top:20px;text-align:center;background:#e8f3ec;border:1px solid #b9dbc6;color:var(--green);border-radius:10px;padding:12px;font-weight:700;line-height:1.7}
-.scale{display:inline-block;font-size:24px;vertical-align:middle;margin-left:6px}
-.in .scale{animation:tilt 2.4s ease-in-out 2}
-@keyframes tilt{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
-
-/* audit */
-.audit p{font-size:15.5px;line-height:2;margin-bottom:12px;text-align:justify}
-.audit .addr{font-weight:700;color:var(--felt)}
-.opinion{background:var(--felt);color:#fff;text-align:center;font-family:'Reem Kufi';font-size:20px;padding:12px;border-radius:8px;margin:18px 0 8px}
-.sign{display:flex;justify-content:space-between;align-items:center;margin-top:20px;min-height:120px}
-.sign small{display:block;color:var(--muted);font-size:13px}
-.sig{font-family:'Aref Ruqaa';font-size:40px;color:#1d3f8f;line-height:1.2}
-.stamp{width:118px;height:118px;border-radius:50%;border:4px double var(--red);color:var(--red);display:grid;place-content:center;text-align:center;
-  transform:rotate(-14deg) scale(3);opacity:0;mix-blend-mode:multiply;transition:transform .35s cubic-bezier(.2,1.6,.4,1),opacity .25s}
-.stamp span{font-family:'Reem Kufi';font-size:26px;font-weight:700;line-height:1.1}
-.stamp small{color:var(--red);font-size:11px}
-.stamp.down{transform:rotate(-14deg) scale(1);opacity:.9}
-.thud{animation:thud .3s}
-@keyframes thud{40%{transform:translateY(4px)}}
-
-/* final */
-.final{text-align:center;color:#fff}
-.final h2{font-family:'Reem Kufi';font-size:28px;color:var(--gold)}
-.final > p{color:#d9e6df;margin:8px 0 20px}
-.thanks{margin-top:30px;background:rgba(255,255,255,.06);border:1px solid rgba(212,173,85,.4);border-radius:16px;padding:26px 18px;animation:feed .6s}
-.thanks h2{font-size:32px;margin-bottom:10px}
-.thanks p{line-height:2;font-size:17px;color:#f2ead6}
-.thanks .from{margin-top:14px;font-family:'Aref Ruqaa';font-size:26px;color:var(--gold)}
-#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
-footer{text-align:center;color:rgba(255,255,255,.35);font-size:12px}
-
-@media (max-width:480px){
-  .bs-grid{grid-template-columns:1fr}
-  .to h1{font-size:36px}
-  .doc-head h2{font-size:26px}
-}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.card{width:min(440px,100%);background:var(--card);border-radius:18px;padding:36px 26px 30px;text-align:center;
+  box-shadow:0 18px 40px rgba(34,48,60,.10);border-top:5px solid var(--accent);animation:up .8s ease-out}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.icon{width:56px;height:56px;border-radius:50%;background:#e7f2ec;color:var(--accent);display:grid;place-items:center;margin:0 auto 16px;font-size:26px}
+small{color:var(--muted);font-size:14px}
+h1{font-size:30px;font-weight:700;margin:4px 0 20px;color:var(--accent)}
+p{font-size:17px;line-height:2}
+.list{list-style:none;margin:22px 0;border-top:1px solid var(--line)}
+.list li{padding:12px 4px;border-bottom:1px solid var(--line);font-size:16px;display:flex;align-items:center;gap:10px;text-align:right}
+.list li:before{content:"✔";color:var(--accent);font-weight:700}
+.from{margin-top:22px;color:var(--muted);font-size:14px}
+.sig{font-family:'Aref Ruqaa';font-size:32px;color:var(--ink);line-height:1.4}
+@media (prefers-reduced-motion:reduce){.card{animation:none}}
 </style>
 </head>
 <body>
-
-<div class="cover" id="cover">
-  <div class="envelope">
-    <div class="env-top">مستند رسمي</div>
-    <div class="to">
-      <small>إلى السيدة الفاضلة</small>
-      <h1>الأستاذة مرفت</h1>
-      <p>مديرة الحسابات</p>
-    </div>
-    <div class="seal">سري</div>
-    <button class="btn" id="openBtn">استلام المستند ✉️</button>
-    <p class="hint">شغّلي الصوت لتجربة أحلى 🔊</p>
-  </div>
-</div>
-
-<main id="main" hidden>
-  <!-- 1. Receipt -->
-  <section class="sec receipt-sec">
-    <div class="printer" id="printer"><div class="led"></div><div class="brand">حسابات القلب</div><div class="slot"></div></div>
-    <div class="receipt" id="receipt"></div>
-    <div class="scroll-hint" id="scrollHint">كمّلي لتحت، لسه في مستندات ↓</div>
-  </section>
-
-  <!-- 2. Ledger -->
-  <section class="sec reveal" id="ledgerSec">
-    <div class="doc ledger">
-      <div class="doc-head">
-        <span class="tag">مستند رقم ٢</span>
-        <h2>كشف حساب</h2>
-        <p>العميل: أ. مرفت · الحساب: امتنان جاري</p>
-      </div>
-      <table>
-        <thead><tr><th>البيان</th><th>لها (دائن)</th></tr></thead>
-        <tbody>
-          <tr><td><small>من أول يوم</small>رصيد افتتاحي: من أساس الشركة وحجر الأساس فيها</td><td class="cr">∞</td></tr>
-          <tr><td><small>كل يوم</small>بتحب الشركة كأنها بيتها التاني</td><td class="cr">∞</td></tr>
-          <tr><td><small>دايمًا</small>بتساعدنا كلنا، من غير ما حد يطلب</td><td class="cr">∞</td></tr>
-          <tr><td><small>آخر كل شهر</small>ضغط الإقفال، وسؤال «هو المرتب نازل إمتى؟» ألف مرة 😄</td><td class="cr">∞</td></tr>
-          <tr><td><small>طول السنة</small>الحسابات مظبوطة للمليم</td><td class="cr">∞</td></tr>
-          <tr class="zero"><td><small>مدين</small>عدد المرات اللي قالت فيها «لأ» لحد محتاج مساعدة</td><td class="cr">0.00</td></tr>
-        </tbody>
-      </table>
-      <div class="calc">
-        <div class="calc-label">الرصيد الختامي</div>
-        <div class="lcd" id="lcd">0</div>
-        <div class="calc-note" id="calcNote"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Balance sheet -->
-  <section class="sec reveal">
-    <div class="doc">
-      <div class="doc-head">
-        <span class="tag">مستند رقم ٣</span>
-        <h2>الميزانية العمومية</h2>
-        <p>في تاريخ: كل يوم</p>
-      </div>
-      <div class="bs-grid">
-        <div class="bs-col">
-          <h3>الأصول</h3>
-          <div class="li"><span>أ. مرفت (أصل ثابت لا يُهلَك)</span><b>∞</b></div>
-          <div class="li"><span>خبرة من أول يوم في الشركة</span><b>∞</b></div>
-          <div class="li"><span>قلب كبير بيشيل الكل</span><b>∞</b></div>
-          <div class="tot"><span>إجمالي الأصول</span><b>∞</b></div>
-        </div>
-        <div class="bs-col">
-          <h3>الخصوم وحقوق الملكية</h3>
-          <div class="li"><span>شكر مستحق لها علينا كلنا</span><b>∞</b></div>
-          <div class="li"><span>دين مساعدة على كل واحد في الشركة</span><b>∞</b></div>
-          <div class="li"><span>محبة واحترام الفريق</span><b>∞</b></div>
-          <div class="tot"><span>إجمالي الخصوم</span><b>∞</b></div>
-        </div>
-      </div>
-      <div class="balanced"><span class="scale">⚖️</span>الميزانية متوازنة… زي ما هي متعودة تخليها دايمًا</div>
-    </div>
-  </section>
-
-  <!-- 4. Auditor report -->
-  <section class="sec reveal" id="auditSec">
-    <div class="doc audit">
-      <div class="doc-head">
-        <span class="tag">مستند رقم ٤</span>
-        <h2>تقرير مراقب الحسابات</h2>
-        <p>عن الفترة من أول يوم… لحد النهارده</p>
-      </div>
-      <p class="addr">إلى السادة / كل اللي في الشركة</p>
-      <p>راجعنا أداء الأستاذة مرفت، وفحصنا الدفاتر والمستندات والإيصالات… وفحصنا القلوب كمان.</p>
-      <p>وفي رأينا، إن الأستاذة مرفت بتعبّر بعدالة ووضوح، من جميع النواحي الجوهرية، عن معنى الإخلاص والجدعنة، وإن الشركة من غيرها مكانتش هتبقى هي هي.</p>
-      <div class="opinion">الرأي: نظيف غير متحفظ ✔</div>
-      <div class="sign" id="signBox">
-        <div><small>المراجع</small><span class="sig">يوسف</span></div>
-        <div class="stamp" id="stamp"><span>مُعتمد</span><small>شكر وتقدير</small></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Final -->
-  <section class="sec final reveal">
-    <h2>يُرجى التوقيع بالاستلام</h2>
-    <p>اضغطي هنا عشان نتأكد إن الشكر وصل 👇</p>
-    <button class="btn gold" id="signBtn">تم الاستلام ✔</button>
-    <div class="thanks" id="thanks" hidden>
-      <h2>شكرًا يا أستاذة مرفت ❤️</h2>
-      <p>على حبك للشركة كأنها بيتك،<br>وعلى إنك من أساسها ومن أول يوم،<br>وعلى إنك دايمًا سند لينا كلنا.</p>
-      <p class="from">يوسف، وكل الفريق</p>
-    </div>
-  </section>
-  <footer>مستند غير قابل للإلغاء أو الاسترداد</footer>
-</main>
-
-<canvas id="fx"></canvas>
-
-<script>
-(function(){
-  const $=id=>document.getElementById(id);
-  let ac=null;
-  function audio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
-  function tick(len=0.04,vol=0.08){
-    if(!ac) return;
-    try{
-      const b=ac.createBuffer(1,ac.sampleRate*len,ac.sampleRate),d=b.getChannelData(0);
-      for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
-      const s=ac.createBufferSource(),g=ac.createGain(),f=ac.createBiquadFilter();
-      f.type='bandpass';f.frequency.value=2200;g.gain.value=vol;
-      s.buffer=b;s.connect(f);f.connect(g);g.connect(ac.destination);s.start();
-    }catch(e){}
-  }
-  function beep(freq=880,dur=.12,vol=.06){
-    if(!ac) return;
-    try{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=freq;o.type='square';g.gain.value=vol;
-      o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+dur);o.stop(ac.currentTime+dur);}catch(e){}
-  }
-
-  const date=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
-  const lines=[
-    {c:'center big',s:'إيصال استلام شكر'},
-    {c:'center small',s:'— حسابات القلب —'},
-    {c:'dash'},
-    {c:'row',a:'رقم الإيصال',b:'0001 / ∞'},
-    {c:'row',a:'التاريخ',b:date},
-    {c:'row',a:'المستلم',b:'أ. مرفت'},
-    {c:'row',a:'الوظيفة',b:'مديرة الحسابات'},
-    {c:'dash'},
-    {c:'item inf',a:'حب الشركة من القلب',b:'∞'},
-    {c:'item inf',a:'من أساس الشركة',b:'∞'},
-    {c:'item inf',a:'بتساعدنا كلنا',b:'∞'},
-    {c:'dash'},
-    {c:'row bold inf',a:'الإجمالي',b:'∞'},
-    {c:'row',a:'الضريبة',b:'0٪ (الشكر معفي)'},
-    {c:'row',a:'طريقة الدفع',b:'من القلب'},
-    {c:'dash'},
-    {c:'center small',s:'الإيصال ده مش بيترد ولا بيتستبدل'},
-    {c:'barcode'},
-    {c:'center small',s:'شكرًا لوجودك معانا ❤'}
-  ];
-
-  function printReceipt(){
-    const r=$('receipt'),p=$('printer');p.classList.add('busy');
-    let i=0;
-    (function next(){
-      if(i>=lines.length){p.classList.remove('busy');beep(1200,.15);setTimeout(()=>$('scrollHint').classList.add('show'),500);return;}
-      const L=lines[i++],el=document.createElement('div');
-      if(L.c==='barcode'){el.className='barcode';}
-      else{
-        el.className='rl '+L.c.replace('row','').replace('item','');
-        if(L.c==='dash'){}
-        else if(L.s){el.textContent=L.s;}
-        else{
-          const a=document.createElement('span');a.textContent=L.a;
-          const b=document.createElement('b');b.textContent=L.b;
-          el.appendChild(a);
-          if(L.c.includes('item')){const d=document.createElement('span');d.className='dots';el.appendChild(d);}
-          el.appendChild(b);
-        }
-      }
-      r.appendChild(el);
-      for(let k=0;k<3;k++) setTimeout(()=>tick(),k*45);
-      setTimeout(next,L.c==='dash'?160:330);
-    })();
-  }
-
-  $('openBtn').addEventListener('click',()=>{
-    audio();beep(660,.08);
-    $('cover').classList.add('out');
-    $('main').hidden=false;
-    setTimeout(()=>{$('cover').remove();printReceipt();},500);
-  });
-
-  // reveal on scroll
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    if(!e.isIntersecting) return;
-    e.target.classList.add('in');io.unobserve(e.target);
-    if(e.target.id==='ledgerSec'){
-      e.target.querySelectorAll('tbody tr').forEach((tr,i)=>tr.style.transitionDelay=(i*.18)+'s');
-      setTimeout(runCalc,1400);
-    }
-    if(e.target.id==='auditSec') setTimeout(stamp,1500);
-  }),{threshold:.3});
-  document.querySelectorAll('.reveal').forEach(s=>io.observe(s));
-
-  function runCalc(){
-    const lcd=$('lcd'),note=$('calcNote');let v=1,steps=0;
-    note.textContent='جاري حساب الرصيد…';
-    const t=setInterval(()=>{
-      v=Math.min(999999999,Math.floor(v*1.9+Math.random()*50));steps++;
-      lcd.textContent=v.toLocaleString('en-US');tick(.02,.05);
-      if(v>=999999999||steps>40){
-        clearInterval(t);
-        setTimeout(()=>{lcd.textContent='ERROR';lcd.classList.add('err');beep(220,.25,.07);note.textContent='الرقم أكبر من الآلة الحاسبة!';},400);
-        setTimeout(()=>{lcd.classList.remove('err');lcd.classList.add('inf');lcd.textContent='∞';beep(1000,.12);note.textContent='الحساب ده مبيتقفلش 💚';},1700);
-      }
-    },70);
-  }
-
-  function stamp(){
-    $('stamp').classList.add('down');
-    setTimeout(()=>{$('signBox').closest('.doc').classList.add('thud');beep(90,.18,.12);tick(.08,.2);},300);
-  }
-
-  // confetti
-  const cv=$('fx'),cx=cv.getContext('2d');let parts=[],running=false;
-  function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}
-  addEventListener('resize',size);size();
-  const glyphs=['∞','✔','❤','💚','🧾','✨','٪','💰'];
-  function burst(){
-    for(let i=0;i<140;i++) parts.push({x:innerWidth/2+(Math.random()-.5)*120,y:innerHeight*.75,vx:(Math.random()-.5)*12,vy:-Math.random()*16-6,
-      r:Math.random()*6.28,vr:(Math.random()-.5)*.3,s:16+Math.random()*16,g:glyphs[i%glyphs.length],c:['#d4ad55','#2ecc71','#ffffff','#e85d5d'][i%4],life:0});
-    if(!running){running=true;loop();}
-  }
-  function loop(){
-    cx.clearRect(0,0,innerWidth,innerHeight);
-    parts.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life++;
-      cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.font=p.s+'px sans-serif';cx.fillStyle=p.c;cx.textAlign='center';cx.fillText(p.g,0,0);cx.restore();});
-    parts=parts.filter(p=>p.y<innerHeight+60&&p.life<400);
-    if(parts.length) requestAnimationFrame(loop); else {running=false;cx.clearRect(0,0,innerWidth,innerHeight);}
-  }
-
-  $('signBtn').addEventListener('click',()=>{
-    audio();
-    [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.18,.05),i*120));
-    burst();setTimeout(burst,600);
-    const t=$('thanks');
-    if(t.hidden){t.hidden=false;setTimeout(()=>t.scrollIntoView({behavior:'smooth',block:'center'}),200);}
-    $('signBtn').textContent='تم الاستلام ✔ (تاني؟ 😄)';
-  });
-})();
-</script>
+  <main class="card">
+    <div class="icon">✉</div>
+    <small>إلى الأستاذة</small>
+    <h1>مرفت</h1>
+    <p>حبيت أقولك كلمة شكر بسيطة</p>
+    <ul class="list">
+      <li>على حبك للشركة</li>
+      <li>وعلى إنك من أساسها ومن أول يوم</li>
+      <li>وعلى إنك دايمًا بتساعدينا كلنا</li>
+    </ul>
+    <p>شكرًا ليكي، وربنا يوفقك.</p>
+    <div class="from">مع التحية،</div>
+    <div class="sig">يوسف</div>
+  </main>
 </body>
 </html>
