@@ -3,99 +3,246 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>شهادة شكر وتقدير | أ. مرفت</title>
-<meta property="og:title" content="شهادة شكر وتقدير للأستاذة مرفت 🌷">
-<meta property="og:description" content="رسالة شكر من الشركة وكل الفريق">
+<title>شكر وتقدير | أ. مرفت</title>
+<meta property="og:title" content="رسالة شكر وتقدير للأستاذة مرفت 🌷">
+<meta property="og:description" content="من الشركة وكل الفريق، بكل محبة">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f0e6;--paper:#fffdf7;--ink:#2a3440;--muted:#7d8792;--gold:#b8923c;--gold2:#e2c77e;--green:#1f6b4f}
+:root{--bg:#f4f0e6;--paper:#fffdf7;--ink:#2a3440;--muted:#7d8792;--gold:#b8923c;--gold2:#e2c77e;--green:#1f6b4f;--green2:#e7f2ec;--rose:#d9727f}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cairo',sans-serif;color:var(--ink);min-height:100vh;padding:28px 16px 40px;overflow-x:hidden;
-  background:radial-gradient(circle at 50% 0,#fbf8f0,var(--bg) 70%)}
-.wrap{max-width:520px;margin:0 auto}
-.top{text-align:center;margin-bottom:18px;animation:fade .8s both}
-.top span{display:inline-block;background:#fff;border:1px solid #e7dcc0;color:var(--gold);font-weight:700;font-size:14px;padding:6px 16px;border-radius:999px}
-.cert{position:relative;background:var(--paper);border-radius:10px;padding:14px;box-shadow:0 20px 45px rgba(60,45,10,.12);animation:up .9s .15s both}
-.frame{border:2px solid var(--gold);outline:1px solid var(--gold2);outline-offset:-8px;border-radius:6px;padding:34px 22px 28px;text-align:center;position:relative}
-.corner{position:absolute;width:26px;height:26px;color:var(--gold);font-size:22px;line-height:26px}
-.c1{top:6px;right:8px}.c2{top:6px;left:8px}.c3{bottom:6px;right:8px}.c4{bottom:6px;left:8px}
-.medal{width:64px;height:64px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;font-size:28px;
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;color:var(--ink);overflow-x:hidden;background:var(--bg)}
+button{font-family:inherit;cursor:pointer;border:0}
+section{padding:70px 16px}
+.wrap{max-width:620px;margin:0 auto}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:none}
+.sec-title{text-align:center;margin-bottom:30px}
+.sec-title small{color:var(--gold);font-weight:700;font-size:14px}
+.sec-title h2{font-family:'Reem Kufi';font-size:30px;color:var(--green);margin-top:4px}
+.orn{color:var(--gold);letter-spacing:8px;text-align:center}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;
+  background:radial-gradient(circle at 50% 30%,#fffaf0,transparent 60%),linear-gradient(180deg,#f8f4ea,var(--bg))}
+.badge{display:inline-block;background:#fff;border:1px solid #e7dcc0;color:var(--gold);font-weight:700;font-size:14px;padding:6px 18px;border-radius:999px;animation:fade 1s both}
+.hero .to{margin-top:28px;color:var(--muted);font-size:16px;animation:fade 1s .3s both}
+.hero h1{font-family:'Aref Ruqaa';font-size:clamp(64px,18vw,104px);color:var(--green);line-height:1.2;animation:up 1s .5s both}
+.hero .role{color:var(--muted);animation:fade 1s .8s both}
+.hero .line{font-size:20px;margin-top:22px;max-width:420px;line-height:1.9;animation:fade 1s 1.1s both}
+.hero .line b{color:var(--gold)}
+.down{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);color:var(--gold);font-size:14px;text-decoration:none;text-align:center;animation:bob 1.8s infinite}
+.down span{display:block;font-size:22px}
+@keyframes bob{50%{transform:translate(-50%,7px)}}
+
+/* Certificate */
+.cert{background:var(--paper);border-radius:10px;padding:14px;box-shadow:0 20px 45px rgba(60,45,10,.12)}
+.frame{border:2px solid var(--gold);outline:1px solid var(--gold2);outline-offset:-8px;border-radius:6px;padding:36px 22px 30px;text-align:center;position:relative}
+.corner{position:absolute;color:var(--gold);font-size:22px;line-height:1}
+.c1{top:10px;right:12px}.c2{top:10px;left:12px}.c3{bottom:10px;right:12px}.c4{bottom:10px;left:12px}
+.medal{width:66px;height:66px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;font-size:30px;
   background:radial-gradient(circle at 35% 30%,#f3dc98,var(--gold));box-shadow:0 6px 14px rgba(184,146,60,.35)}
-h1{font-family:'Reem Kufi';font-size:30px;color:var(--gold);letter-spacing:.5px}
-.sub{color:var(--muted);font-size:14px;margin:2px 0 22px}
-.to{font-size:15px;color:var(--muted)}
-.name{font-family:'Aref Ruqaa';font-size:52px;color:var(--green);line-height:1.3;margin:2px 0 6px}
-.orn{color:var(--gold);letter-spacing:6px;margin:6px 0 16px}
-.body p{font-size:17px;line-height:2.1}
-.body b{color:var(--green)}
-.thx{margin-top:18px;font-family:'Aref Ruqaa';font-size:26px;color:var(--gold)}
+.frame h3{font-family:'Reem Kufi';font-size:30px;color:var(--gold)}
+.frame .sub{color:var(--muted);font-size:14px;margin:2px 0 20px}
+.frame .lbl{font-size:15px;color:var(--muted)}
+.frame .nm{font-family:'Aref Ruqaa';font-size:50px;color:var(--green);line-height:1.3}
+.frame p{font-size:17px;line-height:2.1;margin-top:10px}
+.frame p b{color:var(--green)}
 .sign{margin-top:24px;padding-top:16px;border-top:1px dashed #dccfa9;font-size:15px;color:var(--muted)}
-.sign strong{display:block;font-size:18px;color:var(--ink);margin-top:2px}
-.btn{display:block;margin:24px auto 0;background:var(--green);color:#fff;border:0;font-family:inherit;font-weight:700;font-size:16px;padding:12px 26px;border-radius:999px;cursor:pointer;box-shadow:0 8px 18px rgba(31,107,79,.25)}
+.sign strong{display:block;font-size:18px;color:var(--ink)}
+.date{font-size:13px;margin-top:4px}
+
+/* Thanks grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tcard{background:#fff;border-radius:16px;padding:22px 16px;text-align:center;box-shadow:0 10px 24px rgba(34,48,60,.07);border-bottom:3px solid var(--gold2);transition:transform .25s}
+.tcard:hover{transform:translateY(-4px)}
+.tcard .ic{font-size:32px;margin-bottom:8px}
+.tcard h4{font-size:17px;color:var(--green);margin-bottom:4px}
+.tcard p{font-size:14px;color:var(--muted);line-height:1.8}
+.grid .tcard{transition-delay:var(--d,0s)}
+
+/* Notes */
+.notes-sec{background:linear-gradient(180deg,var(--bg),#efe8d8)}
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.note{padding:20px 16px 16px;border-radius:4px;font-size:16px;line-height:1.9;position:relative;box-shadow:0 10px 18px rgba(0,0,0,.08)}
+.note:before{content:"";position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:60px;height:16px;background:rgba(255,255,255,.6)}
+.note small{display:block;margin-top:10px;font-size:13px;opacity:.7;text-align:left}
+.n1{background:#fff6cf;transform:rotate(-1.5deg)}
+.n2{background:#e3f1e8;transform:rotate(1.2deg)}
+.n3{background:#fde5e3;transform:rotate(1deg)}
+.n4{background:#e6eef8;transform:rotate(-1deg)}
+.reveal.note.in{transform:rotate(var(--r,0deg))}
+.n1{--r:-1.5deg}.n2{--r:1.2deg}.n3{--r:1deg}.n4{--r:-1deg}
+
+/* Hearts */
+.hearts-box{text-align:center;background:#fff;border-radius:20px;padding:30px 20px;box-shadow:0 12px 28px rgba(34,48,60,.07)}
+.hearts-box p{color:var(--muted);margin-bottom:16px}
+.heart-btn{width:96px;height:96px;border-radius:50%;background:#fdecee;font-size:46px;transition:transform .15s;box-shadow:0 8px 20px rgba(217,114,127,.25)}
+.heart-btn:active{transform:scale(.9)}
+.count{margin-top:14px;font-weight:800;font-size:22px;color:var(--rose)}
+.count small{display:block;font-weight:600;font-size:14px;color:var(--muted)}
+
+/* Final */
+.final{text-align:center}
+.envelope{width:min(320px,100%);margin:0 auto;background:#fff;border-radius:14px;padding:30px 20px;box-shadow:0 14px 30px rgba(34,48,60,.1)}
+.envelope .big{font-size:54px}
+.btn{background:var(--green);color:#fff;font-weight:700;font-size:17px;padding:13px 28px;border-radius:999px;box-shadow:0 8px 18px rgba(31,107,79,.25);margin-top:14px}
 .btn:active{transform:scale(.97)}
-.petal{position:fixed;top:-30px;pointer-events:none;font-size:20px;animation:fall linear forwards;z-index:5}
+.msg{margin-top:26px;background:var(--paper);border:1px solid #e7dcc0;border-radius:16px;padding:28px 20px;animation:up .7s both}
+.msg p{font-size:18px;line-height:2.1}
+.msg .thx{font-family:'Aref Ruqaa';font-size:30px;color:var(--gold);margin-top:12px}
+.msg .from{margin-top:8px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 40px}
+
+.petal{position:fixed;top:-30px;pointer-events:none;animation:fall linear forwards;z-index:50}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.pop{position:fixed;pointer-events:none;font-size:24px;animation:pop 1s ease-out forwards;z-index:50}
+@keyframes pop{to{transform:translateY(-120px) scale(1.4);opacity:0}}
 @keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@media (max-width:420px){.name{font-size:44px}h1{font-size:26px}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+@media (max-width:440px){
+  .grid,.notes{grid-template-columns:1fr}
+  .frame .nm{font-size:44px}
+  .frame h3,.sec-title h2{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top"><span>💐 رسالة شكر</span></div>
 
-  <div class="cert">
-    <div class="frame">
-      <span class="corner c1">❦</span><span class="corner c2">❦</span><span class="corner c3">❦</span><span class="corner c4">❦</span>
-      <div class="medal">🏅</div>
-      <h1>شهادة شكر وتقدير</h1>
-      <div class="sub">مقدمة من إدارة الشركة وكل الفريق</div>
+<!-- 1. Hero -->
+<section class="hero">
+  <span class="badge">💐 رسالة شكر وتقدير</span>
+  <div class="to">إلى الأستاذة الفاضلة</div>
+  <h1>مرفت</h1>
+  <div class="role">مديرة الحسابات</div>
+  <p class="line">الصفحة دي معمولة مخصوص عشان نقولك<br><b>شكرًا</b> من الشركة وكل الفريق 🌷</p>
+  <a class="down" href="#cert">كمّلي<span>⌄</span></a>
+</section>
 
-      <div class="to">إلى الأستاذة الفاضلة</div>
-      <div class="name">مرفت</div>
-      <div class="to">مديرة الحسابات</div>
-      <div class="orn">✦ ✦ ✦</div>
-
-      <div class="body">
-        <p>بكل محبة واحترام، بنقولك <b>شكرًا</b><br>
-        على حبك لينا،<br>
-        وعلى إنك دايمًا جنبنا وبتساعدينا كلنا،<br>
-        وعلى روحك الحلوة اللي بتفرق معانا كل يوم.</p>
-        <p>وجودك معانا مكسب، وتقديرنا ليكي كبير.</p>
-      </div>
-
-      <div class="thx">شكرًا من قلوبنا 🌷</div>
-
-      <div class="sign">مع خالص التحية والتقدير
-        <strong>إدارة الشركة وكل الفريق</strong>
+<!-- 2. Certificate -->
+<section id="cert">
+  <div class="wrap reveal">
+    <div class="cert">
+      <div class="frame">
+        <span class="corner c1">❦</span><span class="corner c2">❦</span><span class="corner c3">❦</span><span class="corner c4">❦</span>
+        <div class="medal">🏅</div>
+        <h3>شهادة شكر وتقدير</h3>
+        <div class="sub">مقدمة من إدارة الشركة وكل الفريق</div>
+        <div class="lbl">تُمنح للأستاذة</div>
+        <div class="nm">مرفت</div>
+        <div class="orn">✦ ✦ ✦</div>
+        <p>تقديرًا <b>لحبها لينا</b>، ووقفتها جنب كل واحد فينا،<br>
+        ومساعدتها الدايمة للكل، وروحها الحلوة<br>اللي بتفرق معانا كل يوم.</p>
+        <div class="sign">مع خالص التحية والتقدير
+          <strong>إدارة الشركة وكل الفريق</strong>
+          <div class="date" id="date"></div>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <button class="btn" id="btn">🌷 ورد ليكي</button>
-</div>
+<!-- 3. Thanks for -->
+<section>
+  <div class="wrap">
+    <div class="sec-title reveal"><small>من القلب</small><h2>شكرًا على…</h2></div>
+    <div class="grid">
+      <div class="tcard reveal" style="--d:0s"><div class="ic">💚</div><h4>حبك لينا</h4><p>اللي حاسينه في كل تعامل معاكي</p></div>
+      <div class="tcard reveal" style="--d:.1s"><div class="ic">🤝</div><h4>مساعدتك للكل</h4><p>من غير ما حد يطلب، ومن غير ما تستني حاجة</p></div>
+      <div class="tcard reveal" style="--d:.2s"><div class="ic">😊</div><h4>روحك الحلوة</h4><p>وابتسامتك اللي بتهوّن ضغط الشغل</p></div>
+      <div class="tcard reveal" style="--d:.3s"><div class="ic">🌿</div><h4>صبرك علينا</h4><p>وعلى أسئلتنا الكتير وطلباتنا اللي مبتخلصش</p></div>
+      <div class="tcard reveal" style="--d:.4s"><div class="ic">🫶</div><h4>وقفتك جنبنا</h4><p>في الأوقات الصعبة قبل السهلة</p></div>
+      <div class="tcard reveal" style="--d:.5s"><div class="ic">🌷</div><h4>كلمتك الطيبة</h4><p>اللي دايمًا بتيجي في وقتها</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Notes -->
+<section class="notes-sec">
+  <div class="wrap">
+    <div class="sec-title reveal"><small>رسايل صغيرة</small><h2>من الفريق ليكي</h2></div>
+    <div class="notes">
+      <div class="note n1 reveal">شكرًا على كل مرة لقيناكي فيها جنبنا من غير ما نطلب 💛<small>— الفريق</small></div>
+      <div class="note n2 reveal">وجودك بيفرق، وبيخلّي المكان أحلى 🌿<small>— الفريق</small></div>
+      <div class="note n3 reveal">ربنا يخليكي لينا ويسعدك زي ما بتسعدينا 🌸<small>— الفريق</small></div>
+      <div class="note n4 reveal">إحنا محظوظين إنك معانا، وده أقل حاجة نقولها 💙<small>— الفريق</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Hearts -->
+<section>
+  <div class="wrap reveal">
+    <div class="hearts-box">
+      <div class="sec-title" style="margin-bottom:10px"><small>دورك</small><h2>ابعتيلنا قلب</h2></div>
+      <p>اضغطي على القلب كذا مرة 😄</p>
+      <button class="heart-btn" id="heart" aria-label="قلب">❤️</button>
+      <div class="count"><span id="cnt">0</span><small id="cntMsg">قلب</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Final -->
+<section class="final">
+  <div class="wrap reveal">
+    <div class="envelope">
+      <div class="big">💌</div>
+      <div>في كلمة أخيرة ليكي</div>
+      <button class="btn" id="open">افتحي الرسالة</button>
+    </div>
+    <div class="msg" id="msg" hidden>
+      <p>يا أستاذة مرفت،<br>
+      شكرًا إنك معانا، وشكرًا على حبك لينا كلنا.<br>
+      وجودك مكسب، وتقديرنا ليكي أكبر من أي كلام.</p>
+      <div class="thx">شكرًا من قلوبنا 🌷</div>
+      <div class="from">إدارة الشركة وكل الفريق</div>
+    </div>
+  </div>
+</section>
+
+<footer>صُنعت بكل محبة وتقدير 🌷</footer>
 
 <script>
 (function(){
+  const $=id=>document.getElementById(id);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $('date').textContent=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'});
+
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.2});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
   const items=['🌷','🌸','💐','✨','🌼'];
   function shower(n){
+    if(reduce) return;
     for(let i=0;i<n;i++){
-      const s=document.createElement('span');
-      s.className='petal';
-      s.textContent=items[i%items.length];
-      s.style.left=Math.random()*100+'vw';
-      s.style.fontSize=(16+Math.random()*16)+'px';
-      s.style.animationDuration=(3+Math.random()*3)+'s';
-      s.style.animationDelay=(Math.random()*1.5)+'s';
-      document.body.appendChild(s);
-      setTimeout(()=>s.remove(),8000);
+      const s=document.createElement('span');s.className='petal';s.textContent=items[i%items.length];
+      s.style.left=Math.random()*100+'vw';s.style.fontSize=(16+Math.random()*16)+'px';
+      s.style.animationDuration=(3+Math.random()*3)+'s';s.style.animationDelay=(Math.random()*1.5)+'s';
+      document.body.appendChild(s);setTimeout(()=>s.remove(),8000);
     }
   }
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(()=>shower(18),900);
-  document.getElementById('btn').addEventListener('click',()=>shower(30));
+  setTimeout(()=>shower(16),1200);
+
+  let n=0;
+  const msgs=[[1,'قلب'],[5,'قلوب حلوة 💕'],[10,'وصلونا! 🥰'],[20,'إيه الحب ده كله 😍'],[40,'خلاص اتأكدنا 😂❤️']];
+  $('heart').addEventListener('click',e=>{
+    n++;$('cnt').textContent=n.toLocaleString('ar-EG');
+    let m='قلب';msgs.forEach(([k,t])=>{if(n>=k)m=t;});$('cntMsg').textContent=m;
+    if(reduce) return;
+    const r=e.currentTarget.getBoundingClientRect(),p=document.createElement('span');
+    p.className='pop';p.textContent=['❤️','💚','💛','🩷'][n%4];
+    p.style.left=(r.left+r.width/2-12+(Math.random()*40-20))+'px';p.style.top=(r.top)+'px';
+    document.body.appendChild(p);setTimeout(()=>p.remove(),1000);
+  });
+
+  $('open').addEventListener('click',()=>{
+    const m=$('msg');
+    if(m.hidden){m.hidden=false;setTimeout(()=>m.scrollIntoView({behavior:'smooth',block:'center'}),100);}
+    shower(30);
+  });
 })();
 </script>
 </body>
