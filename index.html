@@ -3064,6 +3064,7 @@ function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code
 .rySeal svg{width:56px;filter:drop-shadow(0 1px 1px rgba(90,0,40,.6))}
 .ryEnv.opened .rySeal{animation:none;transform:scale(1.6);opacity:0}
 @keyframes ryPulse{50%{box-shadow:0 0 0 4px #e9c46a,0 0 0 12px rgba(255,200,230,.35),0 8px 20px rgba(120,0,50,.55),0 0 60px rgba(255,140,200,1)}}
+.ryDoor .rySeal{position:relative;left:auto;top:auto;margin:0;width:min(170px,42vw);height:min(170px,42vw);animation:ryPulse 1.7s ease-in-out infinite,ryFloat 3.4s ease-in-out infinite}.ryDoor .rySeal svg{width:62%}.ryDoor.opened .rySeal{transform:scale(1.8);opacity:0}
 .ryTap{font-weight:900;font-size:clamp(18px,5vw,22px);color:#fff0f8;text-shadow:0 0 14px rgba(255,140,205,.95);animation:ryBlink 1.5s ease-in-out infinite}
 .ryMain{width:100%;max-width:640px;display:none;flex-direction:column;align-items:center}
 #ryOv.open .ryMain{display:flex}
@@ -3111,7 +3112,7 @@ function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code
 /* ===== مفاجأة ملكية لحساب محدد – المحتوى الشخصي متشفّر وبيتفك بس لصاحب الإيميل ===== */
 (function(){
 'use strict';
-const RY={s:'pal-royal-7f3a',it:150000,T:{"32ce12c57e4dc3c34087c1709f6834443051a99da3eabe815c1dafa806f665ea":{"iv":"DXSj87UsTZ9Gstic","ct":"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"}}};
+const RY={s:'pal-royal-7f3a',it:150000,T:{"32ce12c57e4dc3c34087c1709f6834443051a99da3eabe815c1dafa806f665ea":{"iv":"45rWfTbeBKI74T+N","ct":"GJnYOuN81vjAiaYEtXNZOY0qYtIsNl8JkIMh61XsRjfebJDHl01mugjFEl2dWLvcMysfHCYXJOZw/olhMj3BrazbKCiTzivCzjkQEng5gxVRs/CT7EW5H8cduVpt1FNjHYAiqSKFVHUZqIfMni4KRDuLzr8g8vdaV5+MqzChNIFhD+kG3DM1YcOWYYAs7baeTL808yYohuzVnTrAM7zge/tVbWz5xmSF4VHqSJjLYMKGn6xm95yeKM1VCbk67PIEmXuGvH1TKDx9PJNt5xdGV0BeyC9e+LTpWu+0eTXdLtbXHCyIokqRkoGy7KMoOSQUtgKoFe9SLDfw4IpDTGOSyBUaAJSR/+9FDR85JcIuLq34FEkUhfUj9ZkQUjylwanIY9o3k+grTF5id5ldvuA8B+r9TBebYqbInNYreMTsPrVxg28jMBxVPNYKMpB/kOuEtaSB88VGbTPDscbJ4xLmjRTRaPAuZbPVe3Hk/Z8P77tOWGbNUXTMdMRWkyjndVLJ2tev+lf06bbybsQSQtvA0Xl+nIIcGaZbeOBX3ErNH6gM4XJalg=="}}};
 const te=new TextEncoder(),td=new TextDecoder();
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const norm=e=>String(e||'').trim().toLowerCase().split('@')[0];
@@ -3122,7 +3123,7 @@ let P=null,BUSY=false,TM=[],RAF=0,ON=false,OPENED=false;
 const later=(f,ms)=>{const t=setTimeout(f,ms);TM.push(t);return t};
 const day=()=>{const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
-function should(){if(P.mode==='always')return true;if(ls('ry-sent-'+P.id))return false;if(ls('ry-day-'+P.id)===day())return false;return true}
+function should(){if(P.mode==='always')return true;if(P.mode==='session'){try{if(sessionStorage.getItem('ry-ses-'+P.id))return false}catch(e){}return true}if(ls('ry-sent-'+P.id))return false;if(ls('ry-day-'+P.id)===day())return false;return true}
 async function ryCheck(auto){try{if(BUSY||ON||!window.crypto||!crypto.subtle||typeof sesOk!=='function'||!sesOk())return;const e=norm(SES.email);const r=RY.T[await sha('royal|'+e)];if(!r)return;BUSY=true;if(!P)P=await dec(e,r);BUSY=false;fab(true);if(auto&&!should())return;ryOpen()}catch(x){BUSY=false}}
 function fab(show){let f=document.getElementById('ryFab');if(!show){if(f)f.remove();return}if(f)return;f=document.createElement('button');f.id='ryFab';f.className='ryFab';f.type='button';f.setAttribute('data-noi18n','');f.setAttribute('aria-label','👑');f.textContent='👑';f.onclick=()=>{if(P&&!ON)ryOpen()};document.body.appendChild(f)}
 
@@ -3192,20 +3193,20 @@ function loop(t){if(!ON)return;RAF=requestAnimationFrame(loop);drawSky(t);if(MOD
 function finale(){[.2,.5,.8].forEach((x,i)=>later(()=>launch({x:W*x,ty:H*(.14+i%2*.06),big:true,heart:i===1}),i*260))}
 
 /* ---------- العرض ---------- */
-function ryOpen(){if(ON||!P)return;ON=true;OPENED=false;MODE='idle';rockets=[];sparks=[];petals=[];dust=[];if(P.mode!=='always')ls('ry-day-'+P.id,day());
+function ryOpen(){if(ON||!P)return;ON=true;OPENED=false;MODE='idle';rockets=[];sparks=[];petals=[];dust=[];if(P.mode==='session'){try{sessionStorage.setItem('ry-ses-'+P.id,'1')}catch(e){}}else if(P.mode!=='always')ls('ry-day-'+P.id,day());const EN=P.kind==='entrance';
  if(!document.getElementById('ryFont')){const l=document.createElement('link');l.id='ryFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap';document.head.appendChild(l)}
- const wa='https://wa.me/'+P.wa+'?text='+encodeURIComponent(P.waText);
+ const wa=P.wa?'https://wa.me/'+P.wa+'?text='+encodeURIComponent(P.waText||''):'';
  const o=document.createElement('div');o.id='ryOv';o.setAttribute('data-noi18n','');o.setAttribute('dir','rtl');o.setAttribute('lang','ar');o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');
  o.innerHTML=`<canvas id="rySky"></canvas><div class="ryGlow"></div>${castle()}<canvas id="ryFx"></canvas><canvas id="ryFx2"></canvas><div class="ryFlash" id="ryFlash"></div>
  <div class="ryTop"><button type="button" class="ryIc" id="ryX" aria-label="إغلاق">✕</button><button type="button" class="ryIc" id="ryMute" aria-label="الصوت">🔊</button></div>
  <div class="ryIntro" id="ryIntro">${P.intro.map((s,i)=>`<span class="${i===P.intro.length-1?'big':''}">${esc(s)}</span>`).join('')}</div>
  <div class="ryStage" id="ryStage">
-  <div class="ryEnv" id="ryEnv" role="button" tabindex="0" aria-label="${esc(P.tap)}"><div class="ryEB"><div class="ryPaper"></div><div class="ryFront"></div><div class="ryFlap"></div><div class="rySeal">${CROWN('ryCg1')}</div></div><div class="ryTap">${esc(P.tap)}</div></div>
+  <div class="ryEnv${EN?' ryDoor':''}" id="ryEnv" role="button" tabindex="0" aria-label="${esc(P.tap)}">${EN?`<div class="rySeal">${CROWN('ryCg1')}</div>`:`<div class="ryEB"><div class="ryPaper"></div><div class="ryFront"></div><div class="ryFlap"></div><div class="rySeal">${CROWN('ryCg1')}</div></div>`}<div class="ryTap">${esc(P.tap)}</div></div>
   <div class="ryMain" id="ryMain">
    <div class="ryCrown">${CROWN('ryCg2')}<span class="ryGl">✦</span><span class="ryGl">✦</span><span class="ryGl">✦</span></div>
    <h1 class="ryTitle">${esc(P.title)}</h1><div class="rySub">${esc(P.sub)}</div>
-   <div class="ryLetter" id="ryLetter"><i class="k k1">❧</i><i class="k k2">❧</i><i class="k k3">❧</i><i class="k k4">❧</i><div class="ryOrn">✦ ✦ ✦</div><h2>${esc(P.head)}</h2><div class="ryLines" id="ryLines">${P.lines.map(l=>`<p class="${l.hl?'hl':''}">${esc(l.t)}</p>`).join('')}</div><div class="rySign" id="rySign">${esc(P.sign)}</div></div>
-   <div class="ryCta" id="ryCta"><div class="ryBub"><small>${esc(P.bubble)}</small>${esc(P.waText)}</div><a class="ryBtn" id="ryWa" href="${wa}" target="_blank" rel="noopener">💌 ${esc(P.btn)}</a><div class="ryMore"><button type="button" id="ryAgain">✨ ${esc(P.again)}</button><button type="button" id="ryBack">${esc(P.back)}</button></div></div>
+   ${EN?'':`<div class="ryLetter" id="ryLetter"><i class="k k1">❧</i><i class="k k2">❧</i><i class="k k3">❧</i><i class="k k4">❧</i><div class="ryOrn">✦ ✦ ✦</div><h2>${esc(P.head)}</h2><div class="ryLines" id="ryLines">${P.lines.map(l=>`<p class="${l.hl?'hl':''}">${esc(l.t)}</p>`).join('')}</div><div class="rySign" id="rySign">${esc(P.sign)}</div></div>`}
+   <div class="ryCta" id="ryCta">${EN?`<button type="button" class="ryBtn" id="ryGo">✨ ${esc(P.btn)}</button><div class="ryMore"><button type="button" id="ryAgain">🎆 ${esc(P.again)}</button></div>`:`<div class="ryBub"><small>${esc(P.bubble)}</small>${esc(P.waText)}</div><a class="ryBtn" id="ryWa" href="${wa}" target="_blank" rel="noopener">💌 ${esc(P.btn)}</a><div class="ryMore"><button type="button" id="ryAgain">✨ ${esc(P.again)}</button><button type="button" id="ryBack">${esc(P.back)}</button></div>`}</div>
   </div>
  </div>`;
  document.body.appendChild(o);
@@ -3217,21 +3218,22 @@ function ryOpen(){if(ON||!P)return;ON=true;OPENED=false;MODE='idle';rockets=[];s
  o.addEventListener('pointerdown',e=>{if(!OPENED&&!env.classList.contains('in')&&!e.target.closest('.ryTop')){TM.forEach(clearTimeout);TM=[];sp.forEach(s=>s.classList.add('out'));later(()=>env.classList.add('in'),350)}});
  o.addEventListener('pointermove',e=>{if(Math.random()<.7)sparkle(e.clientX,e.clientY,2)},{passive:true});
  env.addEventListener('click',openEnv);env.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openEnv()}});
- o.querySelector('#ryX').onclick=ryClose;o.querySelector('#ryBack').onclick=ryClose;
+ o.querySelector('#ryX').onclick=ryClose;{const bk=o.querySelector('#ryBack');if(bk)bk.onclick=ryClose;const go=o.querySelector('#ryGo');if(go)go.onclick=()=>{const r=go.getBoundingClientRect();sparkle(r.left+r.width/2,r.top,40);if(AC){bell(1568,AC.currentTime,.07);bell(2093,AC.currentTime+.12,.07)}setTimeout(ryClose,450)}}
  o.querySelector('#ryMute').onclick=()=>{ac();setMute(!MUTE)};
  o.querySelector('#ryAgain').onclick=()=>{const a=ac();if(a){harp(a.currentTime);fanfare(a.currentTime+.4)}const f=o.querySelector('#ryFlash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go');grandUntil=performance.now()+6500;nextL=0;finale();o.querySelector('#ryStage').scrollTo({top:0,behavior:'smooth'})};
- o.querySelector('#ryWa').addEventListener('click',e=>{ls('ry-sent-'+P.id,'1');const r=e.currentTarget.getBoundingClientRect();sparkle(r.left+r.width/2,r.top,40);launch({x:W/2,ty:H*.2,heart:true,big:true});if(AC){bell(1568,AC.currentTime,.07);bell(2093,AC.currentTime+.12,.07)}});
+ const wb=o.querySelector('#ryWa');if(wb)wb.addEventListener('click',e=>{ls('ry-sent-'+P.id,'1');const r=e.currentTarget.getBoundingClientRect();sparkle(r.left+r.width/2,r.top,40);launch({x:W/2,ty:H*.2,heart:true,big:true});if(AC){bell(1568,AC.currentTime,.07);bell(2093,AC.currentTime+.12,.07)}});
  document.addEventListener('keydown',escKey)}
 function escKey(e){if(e.key==='Escape'&&ON)ryClose()}
 function openEnv(){if(OPENED)return;OPENED=true;const o=document.getElementById('ryOv'),env=o.querySelector('#ryEnv'),m=o.querySelector('#ryMain');
  const a=ac();if(a){const t=a.currentTime+.05;harp(t);fanfare(t+.55);padOn(t+2.4);later(()=>{if(ON&&AC)musicBox(AC.currentTime+.1)},5200)}
  try{navigator.vibrate&&navigator.vibrate([25,40,70])}catch(e){}
- env.classList.add('opened');const r=env.querySelector('.ryEB').getBoundingClientRect();sparkle(r.left+r.width/2,r.top+r.height*.55,60);
+ env.classList.add('opened');const r=(env.querySelector('.ryEB')||env.querySelector('.rySeal')).getBoundingClientRect();sparkle(r.left+r.width/2,r.top+r.height*.55,60);
  later(()=>{const f=o.querySelector('#ryFlash');f.classList.add('go')},650);
  later(()=>{env.classList.add('gone');o.classList.add('open');MODE='show';grandUntil=performance.now()+7500;nextL=0;launch({x:W/2,ty:H*.18,big:true,heart:true});for(let i=0;i<(W<600?30:48);i++)petals.push(newPetal(true))},800);
  later(()=>env.style.display='none',1800);
  later(()=>m.classList.add('c'),1100);
  later(()=>{m.classList.add('t');if(AC)bell(2637,AC.currentTime,.05)},2000);
+ if(P.kind==='entrance'){later(()=>{o.querySelector('#ryCta').classList.add('in');finale()},3300);return}
  later(()=>{m.classList.add('l');o.classList.add('read');const L=o.querySelector('#ryLetter').getBoundingClientRect();if(L.top>innerHeight*.55)o.querySelector('#ryStage').scrollTo({top:Math.max(0,o.querySelector('#ryStage').scrollTop+L.top-innerHeight*.18),behavior:'smooth'})},3900);
  const ps=[...o.querySelectorAll('#ryLines p')];let t=4900;ps.forEach(p=>{later(()=>{p.classList.add('in');chime()},t);t+=1250});
  later(()=>o.querySelector('#rySign').classList.add('in'),t);t+=900;
@@ -3244,6 +3246,7 @@ try{const _as=applySession;applySession=function(){const r=_as.apply(this,argume
 setTimeout(()=>ryCheck(true),1000);
 })();
 </script>
+
 
 
 
@@ -3534,6 +3537,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261117-165052";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261117-184926";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
