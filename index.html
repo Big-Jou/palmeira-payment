@@ -338,9 +338,9 @@ select:disabled{opacity:.5}
 <div class="recBar"><button type="button" class="recB" id="recBtn" aria-expanded="false">🕘 آخر 5 بيمنت <span class="recN" id="recN">0</span></button><button type="button" class="recB new" id="newBtn">🔄 ابدأ بيمنت جديد</button></div>
 <div class="recList" id="recList" hidden></div>
 <div class="tabs" id="unitTabs"><button type="button" class="tab on" id="utRes" onclick="setUnitMode('res')">وحدة سكنية</button><button type="button" class="tab" id="utAdm" onclick="setUnitMode('adm')">وحدة إدارية (بنك / مول)</button></div>
-<div class="pick" id="resPick"><div class="pk-title">اختيار الوحدة بالتدريج (اختياري)</div>
+<div class="pick" id="resPick"><div class="pkHead"><div class="pk-title">اختيار الوحدة</div><button type="button" class="invBtn" id="invBtn" onclick="invOpen()">🏢 شيت الوحدات المتاحة</button></div>
 <div class="grid"><div><label>رقم العمارة</label><select id="selB" onchange="onB()"></select></div><div><label>الدور</label><select id="selF" onchange="onF()" disabled></select></div><div><label>النموذج</label><select id="selM" onchange="onM()" disabled></select></div></div>
-<div class="hint">أو اكتب / اختار الكود جاهز في خانة "كود الوحدة" تحت – الاتنين بيتزامنوا مع بعض</div></div>
+<div class="hint">اختار العمارة ثم الدور ثم النموذج – أو دوس «🏢 شيت الوحدات المتاحة» وشوف العمارة كلها واختار منها على طول.</div></div>
 <div class="pick" id="auBox" style="display:none">
 <div class="pk-title">بيانات الوحدة الإدارية</div>
 <div class="grid">
@@ -470,9 +470,10 @@ select:disabled{opacity:.5}
 <section class="panel noprint" id="guidePanel">
 <h2 style="cursor:pointer;justify-content:space-between" onclick="guideToggle()"><span style="display:flex;align-items:center;gap:10px"><span class="hbar"></span>إرشاد الاستخدام</span><span id="guideArrow" style="color:var(--gold)">▾</span></h2>
 <div id="guideBody" style="display:none"><ol class="guide">
-<li><b>بيانات العميل:</b> اكتب الاسم وكود الوحدة (أو اختار العمارة ثم النموذج ثم الدور)، وتاريخ التعاقد وتاريخ أول قسط، والخصم لو فيه.</li>
+<li><b>بيانات العميل:</b> اختار الوحدة (العمارة ثم الدور ثم النموذج) أو من زرار «🏢 شيت الوحدات المتاحة»، واكتب الاسم وتاريخ التعاقد وتاريخ أول قسط، والخصم لو فيه.</li>
 <li><b>الوحدات الإدارية (بنك / مول):</b> من أول شيت الإدخال اختار «وحدة إدارية»، اختار النوع (بنك أو مول) والدور (أرضي / أول / ثاني / ثالث) واكتب المساحة. سعر المتر بيتحط حسب الدور (أرضي 200 ألف • أول 150 ألف • ثاني 130 ألف • ثالث 100 ألف) وتقدر تعدله. النظام 5 سنين: مقدم 10% + 5% بعد 6 شهور (من غير قسط معاها) + 10% عند الاستلام + الباقي أقساط ربع سنوية متساوية. تقدر تزوّد المدة كوارتر أو سنة لحد 10 سنين، لكن النظام الأساسي 5 سنين فقط وأي تعديل بتتحمل مسؤوليته كاملة. ولازم تتأكد من الإدارة في أي تسعير لأنه لسه متغير.</li>
-<li><b>حالة الوحدة:</b> لو متاحة بتظهر ملحوظة مراجعة شيت الإنفينتوري. لو هولد بيظهر تنبيه كبير إنها محجوزة وتقدر تكمل البيمنت على مسؤوليتك الكاملة بعد ما توافق. لو مباعة بيتمنع البيمنت إلا بكلمة سر من الإدارة.</li>
+<li><b>شيت الوحدات المتاحة:</b> زرار «🏢 شيت الوحدات المتاحة» بيوريك كل عمارة دور دور ونموذج نموذج بالألوان: أخضر متاح، أصفر هولد، أحمر مباع. دوس على أي وحدة تشوف مساحتها وسعرها، ودوس «اعمل بيمنت» تتختار لوحدها.</li>
+<li><b>حالة الوحدة:</b> لو هولد بيظهر تنبيه كبير إنها محجوزة وتقدر تكمل البيمنت على مسؤوليتك الكاملة بعد ما توافق. لو مباعة بيتمنع البيمنت إلا بكلمة سر من الإدارة.</li>
 <li><b>نظام السداد:</b> اختار الكارت (كاش / 3 / 5 / 8 / 10 سنين) والبيمنت بلان بيظهر تحته على طول وبينزل لحد الورقة.</li>
 <li><b>الخصم:</b> الخصومات واقفة حاليًا، والخصم الوحيد المتاح هو خصم الكاش 35%. أي خصم تاني بيطلع تنبيه، ولازم تأكد إنك مصمم وبتتحمل المسؤولية. نظام 9 و10 سنين بيحتاجوا موافقة قبل الطباعة.</li>
 <li><b>المقدم:</b> في نظام 3 و5 سنين بتكتب دفعة المقدم، وفي 8 و9 و10 تقدر تكتب مقدم مخصص (اختياري) والأقساط بتتعدل على أساسه.</li>
@@ -1003,8 +1004,8 @@ function render0(){
  if(I&&I.au){const u=I.u;[`${AUTY[u.type][0]} • ${AUFL[u.fl][0]}`,`المساحة ${I.tArea} م²`,`الإجمالي ${fmt(I.gross)}`,`سعر المتر ${fmt(u.pm)}`].forEach(x=>ch.insertAdjacentHTML('beforeend',`<span class="chip">${x}</span>`));
    if(Math.abs(u.pm-AUDEF[u.fl])>.5)ch.insertAdjacentHTML('beforeend',`<span class="chip warn">سعر المتر معدّل يدويًا (الأساسي ${fmt(AUDEF[u.fl])})</span>`);
    ch.insertAdjacentHTML('beforeend','<span class="chip note">السعر لسه محتاج تأكيد من الإدارة</span>')}
-  else if(I){const u=I.u;[`${u.type} • ${u.spec}`,`مبنى ${u.bld} – ${u.fl}`,`المساحة ${I.tArea} م²`,`الإجمالي ${fmt(I.gross)}`,`سعر المتر ${fmt(u.pm)}`].concat(u.ga>0?[`سعر متر الجنينة ${fmt(u.gp)}`]:[]).concat(u.ra>0?[`سعر متر الروف ${fmt(u.rp)}`]:[]).forEach(t=>ch.insertAdjacentHTML('beforeend',`<span class="chip">${t}</span>`));
-  if(u.st==='Available')ch.insertAdjacentHTML('beforeend','<span class="chip note">برجاء مراجعة شيت الإنفينتوري للتأكد إن الوحدة متاحة</span>');
+  else if(I){const u=I.u;[`الكود ${u.code}`,`${u.type} • ${u.spec}`,`مبنى ${u.bld} – ${u.fl}`,`المساحة ${I.tArea} م²`,`الإجمالي ${fmt(I.gross)}`,`سعر المتر ${fmt(u.pm)}`].concat(u.ga>0?[`سعر متر الجنينة ${fmt(u.gp)}`]:[]).concat(u.ra>0?[`سعر متر الروف ${fmt(u.rp)}`]:[]).forEach(t=>ch.insertAdjacentHTML('beforeend',`<span class="chip">${t}</span>`));
+  if(u.st==='Available')ch.insertAdjacentHTML('beforeend','<span class="chip ok">✅ متاحة</span>');
   else if(u.st==='Hold'&&holdAck===u.code)ch.insertAdjacentHTML('beforeend','<span class="chip err">⚠️ الوحدة هولد (محجوزة) – البيمنت على مسؤوليتك الكاملة</span>');
   else ch.insertAdjacentHTML('beforeend',`<span class="chip ${unlocked===u.code?'warn':'err'}">الوحدة ${stLbl(u.st)}${unlocked===u.code?' – اتفتحت بكلمة سر':''}</span>`);
   if(OVR[u.code])ch.insertAdjacentHTML('beforeend','<span class="chip warn">بيانات الوحدة معدّلة يدويًا</span>');else if(I.u0.ga>0)ch.insertAdjacentHTML('beforeend','<span class="chip note">مساحة الجنينة من الشيت – دخّلها يدويًا لو مختلفة</span>');
@@ -1471,7 +1472,7 @@ function trText(str){return str.replace(AR_RE,run=>{const e=I18N[run];if(e!==und
 const ORIG=new WeakMap(),TRD=new WeakMap(),ATT=['placeholder','title','aria-label'];
 function i18nNode(n){
  if(n.nodeType===3){const p=n.parentElement;if(!p||p.closest('[data-noi18n],script,style'))return;const v=n.nodeValue;if(TRD.get(n)===v||!HAS_AR.test(v))return;ORIG.set(n,v);const t=trText(v);TRD.set(n,t);n.nodeValue=t}
- else if(n.nodeType===1){if(n.closest('[data-noi18n],script,style'))return;ATT.forEach(a=>{if(n.hasAttribute(a)){const v=n.getAttribute(a);if(HAS_AR.test(v)){n.setAttribute('data-ar-'+a,v);n.setAttribute(a,trText(v))}}});n.childNodes.forEach(i18nNode)}}
+ else if(n.nodeType===1){if(n.closest('[data-noi18n],script,style'))return;ATT.forEach(a=>{if(n.hasAttribute(a)){const v=n.getAttribute(a);if(HAS_AR.test(v)){const t=trText(v);if(t!==v){n.setAttribute('data-ar-'+a,v);n.setAttribute(a,t)}}}});n.childNodes.forEach(i18nNode)}}
 function i18nRestore(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(ORIG.has(n)){n.nodeValue=ORIG.get(n);ORIG.delete(n);TRD.delete(n)}}root.querySelectorAll('*').forEach(e=>ATT.forEach(a=>{const k='data-ar-'+a;if(e.hasAttribute(k)){e.setAttribute(a,e.getAttribute(k));e.removeAttribute(k)}}))}
 let MO=null;
 function i18nObserve(on){if(MO){MO.disconnect();MO=null}if(!on)return;MO=new MutationObserver(ms=>{for(const m of ms){if(m.type==='childList')m.addedNodes.forEach(i18nNode);else i18nNode(m.target)}});MO.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATT})}
@@ -1593,8 +1594,8 @@ var open=function(b,t){return function(){var e=$(b);if(e&&e.style.display==='non
 var ALL=[
 [q('.hero'),'أهلاً بيك في برنامج البيمنت 👋','هنمشي سوا في __N__ خطوة نشرح فيها كل حاجة في البرنامج: من اختيار الوحدة لحد الإعلانات وعروض الوحدات. تقدر تدوس «تخطي» في أي وقت، وترجع للشرح من علامة «؟».'],
 [q('#unitTabs'),'نوع الوحدة: سكنية أو إدارية','لو الوحدة بنك أو مول دوس «وحدة إدارية»: بتختار النوع والدور وتكتب المساحة، وسعر المتر بيتحط حسب الدور وتقدر تعدله. النظام 5 سنين، ولو عايز تزوّد المدة لحد 10 سنين تقدر، بس أي تعديل بمسؤوليتك.'],
-[q('.pick'),'الأول: اختار الوحدة','اختار رقم العمارة، بعدين النموذج، بعدين الدور. القوايم بتتفتح واحدة ورا التانية بالترتيب.'],
-[par('code'),'أو اكتب كود الوحدة مباشرة','لو عارف الكود (مثال: A-42-07-08) اكتبه هنا أو اختاره من القايمة، والخانتين بيتزامنوا مع بعض. بعد الاختيار البرنامج بيشيك على حالة الوحدة: لو متاحة بيفكرك تراجع شيت الإنفينتوري، ولو هولد بيظهر تنبيه كبير إنها محجوزة وتقدر تكمل على مسؤوليتك الكاملة، ولو مباعة بيمنع البيمنت ومش بيكمل إلا بكلمة سر من الإدارة.'],
+[q('.pick'),'الأول: اختار الوحدة','اختار رقم العمارة، بعدين الدور، بعدين النموذج. القوايم بتتفتح واحدة ورا التانية بالترتيب.'],
+[q('#invBtn'),'🏢 شيت الوحدات المتاحة','دوس هنا تشوف كل عمارة زي شيت الإنفينتوري: كل دور وكل نموذج بلونه – أخضر متاح، أصفر هولد، أحمر مباع، ومتحدّث من الشيت أونلاين. دوس على أي وحدة تشوف مساحتها وسعرها، ولو مناسبة دوس «اعمل بيمنت للوحدة دي» وهي تتختار لوحدها. لو الوحدة هولد بيظهر تنبيه إنها محجوزة وتقدر تكمل على مسؤوليتك، ولو مباعة مينفعش يتعمل لها بيمنت إلا بكلمة سر من الإدارة.'],
 [q('#ovBox'),'تعديل بيانات الوحدة (اختياري)','بعد ما تختار وحدة بتظهر خانة «تعديل بيانات الوحدة»: تقدر تغيّر مساحة الوحدة وسعر المتر ومساحة الجنينة والروف وسعرهم لو فيه فرق عن الشيت، والبيمنت بيتحسب بالأرقام الجديدة.',null,q('.pick')],
 [par('name'),'اسم العميل','اكتب اسم العميل، وهيظهر في ورقة البيمنت وفي ترحيب العرض الكامل.'],
 [par('contract'),'تاريخ التعاقد','حدد تاريخ التعاقد. التاريخ ده بيتحسب منه توقيت الدفعات، وبيتراجع عليه كمان لو في تواريخ بتعدي 3 سنين.'],
@@ -2880,6 +2881,138 @@ window.pmDebug={travel:i=>travel(i),game:openGame,gStart:n=>gStart(n),gDrop:()=>
 })();
 </script>
 
+
+<style id="invCss">
+#codeWrap{display:none!important}
+.pkHead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.pkHead .pk-title{margin:0}
+.invBtn{border:1px solid var(--gold);background:linear-gradient(135deg,rgba(184,151,90,.26),rgba(184,151,90,.08));color:var(--ink);border-radius:99px;padding:9px 16px;font:inherit;font-size:13.5px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px -10px rgba(184,151,90,.9)}
+.invBtn:hover{transform:translateY(-1px)}
+.chip.ok{background:#2e9a4a1c;color:#22783a;border-color:#2e9a4a44}
+html.invLock,html.invLock body{overflow:hidden}
+.invOv{position:fixed;inset:0;z-index:9990;background:rgba(5,18,15,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:flex;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 10px) 10px calc(env(safe-area-inset-bottom,0px) + 10px)}
+.invOv[hidden],.invDet[hidden]{display:none!important}
+.invBox{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:18px;width:100%;max-width:1120px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0 14px 18px;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);text-align:start}
+.invHd{position:sticky;top:0;z-index:4;background:var(--bg);display:flex;align-items:center;gap:10px;padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.invHd h3{margin:0;font-size:18px;flex:1}
+.invX{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:50%;width:40px;height:40px;font:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.invLive{font-size:12px;color:var(--mut);margin:8px 0 6px}.invLive a{color:var(--g1);font-weight:800}
+.invTabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
+.invTab{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:7px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer;min-width:82px;line-height:1.35}
+.invTab b{font-size:15px;direction:ltr}.invTab small{font-size:11.5px;color:#2b8a3e;font-weight:800}
+.invTab.on{background:var(--g1);border-color:var(--g1);color:var(--bg)}.invTab.on small{color:inherit;opacity:.85}
+.invSum{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:2px 0 8px}
+.lg{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 9px;border-radius:99px;font-size:12.5px;font-weight:700;background:var(--card);border:1px solid var(--line)}
+.lg i{width:13px;height:13px;border-radius:4px;display:inline-block}
+.lgT{font-size:12px;color:var(--mut)}
+.invChips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px}
+.invCh{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;white-space:nowrap}
+.invCh small{color:#2b8a3e;font-weight:700}.invCh.on{border-color:var(--gold);background:rgba(184,151,90,.2)}
+.invSec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 10px 8px;margin-top:12px}
+.invSec h4{margin:0 0 6px;font-size:14.5px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;color:var(--g1)}
+.invSec h4 span{font-size:12px;color:var(--mut);font-weight:700}
+.invSc{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.invT{--fw:66px;--cw:52px;border-collapse:separate;border-spacing:2px;width:100%;table-layout:fixed;min-width:calc(var(--fw) + var(--n) * var(--cw))}
+.invT col.fc{width:var(--fw)}
+.invT th.fh{position:sticky;inset-inline-start:0;z-index:2;background:var(--card);font-size:12px;text-align:start;padding:3px 6px;color:var(--mut);font-weight:800;white-space:nowrap;overflow:hidden}
+.invT tbody th.fh{color:var(--ink)}
+.invT .mh{font-size:13px;font-weight:900;color:var(--ink);padding:2px;text-align:center;direction:ltr}
+.invT .ar td{font-size:11px;color:var(--mut);text-align:center;font-weight:700;padding:0 1px;white-space:nowrap;overflow:hidden}
+.invT .ar.ivsp td{color:var(--g1)}
+.invT td.c{height:46px;border-radius:7px;text-align:center;cursor:pointer;padding:2px 1px;line-height:1.2;transition:transform .12s,opacity .2s;-webkit-tap-highlight-color:transparent}
+.invT td.c:active{transform:scale(.92)}
+.invT td.c .w{display:block;font-size:12.5px;font-weight:900}
+.invT td.c .ic{display:none;font-style:normal;font-weight:900;font-size:13px}
+.invT td.c .pr{display:block;font-size:10px;font-weight:700;opacity:.9;direction:ltr;white-space:nowrap;overflow:hidden}
+.c.av,.st-av{background:#7ccf5c;color:#0c2a08}.c.ho,.st-ho{background:#ffdf5e;color:#4a3a00}.c.so,.st-so{background:#e3524a;color:#fff}.c.ot,.st-ot{background:#b9b9b9;color:#222}
+.c.dim{opacity:.13}
+.c.cur{box-shadow:0 0 0 3px var(--gold) inset}
+.invFoot{font-size:12px;color:var(--mut);text-align:center;margin-top:12px}.invMore{font-size:11.5px;color:var(--mut);margin:0 0 4px;font-weight:700}
+@media (max-width:760px){.invOv{padding-left:6px;padding-right:6px}.invBox{padding:0 8px 14px}.invSec{padding:8px 5px 6px}.invT{--fw:44px;--cw:25px;border-spacing:2px}.invT td.c{height:31px;border-radius:5px}.invT td.c .w,.invT td.c .pr{display:none}.invT td.c .ic{display:block}.invT th.fh{font-size:10.5px;padding:2px 3px}.invT .mh{font-size:11px}.invT .ar td{font-size:9px}.invHd h3{font-size:16px}}
+.invDet{position:fixed;inset:0;z-index:9991;background:rgba(5,18,15,.45);display:flex;align-items:flex-end;justify-content:center;padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 10px)}
+.invDI{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;width:min(470px,100%);max-height:100%;overflow:auto;padding:16px;box-shadow:0 -10px 40px rgba(0,0,0,.35);animation:pop .25s both;text-align:start}
+@media (min-width:761px){.invDet{align-items:center}}
+.invDI .dh{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.invDI .dh .cd{font-size:20px;font-weight:900;flex:1;text-align:start}
+.invDI .stb{padding:4px 12px;border-radius:99px;font-weight:900;font-size:13px}
+.invDI .dg{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px}
+.invDI .dg div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:6px 0;font-size:13px}
+.invDI .dg span{color:var(--mut)}
+.invDI .dt{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--chip);font-size:14px;font-weight:700}
+.invDI .dt b{font-size:17px;color:var(--g1);direction:ltr}
+.invDI .dn{margin-top:10px;font-size:13px;padding:8px 10px;border-radius:10px;background:#d9a3001f;color:#8a6200;font-weight:700}
+.invDI .dn.err{background:#d63a3a1c;color:#b02a2a}
+.invDI .db{display:flex;gap:8px;margin-top:14px}
+.invDI .db button{flex:1;padding:12px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
+.invDI .db .go{flex:2;background:var(--g1);color:var(--bg);border-color:var(--g1)}
+@media (max-width:420px){.invDI .dg{grid-template-columns:1fr}}
+@media print{.invOv,.invDet{display:none!important}}
+</style>
+
+<script>
+/* ===== شيت الوحدات المتاحة ===== */
+const IVS={open:false,b:null,sp:''};try{IVS.b=localStorage.getItem('pp-inv-b')||null}catch(e){}
+const ivK=s=>s==='Available'?'av':s==='Hold'?'ho':s==='Sold'?'so':'ot',ivW={av:'متاح',ho:'هولد',so:'مباع',ot:'—'},ivI={av:'✓',ho:'H',so:'✕',ot:'·'};
+const ivN=v=>(+v||0).toLocaleString('en-US',{maximumFractionDigits:2}),ivE=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ivFl=f=>(+f===0?'الأرضي':'الدور '+(+f));
+const ivSpS=s=>{s=String(s||'');if(/studio/i.test(s))return 'ST';const m=s.match(/(\d+)\s*BED(?:\s*\+\s*(\d+))?/i);return m?(m[2]?m[1]+'+'+m[2]:m[1]+'BR'):s.slice(0,4)};
+const ivSpO=s=>{s=String(s||'');if(/studio/i.test(s))return 0;const m=s.match(/(\d+)/g)||[9];return (+m[0])*10+(m[1]?+m[1]:0)};
+const ivAll=b=>Object.values(TREE[b]||{}).flatMap(o=>Object.values(o));
+function ivGroups(b){const T=TREE[b]||{},G={};Object.keys(T).forEach(f=>{const ms=Object.keys(T[f]).sort(natCmp),sig=ms.map(m=>{const u=T[f][m];return m+'/'+(+u.ua||0)+'/'+(+u.ga||0)+'/'+(+u.ra||0)}).join('|');(G[sig]=G[sig]||{ms,fs:[]}).fs.push(f)});
+ return Object.values(G).map(g=>{g.fs.sort((x,y)=>(+y)-(+x));return g}).sort((a,c)=>(+c.fs[0])-(+a.fs[0]))}
+function ivTitle(b,g){const fs=g.fs.map(Number).sort((x,y)=>x-y),us=g.fs.flatMap(f=>Object.values(TREE[b][f]));
+ if(us.length&&us.every(u=>/pent/i.test(u.type)))return 'البنتهاوس والروف – '+(fs.length===1?'الدور '+fs[0]:'الأدوار '+fs.join('، '));
+ if(fs.length===1)return fs[0]===0?'الدور الأرضي'+(us.some(u=>+u.ga>0)?' (بجناين)':''):'الدور '+fs[0];
+ if(fs.every((x,i)=>!i||x===fs[i-1]+1))return 'الأدوار المتكررة من '+fs[0]+' لـ '+fs[fs.length-1];
+ if(fs.every(x=>x%2))return 'الأدوار الفردية ('+fs.join('، ')+')';
+ if(fs.every(x=>!(x%2)))return 'الأدوار الزوجية ('+fs.join('، ')+')';
+ return 'الأدوار '+fs.join('، ')}
+function ivStat(){const e=$('invLive');if(!e)return;let t;if(LIVE_BUSY)t='⏳ جاري التحديث من الشيت الأونلاين…';else{const bad=($('liveStat')||{}).className&&/\bbad\b/.test($('liveStat').className);const tm=LIVE_INFO?new Date(LIVE_INFO.t).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';t=bad?'⚠️ تعذّر التحديث دلوقتي – ده '+(LIVE_INFO?'آخر تحديث الساعة '+tm:'آخر بيانات محفوظة'):(LIVE_INFO?'✅ متحدّث من الشيت الأونلاين الساعة '+tm:'بيانات محفوظة')}
+ e.innerHTML=t+(LIVE_BUSY?'':' · <a href="#" onclick="event.preventDefault();invLive(true)">تحديث الآن</a>')}
+function invLive(force){try{if(force||!LIVE_INFO||Date.now()-LIVE_INFO.t>60000)liveSync(!!force)}catch(e){}ivStat();clearInterval(IVS.t);IVS.t=setInterval(()=>{if(!LIVE_BUSY){clearInterval(IVS.t);if(IVS.open)invRender()}},400)}
+function invRender(){if(!$('invOv'))return;const bs=Object.keys(TREE).sort();ivStat();
+ if(!bs.length){$('invBody').innerHTML='<div class="invFoot">مفيش بيانات وحدات</div>';return}
+ if(!IVS.b||!TREE[IVS.b])IVS.b=($('selB').value&&TREE[$('selB').value])?$('selB').value:bs[0];
+ $('invTabs').innerHTML=bs.map(b=>`<button type="button" class="invTab${b===IVS.b?' on':''}" onclick="invB('${b}')"><b>${b}</b><small>${ivAll(b).filter(u=>u.st==='Available').length} متاح</small></button>`).join('');
+ const us=ivAll(IVS.b),cnt=k=>us.filter(u=>ivK(u.st)===k).length;
+ $('invSum').innerHTML=`<span class="lg"><i class="st-av"></i>متاح <b>${cnt('av')}</b></span><span class="lg"><i class="st-ho"></i>هولد <b>${cnt('ho')}</b></span><span class="lg"><i class="st-so"></i>مباع <b>${cnt('so')}</b></span><span class="lgT">من ${us.length} وحدة</span>`;
+ const sps=[...new Set(us.map(u=>u.spec).filter(Boolean))].sort((a,c)=>ivSpO(a)-ivSpO(c));if(IVS.sp&&!sps.includes(IVS.sp))IVS.sp='';
+ $('invChips').innerHTML=`<button type="button" class="invCh${IVS.sp?'':' on'}" onclick="invSp('')">كل الأنواع</button>`+sps.map(s=>`<button type="button" class="invCh${IVS.sp===s?' on':''}" data-s="${ivE(s)}" onclick="invSp(this.dataset.s)"><bdi dir="ltr">${ivE(s)}</bdi> <small>(${us.filter(u=>u.spec===s&&u.st==='Available').length} متاح)</small></button>`).join('');
+ const cur=(($('code')||{}).value||'').trim().toUpperCase(),T=TREE[IVS.b];
+ $('invBody').innerHTML=ivGroups(IVS.b).map(g=>{const ref=T[g.fs[0]],gu=g.fs.flatMap(f=>Object.values(T[f])),hasG=gu.some(u=>+u.ga>0),hasR=gu.some(u=>+u.ra>0),av=gu.filter(u=>u.st==='Available').length,
+  row=(lbl,fn,cls)=>`<tr class="ar${cls?' '+cls:''}"><th class="fh">${lbl}</th>${g.ms.map(m=>`<td>${fn(ref[m])}</td>`).join('')}</tr>`;
+  return `<section class="invSec"><h4>${ivTitle(IVS.b,g)}<span>${av} متاح من ${gu.length}</span></h4><div class="invSc"><table class="invT" style="--n:${g.ms.length}"><colgroup><col class="fc">${g.ms.map(()=>'<col>').join('')}</colgroup><thead>`
+  +`<tr><th class="fh">النموذج</th>${g.ms.map(m=>`<th class="mh">${ivE(m)}</th>`).join('')}</tr>`
+  +row('النوع',u=>ivSpS(u.spec),'ivsp')+row('المساحة',u=>ivN(u.ua))+(hasG?row('الجنينة',u=>+u.ga>0?ivN(u.ga):'–'):'')+(hasR?row('الروف',u=>+u.ra>0?ivN(u.ra):'–'):'')
+  +`</thead><tbody>`+g.fs.map(f=>`<tr><th class="fh">${ivFl(f)}</th>`+g.ms.map(m=>{const u=T[f]&&T[f][m];if(!u)return '<td></td>';const k=ivK(u.st),dim=IVS.sp&&u.spec!==IVS.sp;
+   return `<td class="c ${k}${dim?' dim':''}${u.code===cur?' cur':''}" title="${u.code} · ${ivW[k]}" onclick="invDet('${u.code}')"><b class="w">${ivW[k]}</b><i class="ic">${ivI[k]}</i>${k!=='so'&&!u.bad&&u.price>0?`<small class="pr">${ivN(u.price)}</small>`:''}</td>`}).join('')+'</tr>').join('')
+  +`</tbody></table></div></section>`}).join('')+'<div class="invFoot">دوس على أي وحدة تشوف تفاصيلها وتعمل لها بيمنت</div>';
+ requestAnimationFrame(()=>{try{document.querySelectorAll('#invBody .invSc').forEach(s=>{if(s.scrollWidth>s.clientWidth+4)s.insertAdjacentHTML('beforebegin','<div class="invMore">↔️ اسحب الجدول يمين وشمال تشوف باقي النماذج</div>')})}catch(e){}})}
+function invOpen(){IVS.open=true;try{const bw=$('botW');if(bw&&!bw.hidden){const x=$('botX');if(x)x.click();else bw.hidden=true}}catch(e){}
+ const o=$('invOv');o.hidden=false;document.documentElement.classList.add('invLock');invRender();invLive(false);
+ setTimeout(()=>{try{const t=o.querySelector('.invTab.on');if(t)t.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}},60)}
+function invClose(){IVS.open=false;clearInterval(IVS.t);$('invOv').hidden=true;$('invDet').hidden=true;document.documentElement.classList.remove('invLock')}
+function invB(b){IVS.b=b;IVS.sp='';try{localStorage.setItem('pp-inv-b',b)}catch(e){}invRender()}
+function invSp(s){IVS.sp=IVS.sp===s?'':s;invRender()}
+function invDet(code){const u=BY[code];if(!u)return;const k=ivK(u.st),q=code.split('-'),r=(a,b)=>`<div><span>${a}</span><b>${b}</b></div>`;
+ $('invDet').innerHTML=`<div class="invDI" role="dialog" aria-label="تفاصيل الوحدة"><div class="dh"><span class="cd" dir="ltr">${ivE(code)}</span><span class="stb st-${k}">${ivW[k]}</span><button type="button" class="invX" onclick="invDetX()" aria-label="إغلاق">✕</button></div><div class="dg">`
+ +r('العمارة',q[0]+'-'+q[1])+r('الدور',ivFl(q[2]))+r('النموذج',ivE(q[3]))+r('النوع','<bdi dir="ltr">'+ivE(u.spec)+'</bdi>')
+ +r('المساحة',ivN(u.ua)+' م²')+(+u.ga>0?r('الجنينة',ivN(u.ga)+' م²'):'')+(+u.ra>0?r('الروف',ivN(u.ra)+' م²'):'')
+ +r('سعر المتر',ivN(u.pm))+(+u.ga>0?r('متر الجنينة',ivN(u.gp)):'')+(+u.ra>0?r('متر الروف',ivN(u.rp)):'')+'</div>'
+ +(u.bad?'<div class="dn err">بيانات الوحدة دي ناقصة في الشيت – راجع الإدارة</div>':`<div class="dt"><span>السعر الإجمالي</span><b>${fmt(u.price)}</b></div>`)
+ +(k==='ho'?'<div class="dn">⚠️ الوحدة هولد (محجوزة) – لو كملت هيطلب منك تأكيد إن البيمنت على مسؤوليتك.</div>':'')+(k==='so'?'<div class="dn err">الوحدة دي مباعة.</div>':'')
+ +`<div class="db">${k!=='so'&&!u.bad?`<button type="button" class="go" onclick="invUse('${code}')">📝 اعمل بيمنت للوحدة دي</button>`:''}<button type="button" onclick="invDetX()">رجوع للشيت</button></div></div>`;
+ $('invDet').hidden=false}
+function invDetX(){$('invDet').hidden=true}
+function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code;syncSel();render()}}
+(function(){const o=document.createElement('div');o.id='invOv';o.className='invOv noprint';o.hidden=true;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','شيت الوحدات المتاحة');
+ o.innerHTML='<div class="invBox" id="invBox"><div class="invHd"><h3>🏢 شيت الوحدات المتاحة</h3><button type="button" class="invX" onclick="invClose()" aria-label="إغلاق">✕</button></div><div class="invLive" id="invLive"></div><div class="invTabs" id="invTabs"></div><div class="invSum" id="invSum"></div><div class="invChips" id="invChips"></div><div id="invBody"></div></div>';
+ o.addEventListener('click',e=>{if(e.target===o)invClose()});document.body.appendChild(o);
+ const d=document.createElement('div');d.id='invDet';d.className='invDet noprint';d.hidden=true;d.addEventListener('click',e=>{if(e.target===d)invDetX()});document.body.appendChild(d);
+ document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!IVS.open)return;if(!$('invDet').hidden)invDetX();else invClose()});
+ try{if(typeof I18N!=='undefined')Object.entries({"اختيار الوحدة":"Select the unit","شيت الوحدات المتاحة":"Available units sheet","متاح":"Available","هولد":"Hold","مباع":"Sold","متاحة":"Available","الكود":"Code","كل الأنواع":"All types","النوع":"Type","الأرضي":"Ground","البنتهاوس والروف":"Penthouse & roof","الأدوار المتكررة من":"Typical floors from","لـ":"to","الأدوار الفردية":"Odd floors","الأدوار الزوجية":"Even floors","الأدوار":"Floors","الدور الأرضي":"Ground floor","بجناين":"with gardens","متاح من":"available of","من":"of","وحدة":"units","دوس على أي وحدة تشوف تفاصيلها وتعمل لها بيمنت":"Tap any unit to see its details and make a payment plan","اعمل بيمنت للوحدة دي":"Make a payment plan for this unit","رجوع للشيت":"Back to the sheet","السعر الإجمالي":"Total price","متر الجنينة":"Garden m price","متر الروف":"Roof m price","الجنينة":"Garden","الروف":"Roof","العمارة":"Building","الوحدة دي مباعة.":"This unit is sold.","متحدّث من الشيت الأونلاين الساعة":"Updated from the online sheet at","جاري التحديث من الشيت الأونلاين…":"Updating from the online sheet…","تحديث الآن":"Refresh now","تفاصيل الوحدة":"Unit details","إغلاق":"Close","تعذّر التحديث دلوقتي":"Could not update right now","ده آخر بيانات محفوظة":"showing the last saved data","ده آخر تحديث الساعة":"last updated at","بيانات محفوظة":"Saved data","اسحب الجدول يمين وشمال تشوف باقي النماذج":"Swipe the table sideways to see the other models","اختار العمارة ثم الدور ثم النموذج":"Choose the building, then the floor, then the model","أو دوس":"or tap","وشوف العمارة كلها واختار منها على طول":"to see the whole building and pick directly"}).forEach(([k,v])=>{if(I18N[k]===undefined)I18N[k]=v})}catch(e){}
+})();
+{const _ls=liveSync;liveSync=async function(m){const r=await _ls(m);try{if(IVS.open)invRender()}catch(e){}return r}}
+</script>
 <script>
 /* ===== مساعد البيمنت (بيفهم الكلام المصري ويسأل عن الناقص) – مجاني ومن غير إنترنت ===== */
 (function(){
@@ -2999,10 +3132,11 @@ const KB=[
  [/كوارتر|كورتر|كوتر/,'➕➖ في البيمنت العادي تحت الكروت فيه «تعديل عدد الكوارترات» من −12 لـ +12، والأقساط بتتوزع بالتساوي. في الاسبشيل فيه خانة من −8 لـ +8.'],
  [/صيانه|مقايسات/,'🛠️ الصيانة والمقايسات 10% من سعر الوحدة (8% في بالك ديل). في الاسبشيل تقدر تغيّر النسبة وتقسّطها على قسطين أو 3.'],
  [/عقد|contract/,'📝 «وضع العقد» بيحط التوقيعات في آخر كل صفحة (3 أطراف أو طرفين – بتختار من فوق الورقة) وملحق 3 والتفقيط، وبيحتاج باسورد 2MDY من الإدارة. أرقام العقد بتطلع زي البيمنت العادي بالظبط.'],
+ [/(وحدات|الوحدات|شقق|الشقق|نماذج|النماذج|ايه|اي|فين|اشوف|عمارات|العمارات)\s*(ال)?(متاح|فاضي)|انفنتوري|انفينتوري|اينفنتوري|شيت\s*(ال)?(متاح|وحدات)|available|افاليبل/,'🏢 دوس زرار «شيت الوحدات المتاحة» اللي فوق جنب اختيار الوحدة: بيوريك كل عمارة دور دور ونموذج نموذج بالألوان (أخضر متاح، أصفر هولد، أحمر مباع) ومتحدّث من الشيت. دوس على أي وحدة تشوف مساحتها وسعرها، و«اعمل بيمنت» تتختار لوحدها.<br><button type="button" onclick="invOpen()" style="margin-top:8px;border:1px solid #b8975a;background:#b8975a22;color:inherit;border-radius:99px;padding:7px 14px;font:inherit;font-weight:800;cursor:pointer">🏢 افتح شيت المتاح</button>'],
  [/hold|محجوز/,'⚠️ الوحدة المحجوزة (Hold) تقدر تعمل لها بيمنت، بس بيظهر تنبيه إنك بتتحمل المسؤولية كاملة.'],
  [/اخر 5|اخر خمس|ارجع لبيمنت|السجل/,'🕘 زرار «آخر 5 بيمنت» فوق شيت الإدخال بيرجّعك لأي بيمنت من آخر 5 عملتهم على الجهاز ده.'],
  [/جديد|من الاول|امسح/,'🔄 زرار «ابدأ بيمنت جديد» بيمسح كل البيانات (بيسألك «متأكد؟» الأول). أو اكتبلي «من الأول».'],
- [/مساحه|متر|نموذج/,'📐 اختار العمارة ثم الدور ثم النموذج، والمساحة بتظهر جنب النموذج. أو قولّي كود الوحدة زي A-37-03-05.'],
+ [/مساحه|متر|نموذج/,'📐 اختار العمارة ثم الدور ثم النموذج، والمساحة بتظهر جنب النموذج – أو من «🏢 شيت الوحدات المتاحة» تشوف كل المساحات والأسعار. أو قولّي كود الوحدة زي A-37-03-05.'],
  [/خصم/,'💸 خانة «خصم اللونش» في شيت الإدخال. الخصم ليه حد أقصى حسب النظام، ولو عديته بيطلب موافقة.'],
  [/اقتراح|مشكله|شكوي/,'💡 في آخر الصفحة صندوق «تحب تضيف حاجة تسهّل البيمنت؟» – اكتب فيه وهيوصل للإدارة على طول.'],
  [/مغامره|لعبه|game/,'🕹️ زرار «مغامرة» تحت بيحوّل البرنامج للعبة، والشكل الرسمي بيرجع بزرار تاني.']
@@ -3165,6 +3299,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261117-092729";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261117-103732";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
