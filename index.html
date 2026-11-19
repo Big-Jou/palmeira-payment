@@ -852,7 +852,7 @@ function auUnit(){const ty=$('auType').value,fl=$('auFloor').value,ua=+$('auArea
 function setUnitMode(m){const on=m==='adm';if(AU.on===on)return;AU.on=on;
  $('utRes').classList.toggle('on',!on);$('utAdm').classList.toggle('on',on);
  $('resPick').style.display=on?'none':'';$('codeWrap').style.display=on?'none':'';$('auBox').style.display=on?'':'none';
- sel=on?'adm':null;approved=false;discAppr=null;render()}
+ sel=on?'adm':null;approved=isOwner();discAppr=null;render()}
 function curUnitLabel(){return AU.on?(AUTY[$('auType').value][1]+' '+AUFL[$('auFloor').value][1]):(($('code')||{}).value||'')}
 function unitInfo(){
  window.BADU=null;if(AU.on)return auUnit();const u0=BY[$('code').value.trim().toUpperCase()];if(!u0)return null;if(u0.bad){window.BADU=u0;return null}
@@ -939,7 +939,9 @@ function holdModal(u){if(!u||document.getElementById('holdOv'))return;const o=do
  const ck=o.querySelector('#hoCk'),y=o.querySelector('#hoYes');ck.onchange=()=>{y.disabled=!ck.checked};
  o.querySelector('#hoNo').onclick=()=>{o.remove();pickAnother()};
  y.onclick=()=>{if(!ck.checked)return;holdAck=u.code;o.remove();try{snd('warnAppr')}catch(e){}render();setTimeout(()=>{const b=document.querySelector('.holdban');if(b)b.scrollIntoView({behavior:'smooth',block:'start'})},80)}}
-function holdBanner(){const I=unitInfo&&unitInfo(),P=document.getElementById('planBody');if(!P||!I||!I.u||I.u.st!=='Hold'||holdAck!==I.u.code||P.querySelector('.holdban'))return;
+function holdBanner(){const I=unitInfo&&unitInfo(),P=document.getElementById('planBody');
+ try{if(P&&I&&I.u&&!I.au&&isOwner()&&(I.u.st!=='Available'&&I.u.st!=='Hold'||isContr(I.u))&&P.querySelector('.paper')&&!P.querySelector('.ownban'))P.insertAdjacentHTML('afterbegin',`<div class="holdban ownban noprint"><span class="hb-ic">👑</span><div><b>الوحدة <bdi>${I.u.code}</bdi> ${isContr(I.u)?'هولد خاص بالمقاول':stLbl(I.u.st)}</b><div>مفتوحة لك لأنك الأونر.</div></div></div>`)}catch(e){}
+if(!P||!I||!I.u||I.u.st!=='Hold'||(holdAck!==I.u.code&&!isOwner())||P.querySelector('.holdban:not(.ownban)'))return;
  P.insertAdjacentHTML('afterbegin',`<div class="holdban noprint"><span class="hb-ic">⚠️</span><div><b>تنبيه: الوحدة <bdi>${I.u.code}</bdi> محجوزة (HOLD)${isBulk(I.u)?' – 👮 لبالك ديل الشرطة':''}</b><span class="hb-d">البيمنت ده على مسؤوليتك الكاملة – لازم تأكيد الإدارة قبل عرضه على العميل.</span></div></div>`)}
 function pickAnother(){$('code').value='';$('selB').value='';fillF('');fillM('','');unlocked=null;render();window.scrollTo({top:0,behavior:'smooth'});$('selB').focus()}
 function askBj(){if(fullOK()){const I=unitInfo();if(I){unlocked=I.u.code;snd('ok');render()}return}$('bjRow').style.display='grid';$('bjPw').focus()}
@@ -1029,11 +1031,11 @@ function render0(){
   return`<button class="card ${S.c} ${sel==k?'sel':''}" onclick="pick('${k}')"><div class="big">${S.cash?'CASH':S.adm?(auY(AU.extra))+'<small> سنين • إداري</small>':S.n+'<small> سنين'+(S.semi?' • نصف سنوي':'')+'</small>'}</div><div class="sub">${sub}</div>${S.appr?'<span class="tag">يحتاج موافقة أولًا</span>':''}${bdK(k)?(polOn()?'<span class="tag">👮 بالك ديل الشرطة</span>':'<span class="tag">🤝 بالك ديل</span>'):''}${r?(bdK(k)&&k!='6'&&!polOn()?(BD.amt&&BD.freq?`<div class="amt">الدفعة السنوية ≈ ${fmt(r.ye[0]||0)}</div>`:''):`<div class="amt">${S.cash?'الإجمالي':'القسط'} ≈ ${fmt(r.rows[S.semi?1:S.dp==='manual'?0:2]||r.rows[0])}</div>`):''}</button>`}).join('');
  // plan
  const P=$('planBody');
- if(I&&!I.au&&isContr(I.u)){ALN=['ctr:'+I.u.code,'errHold'];P.innerHTML=contrHTML(I.u);return}
- if(I&&I.u.st==='Hold'&&holdAck!==I.u.code&&unlocked!==I.u.code){ALN=['hold:'+I.u.code,'errHold'];P.innerHTML=holdHTML(I.u);if(holdShown!==I.u.code){holdShown=I.u.code;setTimeout(()=>holdModal(I.u),60)}return}
- if(I&&I.u.st!=='Available'&&I.u.st!=='Hold'&&unlocked!==I.u.code){ALN=['blk:'+I.u.code,I.u.st==='Sold'?'errSold':'errHold'];P.innerHTML=blockHTML(I.u);return}
+ if(I&&!I.au&&isContr(I.u)&&!isOwner()){ALN=['ctr:'+I.u.code,'errHold'];P.innerHTML=contrHTML(I.u);return}
+ if(I&&I.u.st==='Hold'&&holdAck!==I.u.code&&unlocked!==I.u.code&&!isOwner()){ALN=['hold:'+I.u.code,'errHold'];P.innerHTML=holdHTML(I.u);if(holdShown!==I.u.code){holdShown=I.u.code;setTimeout(()=>holdModal(I.u),60)}return}
+ if(I&&I.u.st!=='Available'&&I.u.st!=='Hold'&&unlocked!==I.u.code&&!isOwner()){ALN=['blk:'+I.u.code,I.u.st==='Sold'?'errSold':'errHold'];P.innerHTML=blockHTML(I.u);return}
  if(!sel||!I){P.innerHTML=`<div class="empty">${!I?(AU.on?'اكتب مساحة الوحدة وسعر المتر':'اختار كود وحدة من شيت الإدخال'):'اختار نظام من الكروت'} علشان البيمنت بلان يظهر</div>`;return}
- {const dpc=disc*100;if(bdD()===null&&!discOK(sel,dpc)&&!(discAppr!==null&&Math.abs(dpc-discAppr)<1e-9)){ALN=['disc:'+sel,'warnDisc'];P.innerHTML=`<div class="appr noprint err" style="flex-direction:column;align-items:flex-start"><div>تنبيه: الخصومات وقفت. الخصم اللي كتبته (${+dpc.toFixed(2)}%) غير متاح${AU.on?'':'، والخصم الوحيد المتاح هو خصم الكاش 35%'}.</div><label style="display:flex;gap:8px;align-items:center;margin:0;color:inherit;font-size:14px"><input type="checkbox" onchange="discAppr=this.checked?${dpc}:null;render()"> أنا مصمم على الخصم وأتحمل المسؤولية كاملة</label></div>`;return}}
+ {const dpc=disc*100;if(bdD()===null&&!discOK(sel,dpc)&&!(discAppr!==null&&Math.abs(dpc-discAppr)<1e-9)&&!isOwner()){ALN=['disc:'+sel,'warnDisc'];P.innerHTML=`<div class="appr noprint err" style="flex-direction:column;align-items:flex-start"><div>تنبيه: الخصومات وقفت. الخصم اللي كتبته (${+dpc.toFixed(2)}%) غير متاح${AU.on?'':'، والخصم الوحيد المتاح هو خصم الكاش 35%'}.</div><label style="display:flex;gap:8px;align-items:center;margin:0;color:inherit;font-size:14px"><input type="checkbox" onchange="discAppr=this.checked?${dpc}:null;render()"> أنا مصمم على الخصم وأتحمل المسؤولية كاملة</label></div>`;return}}
  if(bdK(sel)&&bdAsk(sel)&&polOn()){P.innerHTML=`<div class="appr noprint info" style="flex-direction:column;align-items:flex-start;gap:10px"><div style="font-weight:800">👮 بالك ديل الشرطة – 8 سنين</div><div>سؤال واحد: العميل هيدفع الأقساط كل شهر ولا كل كوارتر؟</div><button class="btn" type="button" onclick="bdQ('8')">جاوب</button></div>`;return}
  if(bdK(sel)&&bdAsk(sel)){P.innerHTML=`<div class="appr noprint info" style="flex-direction:column;align-items:flex-start;gap:10px"><div style="font-weight:800">🤝 بالك ديل – نظام ${SYS[sel].n} سنين</div><div>جاوب على سؤالين علشان البيمنت يظهر: القسط 10 ولا 15 ألف شهري؟ وهيدفع شهري ولا كل كوارتر؟</div><button class="btn" type="button" onclick="bdQ('${sel}')">جاوب على السؤالين</button></div>`;return}
  const S=SYS[sel],r=calc(sel,net,dpIn);
@@ -1044,8 +1046,8 @@ function render0(){
  const dpZ=(!S.cash&&!(r.dp>0))?'<div class="appr noprint info">من غير مقدم – التعاقد بيتم بأول قسط ربع سنوي بتاريخ التعاقد</div>':'';
  let cmpHTML='';const stdDp=S.dp==='manual'?null:net*S.dp,dpN=(stdDp!==null&&dpIn>0&&!S.cash&&Math.abs(Math.min(dpIn,net)-stdDp)>1)?`<div class="appr noprint ${dpIn<stdDp?'':'info'}">المقدم المخصص (${fmt(Math.min(dpIn,net))}) ${dpIn<stdDp?'أقل من':'أعلى من'} المقدم المعتاد (${fmt(stdDp)}) – الأقساط الباقية ${dpIn<stdDp?'زادت':'قلّت'} علشانه</div>`:'';
  if(spAct()&&!S.semi&&!S.cash&&!(CT.on&&S.dp==='manual')){
-  const N=Math.min(13,Math.max(1,SP.yrs||1)),nQ=r.cmpQ!==undefined?r.cmpQ:Math.min(4*N,r.rows.length),a=paidPct(calcStd(sel,net,dpIn),nQ,net),b=paidPct(r,r.cmpRows!==undefined?r.cmpRows:nQ,net),diff=b-a,low=diff<-(150/net),sig=[sel,SP.q,SP.y,SP.yrs,SP.keep?1:0,SP.extra,SP.freq,SP.start,Math.round(net)].join('|'),ok=spApprSig===sig,nl=(N==1?'سنة':N==2?'سنتين':N>10?N+' سنة':N+' سنين')+(r.K?' اسبشيل (بعد '+r.K+' كوارتر عادي)':'');
-  const box=`<div class="appr noprint ${low&&!ok?'err':'info'}" style="flex-direction:column;align-items:flex-start;gap:10px"><div style="font-weight:700">مقارنة النسبة المدفوعة بعد ${nl} (المقدم + دفعة الاستلام + أول ${nQ} كوارتر${r.mon?' (شهري)':''}${r.ye&&r.ye.length?' + دفعات نهاية السنة':''})</div><div class="cmp"><div>النظام العادي<b>${pc(a)}</b></div><div>البيمنت الاسبشيل<b>${pc(b)}</b></div><div>الفرق<b>${(diff>1e-6?'+':diff<-1e-6?'−':'')+pc(Math.abs(diff))}</b></div></div>${low?(ok?'<div>تمت موافقة د. أحمد أسعد على التخفيض ده</div>':`<div>النسبة المدفوعة اتخفضت ${pc(-diff)} عن النظام العادي – محتاج موافقة د. أحمد أسعد.</div><label style="display:flex;gap:8px;align-items:center;margin:0;color:inherit;font-size:14px"><input type="checkbox" onchange="spApprSig=this.checked?'${sig}':null;render()"> أؤكد إني جبت موافقة د. أحمد أسعد وعايز أكمل</label>`):''}</div>`;
+  const N=Math.min(13,Math.max(1,SP.yrs||1)),nQ=r.cmpQ!==undefined?r.cmpQ:Math.min(4*N,r.rows.length),a=paidPct(calcStd(sel,net,dpIn),nQ,net),b=paidPct(r,r.cmpRows!==undefined?r.cmpRows:nQ,net),diff=b-a,low=diff<-(150/net),sig=[sel,SP.q,SP.y,SP.yrs,SP.keep?1:0,SP.extra,SP.freq,SP.start,Math.round(net)].join('|'),ok=spApprSig===sig||isOwner(),nl=(N==1?'سنة':N==2?'سنتين':N>10?N+' سنة':N+' سنين')+(r.K?' اسبشيل (بعد '+r.K+' كوارتر عادي)':'');
+  const box=`<div class="appr noprint ${low&&!ok?'err':'info'}" style="flex-direction:column;align-items:flex-start;gap:10px"><div style="font-weight:700">مقارنة النسبة المدفوعة بعد ${nl} (المقدم + دفعة الاستلام + أول ${nQ} كوارتر${r.mon?' (شهري)':''}${r.ye&&r.ye.length?' + دفعات نهاية السنة':''})</div><div class="cmp"><div>النظام العادي<b>${pc(a)}</b></div><div>البيمنت الاسبشيل<b>${pc(b)}</b></div><div>الفرق<b>${(diff>1e-6?'+':diff<-1e-6?'−':'')+pc(Math.abs(diff))}</b></div></div>${low?(ok?(spApprSig!==sig?'<div>👑 معتمد من الأونر</div>':'<div>تمت موافقة د. أحمد أسعد على التخفيض ده</div>'):`<div>النسبة المدفوعة اتخفضت ${pc(-diff)} عن النظام العادي – محتاج موافقة د. أحمد أسعد.</div><label style="display:flex;gap:8px;align-items:center;margin:0;color:inherit;font-size:14px"><input type="checkbox" onchange="spApprSig=this.checked?'${sig}':null;render()"> أؤكد إني جبت موافقة د. أحمد أسعد وعايز أكمل</label>`):''}</div>`;
   if(low&&!ok){ALN=['cmp:'+sig,'warnCmp'];P.innerHTML=box;return}
   cmpHTML=box}
  const c0=pd($('contract').value||iso(t0)),f0=pd($('first').value||iso(addM(t0,3)));
@@ -1096,7 +1098,7 @@ ${swap?rName+rCode:rCode+rName}
  try{setTimeout(tafqUpd,0)}catch(e){}
  try{if(!(S.appr&&!approved)&&typeof recQueue==='function')recQueue({unit:curUnitLabel(),sel,sys:S.cash?'كاش':S.adm?auY(AU.extra)+' سنين إداري':S.n+' سنين'+(S.semi?' نصف سنوي':'')+(nxOK(S)&&NX?' ('+(NX>0?'+':'')+NX+' كوارتر)':'')+(spAct()?' • اسبشيل':'')+(bdK(sel)?(polOn()?' • بالك ديل الشرطة':' • بالك ديل'):''),name:$('name').value.trim(),amt:fmt(S.cash?r.rows[0]:(r.rows.find((x,i)=>i!==1||!(sel==10||sel==8||sel==9))||r.rows[0]))})}catch(e){}
 }
-function pick(k){sel=k;approved=false;discAppr=null;if(!firstTouched&&$('contract').value)$('first').value=iso(addM(pd($('contract').value),bdK(k)&&k!='6'&&bdMon()?1:(SYS[k].step||3)));render();if(bdK(k)&&k!='6'&&k!='cash'&&!window.BDNOASK){setTimeout(()=>bdQ(k),80);return}if(!(AU.on?unitInfo():BY[$('code').value.trim().toUpperCase()])){needUnit();return}setTimeout(()=>$('plan').scrollIntoView({behavior:'smooth',block:'start'}),60)}
+function pick(k){sel=k;approved=isOwner();discAppr=null;if(!firstTouched&&$('contract').value)$('first').value=iso(addM(pd($('contract').value),bdK(k)&&k!='6'&&bdMon()?1:(SYS[k].step||3)));render();if(bdK(k)&&k!='6'&&k!='cash'&&!window.BDNOASK){setTimeout(()=>bdQ(k),80);return}if(!(AU.on?unitInfo():BY[$('code').value.trim().toUpperCase()])){needUnit();return}setTimeout(()=>$('plan').scrollIntoView({behavior:'smooth',block:'start'}),60)}
 $('contract').addEventListener('input',()=>{if(!firstTouched&&$('contract').value)$('first').value=iso(addM(pd($('contract').value),(sel&&SYS[sel]&&SYS[sel].step)||3));render()});
 $('first').addEventListener('input',()=>{firstTouched=true;render()});
 ['name','code','disc','dp','spOn','spQ','spY','spYrs','spKeep','spExtra'].forEach(i=>$(i).addEventListener('input',render));
@@ -1188,7 +1190,7 @@ function recOpen(i){const x=recGet()[i];if(!x)return;recBusy=true;try{
 }finally{setTimeout(()=>{recBusy=false},400)}}
 function recReset(){recCapDef();recBusy=true;try{clearTimeout(recT);setUnitMode('res');recFill(RECDEF);
  const t=new Date();const t0=new Date(Date.UTC(t.getFullYear(),t.getMonth(),t.getDate()));$('contract').value=iso(t0);$('first').value=iso(addM(t0,3));
- $('code').value='';$('selB').value='';fillF('');fillM('','');NX=0;$('nxSel').value=0;SKIP1=false;BD.on=false;sel=null;approved=false;discAppr=null;unlocked=null;holdAck=null;holdShown=null;firstTouched=false;
+ $('code').value='';$('selB').value='';fillF('');fillM('','');NX=0;$('nxSel').value=0;SKIP1=false;BD.on=false;sel=null;approved=isOwner();discAppr=null;unlocked=null;holdAck=null;holdShown=null;firstTouched=false;
  try{for(const k in OVR)delete OVR[k]}catch(e){}
  render();window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>$('selB').focus(),350);try{say('تمام – ابدأ بيمنت جديد من الأول')}catch(e){}
 }finally{setTimeout(()=>{recBusy=false},400)}}
@@ -3008,7 +3010,7 @@ function invDet(code){const u=BY[code];if(!u)return;const k=ivK(u.st),q=code.spl
  +r('سعر المتر',ivN(u.pm))+(+u.ga>0?r('متر الجنينة',ivN(u.gp)):'')+(+u.ra>0?r('متر الروف',ivN(u.rp)):'')+'</div>'
  +(u.bad?'<div class="dn err">بيانات الوحدة دي ناقصة في الشيت – راجع الإدارة</div>':`<div class="dt"><span>السعر الإجمالي</span><b>${fmt(u.price)}</b></div>`)
  +(k==='ho'?(cn?'<div class="dn err">👷 الوحدة دي هولد خاص بالمقاول – ممنوع يتعمل لها بيمنت.</div>':bk?'<div class="dn">👮 الوحدة دي هولد لبالك ديل الشرطة – لو كملت هيطلب منك تأكيد إن البيمنت على مسؤوليتك.</div>':'<div class="dn">⚠️ الوحدة هولد (محجوزة) – لو كملت هيطلب منك تأكيد إن البيمنت على مسؤوليتك.</div>'):'')+(k==='so'?'<div class="dn err">الوحدة دي مباعة.</div>':'')
- +`<div class="db">${k!=='so'&&!u.bad&&!cn?`<button type="button" class="go" onclick="invUse('${code}')">📝 اعمل بيمنت للوحدة دي</button>`:''}<button type="button" onclick="invDetX()">رجوع للشيت</button></div></div>`;
+ +`<div class="db">${!u.bad&&(isOwner()||(k!=='so'&&!cn))?`<button type="button" class="go" onclick="invUse('${code}')">📝 اعمل بيمنت للوحدة دي</button>`:''}<button type="button" onclick="invDetX()">رجوع للشيت</button></div></div>`;
  $('invDet').hidden=false}
 function invDetX(){$('invDet').hidden=true}
 function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code;syncSel();render()}}
@@ -3471,7 +3473,7 @@ function apply(){const s=ST;try{
  window.BDNOASK=true;try{pick(s.sys)}finally{window.BDNOASK=false}
  render();return report()}catch(e){return '⚠️ حصلت مشكلة وأنا بطبّق: '+esc(e.message)+'. جرّب تعدّل من الشيت بنفسك أو ابعت الحالة في صندوق الاقتراحات.'}}
 function report(){const P=$('planBody'),warns=[...P.querySelectorAll('.appr,.warn,.err')].map(e=>e.innerText.trim()).filter(Boolean).slice(0,3);
- try{const cu=BY[($('code').value||'').trim().toUpperCase()];if(typeof isContr==='function'&&isContr(cu))return '👷 الوحدة <b>'+cu.code+'</b> هولد خاص بالمقاول – <b>ممنوع</b> يتعمل لها بيمنت. قولّي وحدة تانية، أو شوف المتاح من «🏢 شيت الوحدات المتاحة».'}catch(e){}
+ try{const cu=BY[($('code').value||'').trim().toUpperCase()];if(typeof isContr==='function'&&isContr(cu)&&!isOwner())return '👷 الوحدة <b>'+cu.code+'</b> هولد خاص بالمقاول – <b>ممنوع</b> يتعمل لها بيمنت. قولّي وحدة تانية، أو شوف المتاح من «🏢 شيت الوحدات المتاحة».'}catch(e){}
  const snap=planSnapshot();if(!snap||!P.querySelector('.paper'))return warns.length?'✋ <b>ظبطت كل البيانات</b>، بس البيمنت محتاج تأكيد منك على الشيت قبل ما يظهر:<br><span class="botW">'+warns.map(esc).join('<br>')+'</span><br>علّم على التأكيد في الشيت تحت والورقة هتظهر على طول.':'⚠️ البيمنت ما ظهرش – بُص على الشيت وكمّل البيانات الناقصة.';
  const p=snap.payload;const S=SYS[sel];let r=null;try{const I=unitInfo(),d=bdD()!==null?bdD():(+$('disc').value||0)/100;r=calc(sel,netOf(I.gross,d),bdK(sel)?0:dpGet())}catch(e){}
  let tot='';if(r){const sum=r.dp+(r.del||0)+(r.six||0)+(r.extra||0)+r.rows.reduce((a,b)=>a+b,0)+(r.ye||[]).reduce((a,b)=>a+b,0);tot=Math.abs(sum-p.net)<1?'✅ الإجمالي مظبوط 100%':''}
@@ -3537,6 +3539,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261117-184926";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261119-102458";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
