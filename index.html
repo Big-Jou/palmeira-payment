@@ -1259,7 +1259,8 @@ async function doLogin(){const em=$('lgEmail').value.trim(),pw=$('lgPass').value
  b.disabled=false}
 function bypassOpen(){$('bypassBox').style.display='block';try{$('bpPass').focus()}catch(e){}}
 function bypassGo(){if(hh($('bpPass').value)===MPH){BYPASS=true;try{sessionStorage.setItem('pp-bypass','1')}catch(e){}$('bpPass').value='';$('loginOv').classList.add('hide');pwOk();snd('ok')}else pwWrong()}
-function applySession(){if(!sesOk())return;$('whoami').textContent='المستخدم: '+SES.name+' ('+SES.email+')';$('logoutBtn').style.display='inline-block';$('admPanel').style.display=SES.role==='owner'?'block':'none'}
+function applySession(){if(!sesOk())return;$('whoami').textContent='المستخدم: '+SES.name+' ('+SES.email+')';$('logoutBtn').style.display='inline-block';$('admPanel').style.display=SES.role==='owner'?'block':'none';setTimeout(ctAuto,150)}
+const CT_AUTO=['you'];function ctAuto(){try{if(!sesOk()||CT.ok)return;const e=String(SES.email||'').trim().toLowerCase().split('@')[0];if(!CT_AUTO.includes(e))return;CT.ok=true;CT.on=true;ctLabel();try{render()}catch(x){}}catch(x){}}
 function logout(){SES=null;try{localStorage.removeItem('pp-ses')}catch(e){}location.reload()}
 function authInit(){if(!apiUrl())return;if(sesOk()){applySession();flushQueue()}else showLogin()}
 /* --- تسجيل الخطط --- */
@@ -3644,6 +3645,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261121-094602";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261121-101032";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
