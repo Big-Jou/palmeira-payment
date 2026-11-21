@@ -1718,7 +1718,7 @@ function accRows(P){var S=P.S,r=P.r,sel=String(P.sel),out=[],st5=-1;
  if(r.dp>0.005)out.push({t:'مقدم',a:r.dp,d:P.c0});
  if(['8','9','10'].indexOf(sel)>=0&&!S.semi&&!r.bd){var f5=r100(P.net*.05);for(var i=0;i<Math.min(6,P.ent.length);i++){var e=P.ent[i];if(/Installment/.test(e.l)&&Math.abs(e.a-f5)<1&&P.ent.some(function(x){return /Installment/.test(x.l)&&Math.abs(x.a-f5)>1})){st5=i;break}}}
  P.ent.forEach(function(e,i){var t;
-  if(/6 Months/.test(e.l)||i===st5)t='دفعة 6 أشهر';else if(/1 Year Payment/.test(e.l))t='دفعة بعد سنة';else if(/3 Years Payment/.test(e.l))t='دفعة بعد 3 سنين';
+  if(/6 Months/.test(e.l)||i===st5)t='دفعة 6 أشهر';else if(/1 Year Payment|3 Years Payment/.test(e.l))t='قسط سنوي';
   else if(/End Payment/.test(e.l))t='قسط سنوي';else if(/Monthly/.test(e.l))t='قسط شهري';else if(S.semi)t='قسط نصف سنوي';else t='قسط ربع سنوي';
   out.push({t:t,a:e.a,d:e.d})});
  if(r.del>0.005)out.push({t:'إستلام',a:r.del,d:null});
@@ -3735,6 +3735,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261121-170500";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261121-174000";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
