@@ -362,7 +362,7 @@ select:disabled{opacity:.5}
 <div><label>تاريخ أول قسط</label><input type="date" id="first"></div>
 <div><label>Launch Discount %</label><input type="number" id="disc" min="0" max="100" step="0.1" value="0"></div>
 <div><label>أو السعر بعد الخصم (اختياري)</label><input type="number" id="netT" min="0" step="1000" placeholder="اكتب السعر والخصم يتحسب لوحده" inputmode="numeric"></div>
-<div id="dpBox" style="display:none"><label id="dpLbl">دفعة المقدم (جنيه)</label><input type="number" id="dp" min="0" step="1000" value="0"></div>
+<div id="dpBox" style="display:none"><label id="dpLbl">دفعة المقدم (جنيه)</label><input type="number" id="dp" min="0" step="1000" value="0"><label id="ddW" style="display:none;align-items:center;gap:8px;margin-top:8px;font-size:14px;color:var(--ink);cursor:pointer"><input type="checkbox" id="ddChk" checked onchange="render()" style="width:20px;height:20px;margin:0"> المقدم ياخد خصم بنفس نسبته على المتبقي</label></div>
 </div>
 <div class="hint" id="discHint"></div>
 <div class="hint" id="liveStat"></div>
@@ -563,6 +563,7 @@ const U=DATA.map(a=>({code:a[0],st:a[1],type:a[2],spec:a[3],bld:a[4],fl:a[5],ua:
 const BY={};U.forEach(u=>BY[u.code.toUpperCase()]=u);
 const SYS={
  3:{c:'c3',e:'⚡',n:3,dp:'manual',cnt:12,t:'3 سنين'},
+ 4:{c:'c5',e:'',n:4,dp:'manual',cnt:16,t:'4 سنين',sp:true},
  5:{c:'c5',e:'',n:5,dp:'manual',cnt:20,t:'5 سنين'},
  6:{c:'c5',e:'🤝',n:6,dp:.05,cnt:25,t:'6 سنين',bd:true},
  8:{c:'c8',e:'',n:8,dp:.05,cnt:33,t:'8 سنين'},
@@ -861,7 +862,9 @@ function unitInfo(){
  return{u,u0,unitP,gr,gross:unitP+gr,gArea:u.ga+u.ra,gPm:u.gp+u.rp,tArea:u.ua+u.ga+u.ra};
 }
 const r100=x=>Math.round(x/100)*100,flr=x=>Math.floor((+x||0)+1e-6),netOf=(g,d)=>{g=flr(g);d=+d||0;if(d<=0)return g;if(Math.abs(d-(1-.75*.65))<1e-12){const r1=g-flr(g*.25);return r1-flr(r1*.35)}return g-flr(g*d)};
-let NODD=false,NX=0,NONX=false;const nxOK=S=>!NONX&&!spAct()&&!(typeof BD!=='undefined'&&BD.on&&SP.ok)&&!S.bd&&!AU.on&&!S.cash&&!S.semi&&!S.adm,nxC=(S,mn)=>nxOK(S)?Math.max(mn,S.cnt+NX):S.cnt;const ddOn=S=>S.dp==='manual'&&!S.cash&&!NODD&&(CT.on||!spAct());
+let NODD=false,NX=0,NONX=false;const nxOK=S=>!NONX&&!spAct()&&!(typeof BD!=='undefined'&&BD.on&&SP.ok)&&!S.bd&&!AU.on&&!S.cash&&!S.semi&&!S.adm,nxC=(S,mn)=>nxOK(S)?Math.max(mn,S.cnt+NX):S.cnt;const ddOn=S=>S.dp==='manual'&&!S.cash&&!NODD&&ddWant()&&(CT.on||!spAct());
+function ddAuth(){try{return !!(fullOK()||CT.on||SP.ok)}catch(e){return false}}
+function ddWant(){const e=document.getElementById('ddChk');return !e||e.checked||!ddAuth()}
 function fin(o){const ye=o.ye||[];let carry=0;const dp=r100(o.dp);if(!o.keepRem)carry+=o.dp-dp;
  const del=r100(o.del);carry+=o.del-del;const six=o.six?r100(o.six):0;if(o.six)carry+=o.six-six;
  const yeR=ye.map(a=>{const v=r100(a);carry+=a-v;return v});
@@ -910,7 +913,7 @@ function calc0(k,net,dpIn){
   const cmpRows=rows.length;let yv=SP.ymode==='fix'?(SP.y||0):0;
   if(yauto&&nY>0)yv=Math.max(0,Math.ceil((stPaid-dp-del-used)/nY/100)*100);
   for(let j=1;j<=nY;j++){ye.push(yv);yd.push(12*j+3*K);used+=yv}
-  const R=CN-K-nSp,bal=net-dp-del-used;for(let i=0;i<R;i++){rows.push(bal/R);rd.push(3*(K+nSp+i));rl.push('')}
+  const R=CN-K-nSp,bal=net-dp-del-used,ra=R>1?Math.round(bal/R/100)*100:bal;for(let i=0;i<R;i++){rows.push(i<R-1?ra:bal-ra*(R-1));rd.push(3*(K+nSp+i));rl.push('')}
   let spread=0,spTo='';if(R<=0&&Math.abs(bal)>0.004){spread=bal;
    if(ye.length){const per=Math.round(bal/ye.length/100)*100;for(let j=0;j<ye.length;j++)ye[j]+=per;ye[ye.length-1]+=bal-per*ye.length;spTo='ye'}
    else{const ix=spIx.length?spIx:rows.map((_,i)=>i);const per=Math.round(bal/ix.length/100)*100;ix.forEach(i=>rows[i]+=per);rows[ix[ix.length-1]]+=bal-per*ix.length;spTo='q'}}
@@ -1006,7 +1009,7 @@ function render0(){
  {const dv=Math.max(0,+$('disc').value||0),bad=bdD()===null&&!discOK(sel,dv),h=$('discHint');h.className='hint'+(bad?' bad':'');h.innerHTML=(AU.on?'الخصومات واقفة حاليًا. أي خصم على الوحدات الإدارية على مسؤوليتك.':'الخصومات واقفة حاليًا: الخصم الوحيد المتاح هو خصم الكاش <b>35%</b>. أي خصم تاني على مسؤوليتك.')+(bad?' الخصم الحالي ('+(+dv.toFixed(2))+'%) مش متاح.':'')+NETT_MSG}
  const I=unitInfo(),disc=bdD()!==null?bdD():Math.max(0,+$('disc').value||0)/100,dpIn=bdK(sel)?0:dpGet();
  ovSync(I);
- $('dpBox').style.display=(sel&&!SYS[sel].cash)?'block':'none';$('dpLbl').textContent=(sel&&SYS[sel].dp==='manual')?'دفعة المقدم (جنيه) – بياخد خصم بنفس نسبتها على المتبقي':'مقدم مخصص (جنيه) – اختياري، سيبه 0 للمقدم المعتاد';
+ $('dpBox').style.display=(sel&&!SYS[sel].cash)?'block':'none';{const mdp=!!(sel&&SYS[sel].dp==='manual'&&!bdK(sel)),dw=$('ddW');if(dw)dw.style.display=(mdp&&ddAuth())?'flex':'none'}$('dpLbl').textContent=(sel&&SYS[sel].dp==='manual')?(ddWant()?'دفعة المقدم (جنيه) – بياخد خصم بنفس نسبتها على المتبقي':'دفعة المقدم (جنيه) – من غير خصم على المتبقي'):'مقدم مخصص (جنيه) – اختياري، سيبه 0 للمقدم المعتاد';
  // chips
  const ch=$('chips');ch.innerHTML='';
  if(I&&I.au){const u=I.u;[`${AUTY[u.type][0]} • ${AUFL[u.fl][0]}`,`المساحة ${I.tArea} م²`,`الإجمالي ${fmt(I.gross)}`,`سعر المتر ${fmt(u.pm)}`].forEach(x=>ch.insertAdjacentHTML('beforeend',`<span class="chip">${x}</span>`));
@@ -1057,7 +1060,7 @@ function render0(){
  const step=S.step||3,ct53=ddOn(S),den=ct53?r.rem:net,netShow=ct53?net-r.extra:net;
  let body='';
  if(!ct53&&!S.cash&&r.dp>0)body+=`<tr class="sec"><td>${fd(c0)}</td><td>Down Payment</td><td class="num">${pc(r.dp/net)}</td><td class="num">${fmt(r.dp)}</td></tr>`;
- if(S.dp!=='manual'&&!S.cash)body+=`<tr class="sec"><td class="ar">Remaining Amount</td><td></td><td class="num">${pc(r.rem/net)}</td><td class="num">${fmt(r.rem)}</td></tr>`;
+ if((S.dp!=='manual'||(!ct53&&r.dp>0))&&!S.cash)body+=`<tr class="sec"><td class="ar">Remaining Amount</td><td></td><td class="num">${pc(r.rem/net)}</td><td class="num">${fmt(r.rem)}</td></tr>`;
  let ent;if(S.adm){const d6=addM(c0,6),ym=d=>d.getUTCFullYear()*12+d.getUTCMonth(),k6=ym(d6),ds=[];for(let i=0;ds.length<r.rows.length&&i<2000;i++){const d=addM(f0,step*i);if(ym(d)!==k6)ds.push(d)}ent=r.rows.map((a,i)=>({d:ds[i],l:ord(i+1)+' Installment',a,o:0}));ent.push({d:d6,l:'6 Months Payment – <span dir="rtl">دفعة بعد 6 شهور</span>',a:r.six,o:0});ent.sort((x,y)=>x.d-y.d||x.o-y.o)}else{let nI=0;ent=r.rows.map((a,i)=>({d:addM(f0,r.rd?r.rd[i]:step*i),l:r.rl&&/^s/.test(r.rl[i])?(r.pol?(r.rl[i]==='s3'?'3 Years Payment – <span dir="rtl">دفعة بعد 3 سنين</span>':'1 Year Payment – <span dir="rtl">دفعة بعد سنة</span>'):'6 Months Payment – <span dir="rtl">دفعة بعد 6 شهور</span>'):ord(r.bd?++nI:i+1)+' Installment'+(r.rl&&r.rl[i]==='m'?' (Monthly)':''),a,o:0})).concat((r.ye||[]).map((a,j)=>({d:yd0?addM(yd0,12*j):addM(c0,r.yd?r.yd[j]:12*(j+1)),l:'Year '+(j+1)+' End Payment',a,o:1}))).sort((x,y)=>x.d-y.d||x.o-y.o)}
  (S.cash?[{d:c0,l:'Cash Payment',a:r.rows[0]}]:ent).forEach(e=>body+=`<tr><td>${fd(e.d)}</td><td>${e.l}</td><td class="num">${pc(e.a/den)}</td><td class="num">${fmt(e.a)}</td></tr>`);
  if(r.del)body+=`<tr><td class="ar">ما قبل الأستلام</td><td>Delivery Batch</td><td class="num">${pc(r.del/net)}</td><td class="num">${fmt(r.del)}</td></tr>`;
@@ -1163,7 +1166,7 @@ function tafqUpd(){const box=$('tafqP');if(!box)return;const s=(typeof CT!=='und
   x.value='';c.textContent='0 / 1000';b.disabled=true;const o=$('fbOk');o.hidden=false;o.textContent=navigator.onLine===false?'✅ اتسجل – هيتبعت أول ما النت يرجع. شكرًا!':'✅ وصل! شكرًا على '+fbType+'ك – الإدارة هتشوفه.';try{snd('ok')}catch(e){}setTimeout(()=>{o.hidden=true},7000)}}
 
 /* ===== آخر 5 بيمنت + ابدأ من جديد ===== */
-const RECF=['code','name','contract','first','disc','netT','m5Sel','dp','auType','auFloor','auArea','auPm','auExtra','spOn','spDp','spFreq','spQ','spStart','spYm','spY','spYd','spYrs','spKeep','spExtra','spMPct','spMOn','spMN','spMD1','spMD2','spMD3'];
+const RECF=['code','name','contract','first','disc','netT','m5Sel','dp','ddChk','auType','auFloor','auArea','auPm','auExtra','spOn','spDp','spFreq','spQ','spStart','spYm','spY','spYd','spYrs','spKeep','spExtra','spMPct','spMOn','spMN','spMD1','spMD2','spMD3'];
 const recKey=()=>'pp-recent:'+((typeof SES!=='undefined'&&SES&&SES.email)||'guest');
 const recGet=()=>{try{const a=JSON.parse(localStorage.getItem(recKey())||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}};
 const recPut=a=>{try{localStorage.setItem(recKey(),JSON.stringify(a.slice(0,5)))}catch(e){}};
@@ -3021,7 +3024,7 @@ function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code
  o.addEventListener('click',e=>{if(e.target===o)invClose()});document.body.appendChild(o);
  const d=document.createElement('div');d.id='invDet';d.className='invDet noprint';d.hidden=true;d.addEventListener('click',e=>{if(e.target===d)invDetX()});document.body.appendChild(d);
  document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!IVS.open)return;if(!$('invDet').hidden)invDetX();else invClose()});
- try{if(typeof I18N!=='undefined')Object.entries({"اختيار الوحدة":"Select the unit","شيت الوحدات المتاحة":"Available units sheet","متاح":"Available","هولد":"Hold","مباع":"Sold","متاحة":"Available","الكود":"Code","كل الأنواع":"All types","النوع":"Type","الأرضي":"Ground","البنتهاوس والروف":"Penthouse & roof","الأدوار المتكررة من":"Typical floors from","لـ":"to","الأدوار الفردية":"Odd floors","الأدوار الزوجية":"Even floors","الأدوار":"Floors","الدور الأرضي":"Ground floor","بجناين":"with gardens","متاح من":"available of","من":"of","وحدة":"units","دوس على أي وحدة تشوف تفاصيلها وتعمل لها بيمنت":"Tap any unit to see its details and make a payment plan","اعمل بيمنت للوحدة دي":"Make a payment plan for this unit","رجوع للشيت":"Back to the sheet","السعر الإجمالي":"Total price","متر الجنينة":"Garden m price","متر الروف":"Roof m price","الجنينة":"Garden","الروف":"Roof","العمارة":"Building","الوحدة دي مباعة.":"This unit is sold.","متحدّث من الشيت الأونلاين الساعة":"Updated from the online sheet at","جاري التحديث من الشيت الأونلاين…":"Updating from the online sheet…","تحديث الآن":"Refresh now","تفاصيل الوحدة":"Unit details","بالك الشرطة":"Police bulk","مقاول":"Contractor","منهم مقاول":"of them contractor","ممنوع":"not allowed","مقاول – ممنوع":"Contractor – not allowed","هولد خاص بالمقاول":"Special hold for the contractor","ممنوع عمل بيمنت":"no payment plans allowed","الوحدة دي محجوزة للمقاول":"This unit is reserved for the contractor","ممنوع تتعمل لها بيمنت":"No payment plan is allowed for it","منهم بالك الشرطة":"of them police bulk","هولد لبالك ديل الشرطة":"On hold for the police bulk deal","لبالك ديل الشرطة":"for the police bulk deal","إغلاق":"Close","تعذّر التحديث دلوقتي":"Could not update right now","ده آخر بيانات محفوظة":"showing the last saved data","ده آخر تحديث الساعة":"last updated at","بيانات محفوظة":"Saved data","اسحب الجدول يمين وشمال تشوف باقي النماذج":"Swipe the table sideways to see the other models","اختار العمارة ثم الدور ثم النموذج":"Choose the building, then the floor, then the model","أو دوس":"or tap","وشوف العمارة كلها واختار منها على طول":"to see the whole building and pick directly"}).forEach(([k,v])=>{if(I18N[k]===undefined)I18N[k]=v})}catch(e){}
+ try{if(typeof I18N!=='undefined')Object.entries({"اختيار الوحدة":"Select the unit","شيت الوحدات المتاحة":"Available units sheet","متاح":"Available","هولد":"Hold","مباع":"Sold","متاحة":"Available","الكود":"Code","كل الأنواع":"All types","النوع":"Type","الأرضي":"Ground","البنتهاوس والروف":"Penthouse & roof","الأدوار المتكررة من":"Typical floors from","لـ":"to","الأدوار الفردية":"Odd floors","الأدوار الزوجية":"Even floors","الأدوار":"Floors","الدور الأرضي":"Ground floor","بجناين":"with gardens","متاح من":"available of","من":"of","وحدة":"units","دوس على أي وحدة تشوف تفاصيلها وتعمل لها بيمنت":"Tap any unit to see its details and make a payment plan","اعمل بيمنت للوحدة دي":"Make a payment plan for this unit","رجوع للشيت":"Back to the sheet","السعر الإجمالي":"Total price","متر الجنينة":"Garden m price","متر الروف":"Roof m price","الجنينة":"Garden","الروف":"Roof","العمارة":"Building","الوحدة دي مباعة.":"This unit is sold.","متحدّث من الشيت الأونلاين الساعة":"Updated from the online sheet at","جاري التحديث من الشيت الأونلاين…":"Updating from the online sheet…","تحديث الآن":"Refresh now","تفاصيل الوحدة":"Unit details","بالك الشرطة":"Police bulk","مقاول":"Contractor","منهم مقاول":"of them contractor","ممنوع":"not allowed","مقاول – ممنوع":"Contractor – not allowed","هولد خاص بالمقاول":"Special hold for the contractor","ممنوع عمل بيمنت":"no payment plans allowed","الوحدة دي محجوزة للمقاول":"This unit is reserved for the contractor","ممنوع تتعمل لها بيمنت":"No payment plan is allowed for it","منهم بالك الشرطة":"of them police bulk","هولد لبالك ديل الشرطة":"On hold for the police bulk deal","لبالك ديل الشرطة":"for the police bulk deal","إغلاق":"Close","المقدم ياخد خصم بنفس نسبته على المتبقي":"Down payment gets the same % discount on the remaining","دفعة المقدم (جنيه) – من غير خصم على المتبقي":"Down payment (EGP) – no discount on the remaining","تعذّر التحديث دلوقتي":"Could not update right now","ده آخر بيانات محفوظة":"showing the last saved data","ده آخر تحديث الساعة":"last updated at","بيانات محفوظة":"Saved data","اسحب الجدول يمين وشمال تشوف باقي النماذج":"Swipe the table sideways to see the other models","اختار العمارة ثم الدور ثم النموذج":"Choose the building, then the floor, then the model","أو دوس":"or tap","وشوف العمارة كلها واختار منها على طول":"to see the whole building and pick directly"}).forEach(([k,v])=>{if(I18N[k]===undefined)I18N[k]=v})}catch(e){}
 })();
 {const _ls=liveSync;liveSync=async function(m){const r=await _ls(m);try{if(IVS.open)invRender()}catch(e){}return r}}
 </script>
@@ -3515,7 +3518,7 @@ function nextQ(){
  if(ST.q!==undefined&&ST.spYrs===undefined)return{q:`القسط ده (${money(ST.q)}) لمدة قد إيه، وبعدها يرجع النظام طبيعي؟`,opts:[['أول سنة',()=>{ST.spYrs=1}],['أول سنة ونص',()=>{ST.spYrs=1.5}],['أول سنتين',()=>{ST.spYrs=2}],['أول سنتين ونص',()=>{ST.spYrs=2.5}],['أول 3 سنين',()=>{ST.spYrs=3}],['أول 4 سنين',()=>{ST.spYrs=4}],['أول 5 سنين',()=>{ST.spYrs=5}],['طول المدة',()=>{ST.spYrs='all'}]]};
  if(isSpecial()&&!ST.ym)return{q:'فيه دفعات آخر كل سنة؟',opts:[['لأ، من غير',()=>{ST.ym='none'}],['أيوه، احسبها تلقائي',()=>{ST.ym='auto'}],['أيوه، هقولك المبلغ',()=>{ST.ym='fix';ST.askY=1}]]};
  if(ST.ym==='fix'&&!ST.y)return{q:'الدفعة السنوية كام؟ (اكتب المبلغ)'};
- if(['3','5'].includes(ST.sys)&&ST.dpAmt===undefined&&ST.dpPct===undefined&&!(+$('dp').value))return{q:`نظام ${ST.sys} سنين المقدم بتحدده انت. العميل هيدفع مقدم كام؟ (مبلغ أو نسبة)`};
+ if(['3','4','5'].includes(ST.sys)&&ST.dpAmt===undefined&&ST.dpPct===undefined&&!(+$('dp').value))return{q:`نظام ${ST.sys} سنين المقدم بتحدده انت. العميل هيدفع مقدم كام؟ (مبلغ أو نسبة)`};
  return null}
 function summary(){const L=[],s=ST;const sp=isSpecial();
  L.push('🏠 الوحدة: <b>'+s.unit+'</b>');
@@ -3561,7 +3564,7 @@ function apply(){const s=ST;try{
  if(!sp&&SYS[s.sys]&&!SYS[s.sys].cash){const S1=SYS[s.sys],dflt=typeof S1.dp==='number'?S1.dp*100:null;
   if(s.dpAmt!==undefined)$('dp').value=Math.round(s.dpAmt);
   else if(s.dpPct!==undefined)$('dp').value=(dflt!==null&&Math.abs(dflt-s.dpPct)<1e-9)?0:Math.round(net*s.dpPct/100);
-  else if(!['3','5'].includes(s.sys))$('dp').value=0}
+  else if(!['3','4','5'].includes(s.sys))$('dp').value=0}
  if(sp){
   $('spDp').value=s.dpAmt!==undefined?Math.round(s.dpAmt):s.dpPct!==undefined?Math.round(net*s.dpPct/100):'';
   $('spFreq').value=s.freq==='m'?'m':'q';
@@ -3625,7 +3628,7 @@ function handle(text){const raw=String(text||'').trim();if(!raw)return;
  const f=parse(raw);
  if(f.reset){ST=S0();hello();return}
  if(ST.askY&&!f.y){const a=amounts(t);if(a.length){f.y=a[0].v;f.ym='fix'}}
- if(['3','5'].includes(ST.sys||f.sys||'')&&f.dpAmt===undefined&&f.dpPct===undefined&&ST.unit&&!/قسط|كوارتر|شهر/.test(t)){const a=amounts(t);if(a.length===1&&f.q!==undefined){if(a[0].pct||/%/.test(t))f.dpPct=a[0].v;else f.dpAmt=a[0].v;delete f.q}}
+ if(['3','4','5'].includes(ST.sys||f.sys||'')&&f.dpAmt===undefined&&f.dpPct===undefined&&ST.unit&&!/قسط|كوارتر|شهر/.test(t)){const a=amounts(t);if(a.length===1&&f.q!==undefined){if(a[0].pct||/%/.test(t))f.dpPct=a[0].v;else f.dpAmt=a[0].v;delete f.q}}
  delete ST.askY;
  const keys=Object.keys(f).filter(k=>!['_t','question','bldAmb','extraAmt'].includes(k)&&f[k]!==undefined&&f[k]!==false||(k==='keep'||k==='skip1')&&f[k]===false);
  if(f.question||(!keys.length&&!f.bldAmb&&!f.extraAmt)){const a=kbAnswer(t);if(a){say(a);return}
@@ -3645,6 +3648,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261121-101032";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261121-110504";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
