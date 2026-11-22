@@ -1099,7 +1099,7 @@ ${swap?rName+rCode:rCode+rName}
   const FIRST=CT.on?30:34,NEXT=CT.on?44:50,ch=[rowsArr.slice(0,FIRST)];for(let i=FIRST;i<rowsArr.length;i+=NEXT)ch.push(rowsArr.slice(i,i+NEXT));
   if(ch.length>1&&ch[ch.length-1].length<4){const last=ch.pop();ch[ch.length-1]=ch[ch.length-1].concat(last)}
   const n=ch.length;return{multi:true,html:ch.map((c,i)=>`<div class="paper mp" data-noi18n>${logos}<h3>${ttl}${i?' <small class="cont">(continued)</small>':''}</h3>${i?'':info+'<div class="sp"></div>'}<table>${TH(i)}${c.join('')}</table>${CT.on||i==n-1?sig:''}<div class="pgn">Page ${i+1} / ${n}</div></div>`).join('')}})();
- P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button>'}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
+ P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${isOwner()?'<button class="btn" type="button" onclick="ctrApprove()" style="background:#15803d;border-color:#15803d;color:#fff">✅ اعتمد كعقد</button>':''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button>'}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
  <div class="scroll${PG.multi?' mpwrap':''}">${PG.html}</div>${DRAWON&&!I.au?drawBlock(I.u):''}`;
  P.classList.toggle('multi',PG.multi);$('plan').classList.toggle('multi',PG.multi);
  try{setTimeout(tafqUpd,0)}catch(e){}
@@ -1684,24 +1684,104 @@ function zip(files){var en=new TextEncoder(),parts=[],cd=[],off=0;
  var cs=0;cd.forEach(function(x){cs+=x.length});var e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
  return new Blob(parts.concat(cd,[new Uint8Array(e.buffer)]),{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
 var exportPlanXlsx=function(){if(!(typeof CT!=='undefined'&&CT.on)){say('تحميل Excel متاح بعد إدخال باسورد 2MDY');return}try{
- var pp=document.querySelector('#planBody .paper');if(!pp){say('اختار الوحدة والنظام الأول');return}var pps=[].slice.call(document.querySelectorAll('#planBody .paper.one,#planBody .paper.mp'));if(!pps.length)pps=[pp];
- var rows=[],w=[18,34,12,22],h3=pp.querySelector('h3');
- if(h3)rows.push([{v:h3.textContent.replace(/\s+/g,' ').trim(),s:5}]);rows.push([]);
- pps.forEach(function(pg){pg.querySelectorAll('table').forEach(function(tb){tb.querySelectorAll('tr:not(.rep)').forEach(function(tr){
-  var hd=!!tr.querySelector('th'),bold=/sec|tot|s\b/.test(tr.className),cells=[].slice.call(tr.children).map(function(x){
-   var t=x.textContent.replace(/\s+/g,' ').trim(),m=t.match(/^([\d,]+(?:\.\d+)?)\s*(?:EGP|جنيه)?$/);
-   if(hd)return{v:t,s:1};if(m&&!/^\d{1,2}\/\d/.test(t))return{v:+m[1].replace(/,/g,''),s:bold?4:2};return{v:t,s:bold?3:0}});
-  if(cells.length)rows.push(cells)});rows.push([])});});
- var sd=rows.map(function(r,ri){return '<row r="'+(ri+1)+'">'+r.map(function(c,ci){var a=col(ci)+(ri+1);return typeof c.v==='number'?'<c r="'+a+'" s="'+c.s+'"><v>'+c.v+'</v></c>':'<c r="'+a+'" t="inlineStr" s="'+c.s+'"><is><t xml:space="preserve">'+esc(c.v)+'</t></is></c>'}).join('')+'</row>'}).join('');
- var X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',N='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"';
- var files=[['[Content_Types].xml',X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
- ['_rels/.rels',X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
- ['xl/workbook.xml',X+'<workbook '+N+' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Payment Plan" sheetId="1" r:id="rId1"/></sheets></workbook>'],
- ['xl/_rels/workbook.xml.rels',X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
- ['xl/styles.xml',X+'<styleSheet '+N+'><fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="14"/><color rgb="FF0B3D35"/><name val="Calibri"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0B3D35"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFF3E7C4"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="6"><xf/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"><alignment horizontal="center"/></xf><xf numFmtId="3" applyNumberFormat="1"/><xf fontId="2" fillId="3" applyFont="1" applyFill="1"/><xf numFmtId="3" fontId="2" fillId="3" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf fontId="3" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'],
- ['xl/worksheets/sheet1.xml',X+'<worksheet '+N+'><sheetViews><sheetView rightToLeft="1" workbookViewId="0"/></sheetViews><cols>'+w.map(function(x,i){return '<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+x+'" customWidth="1"/>'}).join('')+'</cols><sheetData>'+sd+'</sheetData></worksheet>']];
- var a=document.createElement('a');a.href=URL.createObjectURL(zip(files));a.download=fname('.xlsx');document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);say('✅ اتحمّل ملف Excel')
-}catch(e){say('حصلت مشكلة في تحميل Excel')}};
+ var pages=[].slice.call(document.querySelectorAll('#planBody .paper.one,#planBody .paper.mp'));if(!pages.length){var p0=document.querySelector('#planBody .paper');if(!p0){say('اختار الوحدة والنظام الأول');return}pages=[p0]}
+ var add=pages.filter(function(p){return !p.classList.contains('printing')}),zs=pages.map(function(p){return p.style.zoom});add.forEach(function(p){p.classList.add('printing')});pages.forEach(function(p){p.style.zoom=''});var X;try{X=xlPaperBuild(pages)}finally{add.forEach(function(p){p.classList.remove('printing')});pages.forEach(function(p,i){p.style.zoom=zs[i]})}
+ var a=document.createElement('a');a.href=URL.createObjectURL(zip(X));a.download=fname('.xlsx');document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);say('✅ اتحمّل ملف Excel');try{window.offSaveNow&&offSaveNow()}catch(x){}
+}catch(e){try{console.error(e)}catch(x){}say('حصلت مشكلة في تحميل Excel')}};
+/* ورقة البيمنت → Excel بنفس الشكل بالظبط (نفس المربعات والخطوط والكلام) */
+function xlPaperBuild(pages){
+ function abs(el){var x=0,y=0;while(el){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent}return[x,y]}
+ function hid(el){if(el.classList&&el.classList.contains('noprint'))return true;var cs=getComputedStyle(el);return cs.display==='none'||cs.visibility==='hidden'}
+ function txt(el){return String(el.innerText||el.textContent||'').replace(/ /g,' ').replace(/[ \t]+/g,' ').replace(/\s*\n\s*/g,'\n').trim()}
+ var rows=[],W=0;
+ pages.forEach(function(pg,pi){
+  var a=abs(pg),cs=getComputedStyle(pg),pl=parseFloat(cs.paddingLeft)||0,pr=parseFloat(cs.paddingRight)||0,pt=parseFloat(cs.paddingTop)||0,L=a[0]+pg.clientLeft+pl,T=a[1]+pg.clientTop+pt,w=pg.clientWidth-pl-pr;if(!W)W=w;
+  var last=null;
+  function rel(el){var b=abs(el);return[b[0]-L,b[1]-T]}
+  function gap(y){if(last!==null&&y-last>3)rows.push({h:y-last,cells:[]})}
+  [].forEach.call(pg.children,function(ch){
+   if(hid(ch)||ch.classList.contains('plogos'))return;
+   var p=rel(ch),y0=p[1];
+   if(ch.tagName==='H3'){if(pi>0)return;gap(y0);rows.push({h:ch.offsetHeight,cells:[{x0:0,x1:W,el:ch,t:txt(ch).replace(/\n/g,' ')}]});last=y0+ch.offsetHeight;return}
+   if(ch.tagName==='TABLE'){
+    [].forEach.call(ch.rows,function(tr){if(tr.classList.contains('rep')||hid(tr))return;var ty=rel(tr)[1];
+     if(pi>0&&tr.querySelector('th')&&rows.some(function(r){return r.th&&r.sig===txt(tr)}))return;
+     gap(ty);var cells=[].map.call(tr.cells,function(td){var q=rel(td);return{x0:q[0],x1:q[0]+td.offsetWidth,el:td,tr:tr,t:txt(td)}});
+     rows.push({h:tr.offsetHeight,cells:cells,th:!!tr.querySelector('th'),sig:txt(tr),tbl:ch});last=ty+tr.offsetHeight});
+    return}
+   if(ch.classList.contains('sig')){gap(y0);var cells=[].map.call(ch.children,function(d){var q=rel(d);return{x0:q[0],x1:q[0]+d.offsetWidth,el:d,t:txt(d)}});rows.push({h:ch.offsetHeight,cells:cells});last=y0+ch.offsetHeight;return}
+   var t=txt(ch);gap(y0);rows.push({h:Math.max(4,ch.offsetHeight),cells:t?[{x0:0,x1:W,el:ch,t:t}]:[]});last=y0+ch.offsetHeight});
+ });
+ /* أعمدة من حدود كل المربعات */
+ var E=[0,W];rows.forEach(function(r){r.cells.forEach(function(c){E.push(Math.max(0,Math.min(W,c.x0)),Math.max(0,Math.min(W,c.x1)))})});
+ E.sort(function(a,b){return a-b});var ed=[];E.forEach(function(x){if(!ed.length||x-ed[ed.length-1]>2.5)ed.push(x);else ed[ed.length-1]=x>=W-0.5?x:ed[ed.length-1]});
+ function ci(x){var b=0,d=1e9;ed.forEach(function(e,i){var k=Math.abs(e-x);if(k<d){d=k;b=i}});return b}
+ var NC=ed.length-1,cw=[];for(var i=0;i<NC;i++)cw.push(Math.max(0.6,Math.round(((ed[i+1]-ed[i])*1.07-5)/7*100)/100));
+ /* ستايلات */
+ var FONTS=[],FILLS=['<fill><patternFill patternType="none"/></fill>','<fill><patternFill patternType="gray125"/></fill>'],BORDERS=['<border><left/><right/><top/><bottom/><diagonal/></border>'],NUMF=[],XF=['<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'];
+ function ix(arr,s){var i=arr.indexOf(s);if(i<0){arr.push(s);i=arr.length-1}return i}
+ FONTS.push('<font><sz val="11"/><name val="Calibri"/><family val="2"/></font>');
+ function hex(c){var m=String(c||'').match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s\/]+([\d.]+))?/);if(!m)return null;if(m[4]!==undefined&&+m[4]<0.05)return null;return 'FF'+[m[1],m[2],m[3]].map(function(v){return('0'+(+v).toString(16)).slice(-2)}).join('').toUpperCase()}
+ function bside(cs,s){var wd=parseFloat(cs['border'+s+'Width'])||0,st=cs['border'+s+'Style'];if(!wd||st==='none'||st==='hidden')return null;var col=hex(cs['border'+s+'Color'])||'FF000000';return{st:st==='double'?'double':wd>=2.5?'thick':wd>=1.6?'medium':st==='dashed'?'dashed':st==='dotted'?'dotted':'thin',c:col}}
+ function nf(code){if(!code)return 0;var b={'0':1,'0.00':2,'#,##0':3,'#,##0.00':4,'0%':9,'0.00%':10};if(b[code])return b[code];var i=NUMF.indexOf(code);if(i<0){NUMF.push(code);i=NUMF.length-1}return 164+i}
+ function styleOf(c,edges){var el=c.el,cs=getComputedStyle(el),trs=c.tr?getComputedStyle(c.tr):null;
+  var bold=(parseInt(cs.fontWeight)||400)>=600,sz=Math.round((parseFloat(cs.fontSize)||14.5)*0.75*2)/2,fc=hex(cs.color)||'FF000000',it=cs.fontStyle==='italic';
+  var font='<font>'+(bold?'<b/>':'')+(it?'<i/>':'')+'<sz val="'+sz+'"/><color rgb="'+fc+'"/><name val="Calibri"/><family val="2"/></font>';
+  var bg=hex(cs.backgroundColor)||(trs?hex(trs.backgroundColor):null);
+  var fill=bg&&bg!=='FFFFFFFF'?'<fill><patternFill patternType="solid"><fgColor rgb="'+bg+'"/><bgColor indexed="64"/></patternFill></fill>':null;
+  var ta=cs.textAlign,dir=cs.direction,h=ta==='center'?'center':ta==='right'||(ta==='end'&&dir!=='rtl')||(ta==='start'&&dir==='rtl')?'right':ta==='justify'?'left':'left';
+  var B={L:bside(cs,'Left'),R:bside(cs,'Right'),T:bside(cs,'Top'),B:bside(cs,'Bottom')};
+  return{font:font,fill:fill,h:h,B:B}}
+ function xfFor(st,fmt,edge,wrap){
+  function bx(tag,b){return b?'<'+tag+' style="'+b.st+'"><color rgb="'+b.c+'"/></'+tag+'>':'<'+tag+'/>'}
+  var bd='<border>'+bx('left',edge.l?st.B.L:null)+bx('right',edge.r?st.B.R:null)+bx('top',edge.t?st.B.T:null)+bx('bottom',edge.b?st.B.B:null)+'<diagonal/></border>';
+  var fo=ix(FONTS,st.font),fi=st.fill?ix(FILLS,st.fill):0,bo=ix(BORDERS,bd),nm=nf(fmt);
+  var x='<xf numFmtId="'+nm+'" fontId="'+fo+'" fillId="'+fi+'" borderId="'+bo+'" xfId="0"'+(nm?' applyNumberFormat="1"':'')+' applyFont="1"'+(fi?' applyFill="1"':'')+' applyBorder="1" applyAlignment="1"><alignment horizontal="'+st.h+'" vertical="center"'+(st.h!=='center'&&!(fmt&&st.h==='right')?' indent="1"':'')+(wrap?' wrapText="1"':'')+'/></xf>';
+  return ix(XF,x)}
+ function parse(t){var s=String(t).replace(/\n/g,' ').trim(),m;
+  if((m=s.match(/^(-?)(\d[\d,]*)(?:\.(\d+))?\s*EGP$/))){var d=(m[3]||'').length;return{v:(m[1]?-1:1)*parseFloat(m[2].replace(/,/g,'')+(d?'.'+m[3]:'')),f:'#,##0'+(d?'.'+'0'.repeat(d):'')+'" EGP"'}}
+  if((m=s.match(/^(-?\d+)(?:\.(\d+))?%$/))){var d2=(m[2]||'').length;return{v:parseFloat(m[1]+(d2?'.'+m[2]:''))/100,f:'0'+(d2?'.'+'0'.repeat(d2):'')+'%'}}
+  if((m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/))){return{v:(Date.UTC(+m[3],+m[2]-1,+m[1])-Date.UTC(1899,11,30))/864e5,f:'dd/mm/yyyy',date:1}}
+  if((m=s.match(/^(-?)(\d[\d,]*)(?:\.(\d+))?$/))&&s.length<16){var d3=(m[3]||'').length,cm=/,/.test(m[2]);return{v:(m[1]?-1:1)*parseFloat(m[2].replace(/,/g,'')+(d3?'.'+m[3]:'')),f:(cm?'#,##0':'0')+(d3?'.'+'0'.repeat(d3):'')}}
+  return{s:s}}
+ function cn(i){var s='';i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s}
+ /* شبكة الخلايا */
+ var G=[],MER=[],INFO=[];
+ rows.forEach(function(r,ri){var line={h:Math.round(r.h*0.75*100)/100,c:{}};G.push(line);INFO.push([]);
+  r.cells.forEach(function(c){var c0=ci(Math.max(0,c.x0)),c1=ci(Math.min(W,c.x1))-1;if(c1<c0)c1=c0;var st=styleOf(c),pv=parse(c.t);
+   var fmt=pv.s!==undefined?null:(st.h==='right'?pv.f+'_)':pv.f),wrap=pv.s!==undefined;
+   for(var k=c0;k<=c1;k++){line.c[k]={x:xfFor(st,fmt,{l:k===c0,r:k===c1,t:true,b:true},wrap)}}
+   line.c[c0].v=pv;INFO[ri].push({c0:c0,c1:c1,t:c.t,pv:pv,tr:c.tr,tbl:r.tbl});
+   if(c1>c0)MER.push(cn(c0)+(ri+1)+':'+cn(c1)+(ri+1))})});
+ /* معادلات: الإجمالي = مجموع الدفعات، والنسبة = المبلغ ÷ الإجمالي */
+ try{var hi=-1;rows.forEach(function(r,ri){if(hi<0&&r.th&&/Amount/i.test(r.sig)&&/Percentage/i.test(r.sig))hi=ri});
+  if(hi>=0){var ti=-1;for(var q=hi+1;q<rows.length;q++){var f0=INFO[q][0];if(f0&&/^Total$/i.test(f0.t)){ti=q;break}}
+   if(ti>0){var lastC=function(ri){var a=INFO[ri];return a[a.length-1]},pcC=function(ri){var a=INFO[ri];return a.length>=2?a[a.length-2]:null};
+    var tc=lastC(ti);if(tc&&tc.pv.v!==undefined){var inc=[],sum=0,dpRow=-1,remRow=-1;
+     for(var r2=hi+1;r2<ti;r2++){if(!INFO[r2].length||rows[r2].th)continue;var lc=lastC(r2),f1=INFO[r2][0];if(!lc||lc.pv.v===undefined||lc.pv.date)continue;
+      if(/Remaining/i.test(INFO[r2].map(function(z){return z.t}).join(' '))){remRow=r2;continue}
+      if(/Down Payment/i.test(INFO[r2].map(function(z){return z.t}).join(' '))&&dpRow<0)dpRow=r2;inc.push(r2);sum+=lc.pv.v}
+     if(inc.length&&Math.abs(sum-tc.pv.v)<0.6){var colL=cn(tc.c0),refs=[],s0=inc[0],pv0=inc[0];
+      for(var z=1;z<=inc.length;z++){if(z<inc.length&&inc[z]===pv0+1){pv0=inc[z];continue}refs.push(s0===pv0?colL+(s0+1):colL+(s0+1)+':'+colL+(pv0+1));if(z<inc.length){s0=pv0=inc[z]}}
+      var tot=tc.pv.v,TR='$'+colL+'$'+(ti+1);G[ti].c[tc.c0].f='SUM('+refs.join(',')+')';
+      inc.forEach(function(r3){var lc=lastC(r3),pc=pcC(r3);if(!pc||pc.pv.v===undefined||pc.pv.date||!/%/.test(pc.pv.f||''))return;if(Math.abs(lc.pv.v/tot-pc.pv.v)<0.00006){G[r3].c[pc.c0].f=cn(lc.c0)+(r3+1)+'/'+TR;G[r3].c[pc.c0].v={v:lc.pv.v/tot,f:pc.pv.f}}});
+      if(remRow>0&&dpRow>0){var rc=lastC(remRow),dc=lastC(dpRow);if(Math.abs(rc.pv.v-(tot-dc.pv.v))<0.6){G[remRow].c[rc.c0].f=TR+'-'+cn(dc.c0)+(dpRow+1);var rp=pcC(remRow);if(rp&&rp.pv.v!==undefined&&/%/.test(rp.pv.f||''))G[remRow].c[rp.c0].f=cn(rc.c0)+(remRow+1)+'/'+TR}}}}}}}catch(e){}
+ function xv(n){return String(Math.round(n*1e10)/1e10)}
+ var sd=G.map(function(line,ri){var ks=Object.keys(line.c).map(Number).sort(function(a,b){return a-b});
+  return '<row r="'+(ri+1)+'" ht="'+Math.max(3,line.h)+'" customHeight="1">'+ks.map(function(k){var c=line.c[k],a=cn(k)+(ri+1),v=c.v;
+   if(!v)return '<c r="'+a+'" s="'+c.x+'"/>';
+   if(v.s!==undefined)return '<c r="'+a+'" s="'+c.x+'" t="inlineStr"><is><t xml:space="preserve">'+esc(v.s)+'</t></is></c>';
+   return '<c r="'+a+'" s="'+c.x+'">'+(c.f?'<f>'+c.f+'</f>':'')+'<v>'+xv(v.v)+'</v></c>'}).join('')+'</row>'}).join('');
+ var Xh='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',N='xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"',R='xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+ var last=cn(NC-1)+G.length;
+ var sheet=Xh+'<worksheet '+N+' '+R+'><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><dimension ref="A1:'+last+'"/><sheetViews><sheetView showGridLines="0" workbookViewId="0"/></sheetViews><sheetFormatPr defaultRowHeight="15"/><cols>'+cw.map(function(x,i){return '<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+x+'" customWidth="1"/>'}).join('')+'</cols><sheetData>'+sd+'</sheetData>'+(MER.length?'<mergeCells count="'+MER.length+'">'+MER.map(function(m){return '<mergeCell ref="'+m+'"/>'}).join('')+'</mergeCells>':'')+'<printOptions horizontalCentered="1"/><pageMargins left="0.4" right="0.4" top="0.45" bottom="0.45" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="portrait" fitToWidth="1" fitToHeight="0"/></worksheet>';
+ var styles=Xh+'<styleSheet '+N+'>'+(NUMF.length?'<numFmts count="'+NUMF.length+'">'+NUMF.map(function(f,i){return '<numFmt numFmtId="'+(164+i)+'" formatCode="'+esc(f).replace(/"/g,'&quot;')+'"/>'}).join('')+'</numFmts>':'')+'<fonts count="'+FONTS.length+'">'+FONTS.join('')+'</fonts><fills count="'+FILLS.length+'">'+FILLS.join('')+'</fills><borders count="'+BORDERS.length+'">'+BORDERS.join('')+'</borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="'+XF.length+'">'+XF.join('')+'</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+ return [['[Content_Types].xml',Xh+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
+ ['_rels/.rels',Xh+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+ ['xl/workbook.xml',Xh+'<workbook '+N+' '+R+'><sheets><sheet name="Payment Plan" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm.Print_Area" localSheetId="0">\'Payment Plan\'!$A$1:$'+cn(NC-1)+'$'+G.length+'</definedName></definedNames><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>'],
+ ['xl/_rels/workbook.xml.rels',Xh+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+ ['xl/styles.xml',styles],['xl/worksheets/sheet1.xml',sheet]]}
+window.xlPaperBuild=xlPaperBuild;window.xlZip=zip;
 window.exportXlsx=function(){if(!(typeof CT!=='undefined'&&CT.on)){say('تحميل Excel متاح بعد إدخال باسورد 2MDY');return}if(!document.querySelector('#planBody .paper')){say('اختار الوحدة والنظام الأول');return}exportPlanXlsx()};
 window.exportAcc=function(){if(!(typeof isOwner==='function'&&isOwner())){say('شيت الحسابات متاح للأونر بس');return}if(!(typeof CT!=='undefined'&&CT.on)){say('متاح في وضع 2MDY بس');return}if(!document.querySelector('#planBody .paper')){say('اختار الوحدة والنظام الأول');return}accAsk(function(p){if(p)accDl(p)})};
 /* ===== شيت حسابات المعمرون وسموحة والتشطيب (نفس قالب الإكسل الأصلي) ===== */
@@ -3734,9 +3814,6 @@ window.pmBot={parse,handle,get state(){return ST},reset(){ST=S0()},apply,nextQ};
 })();
 
 </script>
-<style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
-<div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261121-192000";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <script>
 /* ===== أسماء العملاء + البيمنتات المحفوظة (للأونر بس – متشفرة) ===== */
 (function(){
@@ -3816,5 +3893,122 @@ try{var k0=localStorage.getItem(BK);if(k0)setTimeout(function(){if(own())bUnlock
 </script>
 
 
+<script>
+/* ===== العقود المعتمدة + العروض (الأونر بس) ===== */
+(function(){
+var CAP=null,CTRS=null,CLOAD=null,OFFS={},SENT={};
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function msg(t){var m=$('xlMsg');if(!m)return;m.textContent=t;m.classList.add('on');clearTimeout(msg.t);msg.t=setTimeout(function(){m.classList.remove('on')},4200)}
+function ready(){try{return typeof apiUrl==='function'&&!!apiUrl()&&sesOk()}catch(e){return false}}
+function own(){try{return isOwner()}catch(e){return false}}
+function api(b){return apiCall(Object.assign({token:SES.token},b))}
+async function cap(){if(CAP!==null)return CAP;if(!ready())return false;try{var r=await apiCall({action:'ping',ctr:1});CAP=!!(r&&r.ctr)}catch(e){return false}return CAP}
+function money(n){n=+n;if(!isFinite(n)||n===''||n===null)return '';try{return fmt(n)}catch(e){return String(n)}}
+function dt(t){var d=new Date(t);if(isNaN(d))return '';return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear()}
+/* حالة البيمنت الحالية بالكامل (علشان يتفتح تاني بالظبط) */
+function curState(){var v={};RECF.forEach(function(id){v[id]=fv(id)});var I=null;try{I=unitInfo()}catch(e){}var code=I&&I.u0?I.u0.code:String($('code').value||'').trim().toUpperCase();
+ return{t:Date.now(),unit:code,sel:sel,name:($('name').value||'').trim(),au:AU.on,nx:NX,sk1:SKIP1,ft:firstTouched,sp:!!(SP.ok&&SP.on),bd:bdOn()?{amt:BD.amt,freq:BD.freq,kind:BD.kind,pf:BD.pf,pdp:BD.pdp}:null,ct:!!CT.on,v:v,ovr:(code&&OVR[code])?OVR[code]:null}}
+function applyState(x){recBusy=true;try{
+ setUnitMode(x.au?'adm':'res');recFill(x.v);
+ if((x.sp||x.bd)&&!SP.ok){var v=$('spOn').checked;spUnlock();$('spOn').checked=v}
+ if(x.bd&&(x.bd.kind!=='p'||polAllowed())){BD.on=true;BD.amt=x.bd.amt;BD.freq=x.bd.freq;BD.kind=x.bd.kind||'c';BD.pf=x.bd.pf||'';BD.pdp=x.bd.pdp===undefined?null:x.bd.pdp}else BD.on=false;
+ if(!x.au)syncSel();NX=x.nx||0;SKIP1=!!x.sk1;$('nxSel').value=NX;firstTouched=!!x.ft;unlocked=null;
+ try{for(var k in OVR)delete OVR[k]}catch(e){}if(x.ovr&&x.unit)OVR[x.unit]=x.ovr;
+ if(x.ct&&!CT.on&&CT.ok){CT.on=true;try{ctLabel()}catch(e){}}
+ window.BDNOASK=true;try{if(x.sel&&SYS[x.sel])pick(x.sel);else{sel=null;render()}}finally{window.BDNOASK=false}
+}finally{setTimeout(function(){recBusy=false},400)}}
+/* نسخة متجمدة من ورقة البيمنت زي ما اتطبعت */
+function frozenPaper(){var ps=[].slice.call(document.querySelectorAll('#planBody .paper'));return ps.map(function(p){var c=p.cloneNode(true);
+ [].forEach.call(c.querySelectorAll('.noprint,script,style,button,input'),function(x){x.remove()});
+ [].forEach.call(c.querySelectorAll('img'),function(im,i){im.removeAttribute('src');im.setAttribute('data-lg',String(i))});
+ c.classList.remove('fxp');c.classList.remove('printing');c.removeAttribute('style');[].forEach.call(c.querySelectorAll('tr[style]'),function(tr){tr.removeAttribute('style')});return c.outerHTML}).join('')}
+function paperNode(html){var d=document.createElement('div');d.innerHTML=html;[].forEach.call(d.querySelectorAll('img[data-lg]'),function(im){try{im.src=im.getAttribute('data-lg')==='0'?LOGO_PAL:LOGO_MO}catch(e){}});return d}
+/* طابور محلي لو السيرفر لسه متحدّثش */
+function qGet(){try{return JSON.parse(localStorage.getItem('pp-ctr-q')||'[]')}catch(e){return[]}}
+function qSet(a){try{localStorage.setItem('pp-ctr-q',JSON.stringify(a.slice(-40)))}catch(e){msg('مساحة الجهاز مش كفاية لحفظ العقد')}}
+async function qFlush(){if(!own()||!(await cap()))return;var q=qGet();while(q.length){try{var r=await api(q[0]);if(r&&r.ok){q.shift();qSet(q)}else break}catch(e){break}}if(!qGet().length)CTRS=null}
+/* قايمة العقود المعتمدة */
+async function ctrLoad(force){if(!own())return {};if(CTRS&&!force)return CTRS;if(CLOAD&&!force)return CLOAD;
+ CLOAD=(async function(){var m={};try{if(await cap()){var r=await api({action:'ctrList'});if(r&&r.ok){r.rows.forEach(function(x){if(x.status==='معتمد'){var u=String(x.unit).toUpperCase();if(!m[u]||m[u].t<x.t)m[u]=x}});CTRS=m;try{localStorage.setItem('pp-ctr-c',JSON.stringify(m))}catch(e){}}}}catch(e){}
+  if(!CTRS){try{CTRS=JSON.parse(localStorage.getItem('pp-ctr-c')||'{}')}catch(e){CTRS={}}}
+  qGet().forEach(function(it){if(it.action==='ctrSave'&&it.sum){var u=String(it.sum.unit).toUpperCase();CTRS[u]={id:'local',t:new Date().toISOString(),unit:u,client:it.sum.client,system:it.sum.system,net:it.sum.net,dp:it.sum.dp,firstInst:it.sum.firstInst,status:'معتمد',local:it.data}}});
+  CLOAD=null;return CTRS})();return CLOAD}
+window.ctrUnits=function(){return CTRS||{}};
+/* ✅ اعتمد كعقد */
+window.ctrApprove=async function(){if(!own())return;var s=null;try{s=planSnapshot()}catch(e){}if(!s){msg('اختار الوحدة والنظام الأول');return}
+ var sum=s.payload;if(!sum.client){msg('اكتب اسم العميل الأول');try{$('name').focus()}catch(e){}return}
+ var m=await ctrLoad(),old=m[String(sum.unit).toUpperCase()];
+ var o=document.createElement('div');o.id='ctQ';o.innerHTML='<div class="ctQb" role="dialog" aria-modal="true"><h3>✅ اعتماد البيمنت كعقد</h3>'+
+  '<div class="ctL"><span>الوحدة</span><b dir="ltr">'+esc(sum.unit)+'</b></div><div class="ctL"><span>العميل</span><b>'+esc(sum.client)+'</b></div><div class="ctL"><span>النظام</span><b>'+esc(sum.system)+'</b></div>'+
+  '<div class="ctL"><span>الإجمالي بعد الخصم</span><b>'+money(sum.net)+'</b></div><div class="ctL"><span>المقدم</span><b>'+money(sum.dp)+'</b></div><div class="ctL"><span>أول قسط</span><b>'+money(sum.firstInst)+'</b></div><div class="ctL"><span>تاريخ التعاقد</span><b>'+esc(sum.contract)+'</b></div>'+
+  (old?'<div class="ctW">⚠️ الوحدة دي عليها عقد معتمد قبل كده باسم <b>'+esc(old.client)+'</b> ('+esc(old.system)+') – الجديد هيحل محله وهيتسجل إن القديم اتغير (ملحق).</div>':'')+
+  '<div class="ctN">البيمنت هيتسجل على الوحدة زي ما هو دلوقتي بالظبط (الأقساط والتواريخ والمبالغ) ومش هيتغير بعد كده حتى لو الأنظمة اتغيرت. والـ Sold بتعمله انت من الشيت بتاعك.</div>'+
+  '<div class="ctA"><button type="button" class="recB" data-x="1">إلغاء</button><button type="button" class="btn" data-ok="1">✅ اعتمد</button></div></div>';
+ document.body.appendChild(o);o.addEventListener('click',function(e){if(e.target===o)o.remove()});o.querySelector('[data-x]').onclick=function(){o.remove()};
+ o.querySelector('[data-ok]').onclick=async function(){var b=this;b.disabled=true;b.textContent='جاري الحفظ…';
+  var item={action:'ctrSave',sum:sum,rep:(SES&&(SES.name||SES.email))||'',data:JSON.stringify({v:1,sum:sum,st:curState(),paper:frozenPaper()})};
+  var ok=false,srv=false;try{if(await cap()){srv=true;var r=await api(item);ok=!!(r&&r.ok);if(!ok&&r&&r.error==='auth'){o.remove();msg('لازم تسجل دخول تاني');try{sessionExpired()}catch(e){}return}}}catch(e){}
+  if(!ok){var q=qGet();q.push(item);qSet(q)}
+  try{var nm0=typeof buyerName==='function'?buyerName(sum.unit):'';if(typeof buyerSave==='function'&&!(old&&old.client===sum.client)&&nm0!==sum.client)buyerSave(sum.unit,sum.client,'')}catch(e){}
+  CTRS=null;await ctrLoad(true);o.remove();try{snd('ok')}catch(e){}
+  msg(ok?'✅ اتسجل العقد على الوحدة '+sum.unit:srv?'⚠️ اتحفظ على الجهاز – هيتبعت للسيرفر أول ما النت يرجع':'⚠️ اتحفظ على الجهاز ده – محتاج تضيف كود العقود في شيت جوجل علشان يتسجل أونلاين');
+  try{ctBar()}catch(e){}};}
+/* عرض/طباعة/إكسل للعقد المتجمد */
+async function ctrData(c){if(c.local)return JSON.parse(c.local);var r=await api({action:'ctrGet',id:c.id});if(!r||!r.ok)throw new Error('get');return JSON.parse(r.data)}
+function viewPaper(html,title){var o=document.createElement('div');o.id='ctV';o.innerHTML='<div class="ctVb"><div class="ctVh"><b>'+esc(title)+'</b><span><button type="button" class="btn" data-p="1">🖨️ طباعة / PDF</button><button type="button" class="btn" data-x2="1">⬇ Excel</button><button type="button" class="btn ghost" data-c="1">✕</button></span></div><div class="ctVp"></div></div>';
+ o.querySelector('.ctVp').appendChild(paperNode(html));document.body.appendChild(o);o.addEventListener('click',function(e){if(e.target===o)o.remove()});o.querySelector('[data-c]').onclick=function(){o.remove()};
+ o.querySelector('[data-x2]').onclick=function(){xlFrom(o.querySelectorAll('.ctVp .paper'),title)};
+ o.querySelector('[data-p]').onclick=function(){var w=window.open('','_blank');if(!w){msg('اسمح بفتح النوافذ علشان الطباعة');return}var css=[].map.call(document.querySelectorAll('style'),function(s){return s.textContent}).join('\n');
+  var n=paperNode(html);[].forEach.call(n.querySelectorAll('.paper'),function(p){p.classList.add('printing')});
+  w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>'+css+'</style><style>html,body{background:#fff!important;margin:0;padding:0}body::before,body::after{display:none!important}@page{size:A4;margin:8mm}.paper{margin:0 auto!important;box-shadow:none!important;border:0!important}</style></head><body>'+n.innerHTML+'<script>setTimeout(function(){print()},400)<\/script></body></html>');w.document.close()}}
+function xlFrom(pages,title){try{pages=[].slice.call(pages);var add=pages.filter(function(p){return !p.classList.contains('printing')});add.forEach(function(p){p.classList.add('printing')});var X;try{X=xlPaperBuild(pages)}finally{add.forEach(function(p){p.classList.remove('printing')})}
+ var a=document.createElement('a');a.href=URL.createObjectURL(xlZip(X));a.download=String(title||'Palmeira').replace(/[\\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')+'.xlsx';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},1500);msg('✅ اتحمّل ملف Excel')}catch(e){try{console.error(e)}catch(x){}msg('حصلت مشكلة في تحميل Excel')}}
+/* العروض: كل بيمنت بيتطبع أو يتحمل بيتسجل كعرض (من غير ما المندوب يشوف أي حاجة جديدة) */
+window.offSaveNow=async function(){try{if(!ready())return;var s=planSnapshot();if(!s||SENT[s.sig])return;if(!(await cap()))return;SENT[s.sig]=1;
+ var r=await api({action:'offSave',sum:s.payload,rep:(SES&&(SES.name||SES.email))||'',data:JSON.stringify({v:1,sum:s.payload,st:curState()})});if(!r||!r.ok)delete SENT[s.sig]}catch(e){}};
+if(typeof logPrint==='function'){var _lp=logPrint;logPrint=function(){var r=_lp.apply(this,arguments);try{offSaveNow()}catch(e){}return r}}
+/* صندوق العقد والعروض جوه تفاصيل الوحدة */
+function ctBoxHTML(code,u,c,srv){var h='<div class="ctH">📑 العقد والعروض</div>';
+ if(c){h+='<div class="ctOk">✅ عقد معتمد: <b>'+esc(c.client)+'</b> • '+esc(c.system)+(c.t?' • '+dt(c.t):'')+'</div><div class="ctBt"><button type="button" data-cv="1">📄 فتح العقد</button><button type="button" data-cx="1">⬇ Excel</button><button type="button" data-co="1">↩ افتحه في البرنامج</button><button type="button" data-cc="1" class="rd">✕ إلغاء الاعتماد</button></div>';
+  if(u&&u.st!=='Sold')h+='<div class="dn err">⚠️ الوحدة دي عليها عقد معتمد ولسه مش Sold في الشيت – غيّرها لـ Sold من شيتك.</div>'}
+ else h+='<div class="ctNo">مفيش عقد معتمد على الوحدة دي. افتح عرض من تحت أو اعمل بيمنت واضغط «✅ اعتمد كعقد».</div>';
+ if(srv===false)h+='<div class="dn">⚠️ علشان العقود والعروض تتسجل أونلاين ومن أي جهاز، لازم تضيف كود العقود في شيت جوجل مرة واحدة.</div>';
+ else h+='<div class="ctOf"><div class="ctOt">العروض اللي اتعملت على الوحدة دي</div><div class="ctOl" id="ctOl"><small>جاري التحميل…</small></div></div>';
+ return h}
+async function ctBox(code){if(!own())return;var d=$('invDet')&&$('invDet').querySelector('.invDI');if(!d)return;var old=d.querySelector('.ctBox');if(old)old.remove();
+ var w=document.createElement('div');w.className='ctBox';w.innerHTML='<div class="ctH">📑 العقد والعروض</div><small>جاري التحميل…</small>';d.insertBefore(w,d.querySelector('.db'));
+ var srv=await cap(),m=await ctrLoad(),c=m[code],u=BY[code];if(!w.isConnected)return;w.innerHTML=ctBoxHTML(code,u,c,srv);
+ if(c){var title='Palmeira_'+code+'_'+(c.client||'');
+  w.querySelector('[data-cv]').onclick=async function(){try{var D=await ctrData(c);viewPaper(D.paper,'عقد '+code+' – '+(c.client||''))}catch(e){msg('تعذّر تحميل العقد')}};
+  w.querySelector('[data-cx]').onclick=async function(){try{var D=await ctrData(c),n=paperNode(D.paper);n.style.cssText='position:absolute;left:-12000px;top:0;width:820px';document.body.appendChild(n);try{xlFrom(n.querySelectorAll('.paper'),title)}finally{n.remove()}}catch(e){msg('تعذّر تحميل العقد')}};
+  w.querySelector('[data-co]').onclick=async function(){try{var D=await ctrData(c);invClose();applyState(D.st);setTimeout(function(){try{$('plan').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},300);msg('اتفتح البيمنت بتاع العقد – لو عدّلت فيه واعتمدته تاني هيتسجل كملحق')}catch(e){msg('تعذّر تحميل العقد')}};
+  w.querySelector('[data-cc]').onclick=async function(){var b=this;if(!b.dataset.arm){b.dataset.arm=1;b.textContent='⚠️ متأكد؟ اضغط تاني';setTimeout(function(){if(b.isConnected){delete b.dataset.arm;b.textContent='✕ إلغاء الاعتماد'}},3500);return}
+   try{if(c.id==='local'){qSet(qGet().filter(function(it){return !(it.action==='ctrSave'&&String(it.sum.unit).toUpperCase()===code)}))}else{var r=await api({action:'ctrCancel',id:c.id});if(!r||!r.ok)throw 0}CTRS=null;await ctrLoad(true);msg('اتلغى اعتماد العقد');ctBox(code);try{ctBar()}catch(e){}}catch(e){msg('تعذّر إلغاء الاعتماد')}}}
+ if(srv){var L=w.querySelector('#ctOl');try{var r=await api({action:'offList',unit:code});if(!L.isConnected)return;var rows=(r&&r.ok&&r.rows)||[];rows.sort(function(a,b){return a.t<b.t?1:-1});
+  L.innerHTML=rows.length?rows.slice(0,30).map(function(x,i){return '<div class="ctOr"><div><b>'+esc(x.client||'بدون اسم')+'</b><small>'+dt(x.t)+' • '+esc(x.system)+(x.dp!==''&&x.dp!=null?' • مقدم '+money(x.dp):'')+(x.firstInst?' • أول قسط '+money(x.firstInst):'')+' • '+esc(x.by||'')+'</small></div><button type="button" data-i="'+i+'">↩ افتح</button></div>'}).join(''):'<small>لسه مفيش عروض متسجلة على الوحدة دي (العروض بتتسجل لما البيمنت يتطبع أو يتحمل PDF/Excel).</small>';
+  [].forEach.call(L.querySelectorAll('[data-i]'),function(b){b.onclick=async function(){var x=rows[+b.dataset.i];try{var g=await api({action:'offGet',id:x.id});if(!g||!g.ok)throw 0;var D=JSON.parse(g.data);invClose();applyState(D.st);setTimeout(function(){try{$('plan').scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},300);msg('اتفتح العرض – راجعه واضغط «✅ اعتمد كعقد» لو العميل اشترى')}catch(e){msg('تعذّر فتح العرض')}}})}catch(e){if(L.isConnected)L.innerHTML='<small>تعذّر تحميل العروض</small>'}}}
+if(typeof invDet==='function'){var _idc=invDet;invDet=function(code){_idc.apply(this,arguments);try{ctBox(code)}catch(e){}}}
+/* شريط في شيت المتاح: وحدات عليها عقد ولسه مش Sold */
+function ctBar(){var box=$('invBox');if(!box)return;var el=$('invCtBar');if(!own()||!CTRS){if(el)el.remove();return}
+ var pend=Object.keys(CTRS).filter(function(k){var u=BY[k];return u&&u.st!=='Sold'});if(!pend.length){if(el)el.remove();return}
+ if(!el){el=document.createElement('div');el.id='invCtBar';el.className='invCtBar';box.insertBefore(el,$('invSum'))}
+ el.innerHTML='<span>⚠️ وحدات عليها عقد معتمد ولسه مش Sold في الشيت:</span>'+pend.map(function(k){return '<button type="button" data-u="'+esc(k)+'" dir="ltr">'+esc(k)+'</button>'}).join('');
+ [].forEach.call(el.querySelectorAll('[data-u]'),function(b){b.onclick=function(){invDet(b.dataset.u)}})}
+window.ctBar=ctBar;
+if(typeof invRender==='function'){var _ir=invRender;invRender=function(){var r=_ir.apply(this,arguments);try{ctBar()}catch(e){}return r}}
+if(typeof invOpen==='function'){var _io2=invOpen;invOpen=function(){var r=_io2.apply(this,arguments);try{if(own())ctrLoad().then(function(){ctBar()})}catch(e){}return r}}
+window.addEventListener('load',function(){setTimeout(function(){if(own())qFlush()},4000)});
+window.addEventListener('online',function(){if(own())qFlush()});
+var st=document.createElement('style');st.textContent='.ctBox{margin:12px 0 4px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}.ctH{font-weight:800;margin-bottom:8px}.ctOk{background:color-mix(in srgb,#16a34a 12%,transparent);border:1px solid color-mix(in srgb,#16a34a 40%,transparent);border-radius:10px;padding:8px 10px;margin-bottom:8px}.ctNo{color:var(--mut);font-size:13.5px;margin-bottom:6px}.ctBt{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.ctBt button,.ctOr button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:7px 11px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}.ctBt button.rd{color:#b42318}.ctOf{margin-top:8px}.ctOt{font-weight:700;font-size:13.5px;margin-bottom:6px}.ctOr{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px dashed var(--line)}.ctOr small{display:block;color:var(--mut);font-size:12px}'+
+ '#ctQ,#ctV{position:fixed;inset:0;z-index:10050;background:rgba(10,30,26,.5);display:flex;align-items:center;justify-content:center;padding:16px}.ctQb{background:var(--card);color:var(--ink);border-radius:18px;padding:18px;width:min(440px,100%);max-height:90vh;overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.3)}.ctQb h3{margin:0 0 10px;font-size:18px}.ctL{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}.ctL span{color:var(--mut)}.ctW{margin-top:10px;background:#fff4e5;color:#7a4b00;border-radius:10px;padding:8px 10px;font-size:13.5px}.ctN{margin-top:10px;color:var(--mut);font-size:13px;line-height:1.7}.ctA{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}'+
+ '.ctVb{background:var(--card);border-radius:16px;width:min(900px,100%);max-height:92vh;overflow:auto;padding:12px}.ctVh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}.ctVh span{display:flex;gap:6px;flex-wrap:wrap}.ctVp{background:#fff;overflow:auto}.invCtBar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0;padding:8px 10px;border-radius:12px;background:#fff4e5;color:#7a4b00;font-size:13px;font-weight:700}.invCtBar button{border:1px solid #e0b25c;background:#fff;color:#7a4b00;border-radius:99px;padding:3px 10px;font:inherit;font-size:12.5px;cursor:pointer}';
+document.head.appendChild(st);
+})();
+
+</script>
+<style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
+<div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
+<script>(function(){var V="20261122-084646";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
