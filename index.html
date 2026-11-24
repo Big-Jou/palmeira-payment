@@ -3161,7 +3161,7 @@ const ivSpS=s=>{s=String(s||'');if(/studio/i.test(s))return 'ST';const m=s.match
 const ivSpO=s=>{s=String(s||'');if(/studio/i.test(s))return 0;const m=s.match(/(\d+)/g)||[9];return (+m[0])*10+(m[1]?+m[1]:0)};
 const ivAll=b=>Object.values(TREE[b]||{}).flatMap(o=>Object.values(o));
 function ivGroups(b){const T=TREE[b]||{},G={};Object.keys(T).forEach(f=>{const ms=Object.keys(T[f]).sort(natCmp),sig=ms.map(m=>{const u=T[f][m];return m+'/'+(+u.ua||0)+'/'+(+u.ga||0)+'/'+(+u.ra||0)}).join('|');(G[sig]=G[sig]||{ms,fs:[]}).fs.push(f)});
- return Object.values(G).map(g=>{g.fs.sort((x,y)=>(+y)-(+x));return g}).sort((a,c)=>(+c.fs[0])-(+a.fs[0]))}
+ return Object.values(G).map(g=>{g.fs.sort((x,y)=>(+x)-(+y));return g}).sort((a,c)=>(+a.fs[0])-(+c.fs[0]))}
 function ivTitle(b,g){const fs=g.fs.map(Number).sort((x,y)=>x-y),us=g.fs.flatMap(f=>Object.values(TREE[b][f]));
  if(us.length&&us.every(u=>/pent/i.test(u.type)))return 'البنتهاوس والروف – '+(fs.length===1?'الدور '+fs[0]:'الأدوار '+fs.join('، '));
  if(fs.length===1)return fs[0]===0?'الدور الأرضي'+(us.some(u=>+u.ga>0)?' (بجناين)':''):'الدور '+fs[0];
@@ -4103,6 +4103,6 @@ document.head.appendChild(st);
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261123-153808";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261124-235415";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
