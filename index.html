@@ -961,20 +961,20 @@ const BD={on:false,amt:0,freq:'',kind:'c',pf:'',pdp:null,pq:0},bdOn=()=>BD.on&&S
 function bdFO(){try{const c=pd($('contract').value),f=pd($('first').value);const m=(f.getUTCFullYear()-c.getUTCFullYear())*12+f.getUTCMonth()-c.getUTCMonth();return isFinite(m)?m:3}catch(e){return 3}}
 function pol5Calc(net){const W=Math.min(Math.max(0,+BD.pdp||0),net),ex=net>0?r100(W*(net-W)/net):0,base=net-W-ex,C=SYS['5'].cnt,rows=[];for(let i=0;i<C;i++)rows.push(base/C);return{dp:W,extra:ex,rows,del:0,rem:base,keepRem:true,bd:true,pol:true,pol5:true}}
 function polSCalc(net){const dp=net*.05,p1=net*.05,p3=net*.05,fo=bdFO(),Q=Math.max(0,+BD.pq||0),N=8,end=12*N,rows=[],rd=[],rl=[],ye=[],yd=[];let used=0;
- for(let m=3;m<=end;m+=3){const r=m-fo;if(r<0)continue;rows.push(Q);rd.push(r);rl.push('');used+=Q}
+ for(let r=0;fo+r<=end;r+=3){rows.push(Q);rd.push(r);rl.push('');used+=Q}
  rows.push(p1);rd.push(12-fo);rl.push('s');rows.push(p3);rd.push(36-fo);rl.push('s3');
  const o=rd.map((d,i)=>i).sort((a,b)=>rd[a]-rd[b]||(rl[a][0]==='s'?1:-1));
  const bal=net-dp-p1-p3-used,yv=Math.max(0,Math.ceil(bal/N/100)*100);for(let j=1;j<=N;j++){ye.push(j<N?yv:Math.max(0,bal-yv*(N-1)));yd.push(12*j)}
  return{dp,rows:o.map(i=>rows[i]),rd:o.map(i=>rd[i]),rl:o.map(i=>rl[i]),ye,yd,del:0,rem:net-dp,spTo:'ye',bd:true,pol:true,psp:true,over:bal<0||bal-yv*(N-1)<0,mon:false,A:Q,nQ:used/(Q||1)}}
 function polCalc(k,net){if(String(k)==='5')return pol5Calc(net);if(String(k)==='p8')return polSCalc(net);const S=SYS[k],CN=S.cnt,dp=net*.05,p1=net*.05,p3=net*.05,fo=bdFO(),mon=BD.pf==='m',end=12*S.n,stp=mon?1:3,rows=[],rd=[],rl=[];let n=0;
- for(let m=mon?1:3;m<=end;m+=stp){const r=m-fo;if(r<0)continue;rows.push(0);rd.push(r);rl.push(mon?'m':'');n++}
+ for(let r=0;fo+r<=end;r+=stp){rows.push(0);rd.push(r);rl.push(mon?'m':'');n++}
  const A=(net-dp-p1-p3)/Math.max(1,n);for(let i=0;i<rows.length;i++)rows[i]=A;
  rows.push(p1);rd.push(12-fo);rl.push('s');rows.push(p3);rd.push(36-fo);rl.push('s3');
  const o=rd.map((d,i)=>i).sort((a,b)=>rd[a]-rd[b]||(rl[a][0]==='s'?1:-1));return{dp,rows:o.map(i=>rows[i]),rd:o.map(i=>rd[i]),rl:o.map(i=>rl[i]),ye:[],yd:[],del:0,rem:net-dp,bd:true,pol:true}}
 function bdCalc(k,net){if(polOn())return polCalc(k,net);const S=SYS[k],N=S.n,CN=S.cnt,dp=net*(k=='10'?.10:.05),six=net*.05,del=net*(k=='10'?.10:.05),fo=bdFO(),rows=[],rd=[],rl=[],ye=[],yd=[];
  if(k=='6'){const A=net/24;for(let q=0;q<23;q++){rows.push(A);rd.push(3*q);rl.push('')}return{dp:A,rows,rd,rl,ye,yd,del:0,rem:net-A,bd:true,bd6:true}}
  const mon=BD.freq==='m',A=(BD.amt||10000)*(mon?1:3),end=3*CN,stp=mon?1:3;let used=0,six6=false;
- for(let m=mon?1:3;m<=end;m+=stp){const r=m-fo;if(r<0)continue;if(m===6){rows.push(six);rd.push(r);rl.push('s');six6=true;continue}rows.push(A);rd.push(r);rl.push(mon?'m':'');used+=A}
+ for(let r=0;fo+r<=end;r+=stp){const m=fo+r;if(m===6){rows.push(six);rd.push(r);rl.push('s');six6=true;continue}rows.push(A);rd.push(r);rl.push(mon?'m':'');used+=A}
  if(!six6){rows.push(six);rd.push(6-fo);rl.push('s')}
  const o=rd.map((d,i)=>i).sort((a,b)=>rd[a]-rd[b]||(rl[a]==='s'?-1:1));
  const bal=net-dp-six-del-used;let yv=Math.max(0,Math.ceil(bal/N/100)*100);
@@ -4104,6 +4104,6 @@ document.head.appendChild(st);
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261125-125319";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261126-133831";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 </body>
 </html>
