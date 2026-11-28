@@ -3173,8 +3173,8 @@ html.invLock,html.invLock body{overflow:hidden}
 .invDI .dt b{font-size:17px;color:var(--g1);direction:ltr}
 .invDI .dn{margin-top:10px;font-size:13px;padding:8px 10px;border-radius:10px;background:#d9a3001f;color:#8a6200;font-weight:700}
 .invDI .dn.err{background:#d63a3a1c;color:#b02a2a}
-.invDI .db{display:flex;gap:8px;margin-top:14px}
-.invDI .db button{flex:1;padding:12px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
+.invDI .db{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.invDI .db button{flex:1 1 150px;padding:12px;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--ink)}
 .invDI .db .go{flex:2;background:var(--g1);color:var(--bg);border-color:var(--g1)}
 @media (max-width:420px){.invDI .dg{grid-template-columns:1fr}}
 @media print{.invOv,.invDet{display:none!important}}
@@ -3232,7 +3232,7 @@ function invDet(code){const u=BY[code];if(!u)return;const k=ivK(u.st),q=code.spl
  +r('سعر المتر',ivN(u.pm))+(+u.ga>0?r('متر الجنينة',ivN(u.gp)):'')+(+u.ra>0?r('متر الروف',ivN(u.rp)):'')+'</div>'
  +(u.bad?'<div class="dn err">بيانات الوحدة دي ناقصة في الشيت – راجع الإدارة</div>':`<div class="dt"><span>السعر الإجمالي</span><b>${fmt(u.price)}</b></div>`)
  +(k==='ho'?(cn?'<div class="dn err">👷 الوحدة دي هولد خاص بالمقاول – ممنوع يتعمل لها بيمنت.</div>':bk?'<div class="dn">👮 الوحدة دي هولد لبالك ديل الشرطة – لو كملت هيطلب منك تأكيد إن البيمنت على مسؤوليتك.</div>':'<div class="dn">⚠️ الوحدة هولد (محجوزة) – لو كملت هيطلب منك تأكيد إن البيمنت على مسؤوليتك.</div>'):'')+(k==='so'?'<div class="dn err">الوحدة دي مباعة.</div>':'')
- +`<div class="db">${!u.bad&&(isOwner()||(k!=='so'&&!cn))?`<button type="button" class="go" onclick="invUse('${code}')">📝 اعمل بيمنت للوحدة دي</button>`:''}<button type="button" onclick="invDetX()">رجوع للشيت</button></div></div>`;
+ +`<div class="db">${!u.bad&&(isOwner()||(k!=='so'&&!cn))?`<button type="button" class="go" onclick="invUse('${code}')">📝 اعمل بيمنت للوحدة دي</button>`:''}${!u.bad&&k!=='so'?`<button type="button" onclick="cmAdd('${code}')">⚖️ قارنها بوحدات تانية</button>`:''}<button type="button" onclick="invDetX()">رجوع للشيت</button></div></div>`;
  $('invDet').hidden=false}
 function invDetX(){$('invDet').hidden=true}
 function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code;syncSel();render()}}
@@ -3916,7 +3916,9 @@ function drawQR(g,d,x,y,s){if(!AD.qr||typeof qrcode!=='function')return false;tr
  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c)){const x0=Math.round(x+pad+c*cs),y0=Math.round(y+pad+r*cs);g.fillRect(x0,y0,Math.round(x+pad+(c+1)*cs)-x0,Math.round(y+pad+(r+1)*cs)-y0)}
  T(g,Q.lb,x+s/2,y+s+lbH*.58,'700 '+Math.round(s*.1)+'px '+AR,'#0C2C25','center');g.restore();return true}catch(e){g.restore();return false}}
 
-async function planImg(u){const want=AD.plan==='auto'?(rAvail(u)&&!DRAWUP[u.code]?'open':'plan'):AD.plan;
+const PLC={};
+function planImg(u){const k=[u.code,AD.plan,(typeof DRAWUP!=='undefined'&&DRAWUP[u.code]||'').length,u.ua,u.ga,u.ra].join('|');if(!PLC[k]){PLC[k]=planImg0(u);PLC[k].then(r=>{if(!r)delete PLC[k]})}return PLC[k]}
+async function planImg0(u){const want=AD.plan==='auto'?(rAvail(u)&&!DRAWUP[u.code]?'open':'plan'):AD.plan;
  const tryR=async()=>{if(!rAvail(u))throw new Error('nor');const r=await fetch(rUrl(u,'open'));if(!r.ok)throw new Error('http');const bm=await createImageBitmap(await r.blob());const b=PLANBOX[rKey(u)];return{im:bm,box:b||null}};
  const tryP=async()=>({im:await createImageBitmap(await planBlob(u)),box:null});
  try{return await (want==='open'?tryR().catch(tryP):tryP().catch(tryR))}catch(e){return null}}
@@ -4323,7 +4325,7 @@ function avOpen(){avCss();let ov=document.getElementById('avOv');if(ov)ov.remove
 window.avOpen=avOpen;
 
 /* ================= ⚖️ مقارنة وحدات للعميل (2–3 وحدات) ================= */
-const CM={codes:['','',''],price:true,s10:true,s8:false,cv:'beach'};
+const CM={codes:[],price:true,s10:true,s8:false,cv:'beach'};
 try{const o=JSON.parse(localStorage.getItem('pp-cmp')||'{}');['price','s10','s8'].forEach(k=>{if(typeof o[k]==='boolean')CM[k]=o[k]});if(o.cv)CM.cv=o.cv}catch(e){}
 const saveCM=()=>{try{localStorage.setItem('pp-cmp',JSON.stringify({price:CM.price,s10:CM.s10,s8:CM.s8,cv:CM.cv}))}catch(e){}};
 function cmUnit(code){code=String(code||'').trim().toUpperCase();const u0=BY[code];if(!u0)return null;const u=Object.assign({},u0,(typeof OVR!=='undefined'&&OVR[code])||{});
@@ -4370,34 +4372,103 @@ function cmText(L){const R=rep(),ct=R.ph?(R.nm?R.nm+' – ':'')+R.ph:'16339',bd=
   if(CM.price)lines.push('   السعر: '+n0(x.price)+' ج (المتر '+n0(x.price/(+u.ua||1))+' ج)');if(CM.s10)lines.push('   10 سنين: مقدم '+n0(x.p10.dp)+' – ربع سنوي '+n0(x.p10.q));if(CM.s8)lines.push('   8 سنين: مقدم '+n0(x.p8.dp)+' – ربع سنوي '+n0(x.p8.q));
   if(bd[x.code])lines.push('   '+bd[x.code].join(' • '));lines.push('')});
  return lines.concat(['✨ استلام ألترا سوبر لوكس','📞 للحجز والتفاصيل: '+ct]).join('\n')}
-function cmOpen(){avCss();let ov=document.getElementById('avOv');if(ov)ov.remove();const R=rep();
- try{const I=unitInfo&&unitInfo();if(I&&I.u&&!CM.codes.includes(I.u.code)){const e=CM.codes.indexOf('');if(e>=0)CM.codes[e]=I.u.code}}catch(e){}
+/* اختيار الوحدات للمقارنة بالضغط (من غير كتابة كود) */
+const CMF={b:'',cat:'all',q:''};
+function cmPool(){const out=[];(typeof DATA!=='undefined'?DATA:[]).forEach(r=>{const u0=BY[r[0]];if(!u0||u0.bad)return;const u=Object.assign({},u0,(typeof OVR!=='undefined'&&OVR[u0.code])||{});
+  if(u.st!=='Available'||(typeof isBulk==='function'&&isBulk(u))||(typeof isContr==='function'&&isContr(u)))return;
+  out.push({u,code:u.code,price:Math.floor((+u.ua||0)*(+u.pm||0)+1e-6)+Math.floor((+u.ga||0)*(+u.gp||0)+(+u.ra||0)*(+u.rp||0)+1e-6),cat:avCat(u)})});
+ return out.sort((a,b)=>String(a.u.bld).localeCompare(String(b.u.bld))||flN(a.u)-flN(b.u)||natCmp(modelN(a.u),modelN(b.u)))}
+function cmCss(){if(document.getElementById('cmCss'))return;const s=document.createElement('style');s.id='cmCss';s.textContent=`
+#avOv.cmMode .avBody{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);grid-template-areas:"prev pick" "prev side";grid-template-rows:auto 1fr;align-items:start}
+#avOv.cmMode .avPrev{grid-area:prev;position:sticky;top:0}
+#avOv.cmMode .cmPick{grid-area:pick;min-width:0}#avOv .cmFl,#avOv .cmFl .avChips{min-width:0;max-width:100%}#avOv.cmMode .avSide{grid-area:side}
+#avOv .cmSl{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+#avOv .cmS{display:flex;align-items:center;gap:10px;border:1.5px dashed #cdd8d5;border-radius:12px;padding:8px 10px;min-height:44px;box-sizing:border-box;color:#8a978f;font-size:13px;font-weight:600}
+#avOv .cmS.on{border:1.5px solid #0f5c52;background:#f1f8f6;color:#14302b}
+#avOv .cmS em,#avOv .cmT em{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:99px;background:#0f5c52;color:#fff;font-size:13px;font-weight:800;flex:none}
+#avOv .cmS:not(.on) em{background:#e3dccb;color:#6a7a75}
+#avOv .cmS div{flex:1;min-width:0;line-height:1.35}#avOv .cmS b{display:block;font-size:14.5px;direction:ltr;text-align:right}#avOv .cmS span{font-size:12.5px;color:#56655f}
+#avOv .cmS button{border:0;background:#f6e3e3;color:#b02a2a;border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer;flex:none}
+#avOv .cmFl{display:flex;flex-direction:column;gap:7px;margin-bottom:8px}
+#avOv .cmFl .avChips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+#avOv .cmFl .avChips button{padding:6px 12px;font-size:12.5px;white-space:nowrap;flex:none}
+#avOv .cmFl .avChips button small{display:inline-block;background:rgba(15,92,82,.1);border-radius:99px;padding:0 6px;margin-inline-start:6px;font-size:11px;opacity:1}
+#avOv .cmFl .avChips button.on small{background:rgba(255,255,255,.22)}
+#avOv .cmGh{grid-column:1/-1;font-size:12px;font-weight:800;color:#0f5c52;padding:6px 2px 0;position:sticky;top:-2px;background:#fff;z-index:1}
+#avOv .cmQ{width:100%;box-sizing:border-box;border:1px solid #d8d0bf;border-radius:10px;padding:8px 11px;font:inherit;font-size:13.5px;background:#fffdf8}
+#avOv .cmG{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:8px;max-height:340px;overflow:auto;padding:2px;overscroll-behavior:contain}
+#avOv .cmT{position:relative;text-align:right;border:1px solid #e3dccb;background:#fff;border-radius:12px;padding:8px 10px;font:inherit;cursor:pointer;color:#14302b;display:flex;flex-direction:column;gap:1px;line-height:1.4;transition:transform .12s,border-color .12s}
+#avOv .cmT:active{transform:scale(.97)}
+#avOv .cmT b{font-size:13.5px;direction:ltr;text-align:right;letter-spacing:.3px}
+#avOv .cmT span{font-size:12px;color:#56655f}
+#avOv .cmT i{font-style:normal;font-size:12.5px;font-weight:800;color:#9a7426}
+#avOv .cmT.on{border:2px solid #0f5c52;background:#f1f8f6;padding:7px 9px}
+#avOv .cmT em{position:absolute;top:6px;left:6px;width:22px;height:22px;font-size:12px}
+#avOv .cmHint{font-size:12.5px;color:#6a7a75;margin:8px 0 0;min-height:18px}
+#avOv .cmHint.warn{color:#b0552a;font-weight:700}
+#avOv #cmSee{display:none;width:100%;margin-top:10px}
+@media (max-width:820px){#avOv.cmMode .avBody{grid-template-columns:minmax(0,1fr);grid-template-rows:auto;grid-template-areas:"pick" "prev" "side"}#avOv.cmMode .avPrev{position:static}#avOv .cmG{max-height:300px}#avOv #cmSee.show{display:block}}`;document.head.appendChild(s)}
+function cmOpen(o){o=o||{};avCss();cmCss();let ov=document.getElementById('avOv');if(ov)ov.remove();
+ CM.codes=(CM.codes||[]).filter(Boolean).slice(0,3);
+ let cur=null;try{const I=unitInfo&&unitInfo();cur=I&&I.u||null}catch(e){}
+ if(!o.noCur&&cur&&!CM.codes.includes(cur.code)&&CM.codes.length<3)CM.codes.push(cur.code);
+ const ref=BY[o.code||CM.codes[CM.codes.length-1]||(cur&&cur.code)||''];
+ if(ref){CMF.b=String(ref.bld);CMF.cat=avCat(ref)}else if(!CMF.b){CMF.b=(typeof IVS!=='undefined'&&IVS.b)||''}
+ CMF.q='';const P=cmPool(),bs=[...new Set(P.map(x=>String(x.u.bld)))].sort();if(CMF.b&&!bs.includes(CMF.b))CMF.b='';
  ov=document.createElement('div');ov.id='avOv';ov.className='cmMode';ov.setAttribute('data-noi18n','');
- const ch=(k,opts,cur)=>'<div class="avChips" data-k="'+k+'">'+opts.map(o=>'<button type="button" data-v="'+o[0]+'"'+(cur===o[0]?' class="on"':'')+'>'+esc(o[1])+'</button>').join('')+'</div>';
  ov.innerHTML='<div class="avTop"><button type="button" id="avX">↩ رجوع</button><span>⚖️ مقارنة وحدات للعميل</span></div>'+
   '<div class="avBody"><div class="avPrev"><canvas id="avCv" width="1754" height="1240"></canvas>'+
    '<div class="avBtns"><button class="btn" type="button" id="cmDl">🖼️ تحميل صورة</button><button class="btn" type="button" id="cmPdf" style="background:#b02a2a">📄 تحميل PDF</button><button class="btn gold" type="button" id="cmSh">📤 مشاركة</button><button class="btn navy" type="button" id="cmBk">↩ رجوع</button></div></div>'+
-  '<div class="avSide"><div class="avCard"><h4>الوحدات اللي هتتقارن</h4>'+[0,1,2].map(i=>'<label style="display:block;font-size:13px;font-weight:700;margin-bottom:8px">الوحدة '+(i+1)+(i===2?' (اختياري)':'')+'<input type="text" class="cmC" data-i="'+i+'" list="units" autocomplete="off" placeholder="مثال: A-37-04-03" value="'+esc(CM.codes[i])+'" style="display:block;width:100%;box-sizing:border-box;margin-top:3px;border:1px solid #d8d0bf;border-radius:10px;padding:8px 10px;font:inherit;font-size:15px;direction:ltr;text-align:right"></label>').join('')+'<div class="avNote" id="cmErr"></div></div>'+
-   '<div class="avCard"><h4>يظهر في المقارنة</h4><label style="display:flex;align-items:center;gap:8px;font-size:13.5px"><input type="checkbox" id="cmPr"'+(CM.price?' checked':'')+'> السعر وسعر المتر</label><label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px"><input type="checkbox" id="cmS10"'+(CM.s10?' checked':'')+'> نظام 10 سنين (المقدم + الربع سنوي)</label><label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px"><input type="checkbox" id="cmS8"'+(CM.s8?' checked':'')+'> نظام 8 سنين (المقدم + الربع سنوي)</label><p class="avNote">الفيو بيظهر لو اتحدد للوحدة قبل كده في العرض أو الصورة الإعلانية. البرنامج بيعلّم لوحده على الأكبر مساحة والأقل سعرًا والأوفر في سعر المتر.</p></div>'+
-   '<div class="avCard"><h4>صورة الهيدر</h4>'+ch('cv',Object.keys(COVERS).map(k=>[k,COVERS[k][1]]),CM.cv)+'</div>'+
+  '<div class="avCard cmPick"><h4>اختار 2 أو 3 وحدات</h4><div class="cmSl" id="cmSl"></div>'+
+   '<div class="cmFl"><div class="avChips" id="cmB"></div><div class="avChips" id="cmK"></div><input type="search" class="cmQ" id="cmQ" placeholder="🔎 دوّر برقم الدور أو المساحة أو جزء من الكود (اختياري)"></div>'+
+   '<div class="cmG" id="cmG"></div><div class="cmHint" id="cmH"></div><button class="btn" type="button" id="cmSee">👀 شوف المقارنة</button></div>'+
+  '<div class="avSide">'+
+   '<div class="avCard"><h4>يظهر في المقارنة</h4><label style="display:flex;align-items:center;gap:8px;font-size:13.5px"><input type="checkbox" id="cmPr"'+(CM.price?' checked':'')+'> السعر وسعر المتر</label><label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px"><input type="checkbox" id="cmS10"'+(CM.s10?' checked':'')+'> نظام 10 سنين (المقدم + الربع سنوي)</label><label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px"><input type="checkbox" id="cmS8"'+(CM.s8?' checked':'')+'> نظام 8 سنين (المقدم + الربع سنوي)</label><p class="avNote">البرنامج بيعلّم لوحده على الأكبر مساحة والأقل سعرًا والأوفر في سعر المتر. الفيو بيظهر لو اتحدد للوحدة قبل كده.</p></div>'+
+   '<div class="avCard"><h4>صورة الهيدر</h4><div class="avChips" id="cmCv">'+Object.keys(COVERS).map(k=>'<button type="button" data-v="'+k+'"'+(CM.cv===k?' class="on"':'')+'>'+esc(COVERS[k][1])+'</button>').join('')+'</div></div>'+
    '<div class="avCard"><h4>💬 نص للعميل</h4><textarea id="avTx" dir="rtl"></textarea><div class="avBtns" style="margin-top:8px;justify-content:flex-start"><button class="btn" type="button" id="cmCp">نسخ</button></div></div>'+
   '</div></div>';
- document.body.appendChild(ov);const $v=id=>ov.querySelector('#'+id),cv=$v('avCv');let tok=0,L=[];
- const go=()=>{L=cmList();const bad=CM.codes.filter(c=>c.trim()&&!cmUnit(c));$v('cmErr').textContent=bad.length?'مش لاقي الكود: '+bad.join('، '):'';$v('cmErr').style.color=bad.length?'#b0552a':'';
-  const t=++tok,off=document.createElement('canvas');cmDraw(off,L).then(()=>{if(t!==tok)return;cv.width=off.width;cv.height=off.height;cv.getContext('2d').drawImage(off,0,0)});$v('avTx').value=L.length?cmText(L):''};
- let tt=null;ov.querySelectorAll('.cmC').forEach(i=>i.oninput=()=>{CM.codes[+i.dataset.i]=i.value.trim().toUpperCase();clearTimeout(tt);tt=setTimeout(go,350)});
- ov.addEventListener('click',e=>{const b=e.target.closest('.avChips button');if(!b)return;CM.cv=b.dataset.v;saveCM();ov.querySelectorAll('.avChips button').forEach(x=>x.classList.toggle('on',x===b));go()});
- [['cmPr','price'],['cmS10','s10'],['cmS8','s8']].forEach(([id,k])=>{$v(id).onchange=e=>{CM[k]=e.target.checked;saveCM();go()}});
+ document.body.appendChild(ov);const $v=id=>ov.querySelector('#'+id),cv=$v('avCv');let tok=0,L=[],dt=null;
+ const sub=u=>avKind(u)+' • '+fA(u.ua)+' م²';
+ const hint=(t,w)=>{const h=$v('cmH');h.textContent=t;h.className='cmHint'+(w?' warn':'')};
+ const pass=(x,skip)=>(skip==='b'||!CMF.b||String(x.u.bld)===CMF.b)&&(skip==='k'||CMF.cat==='all'||x.cat===CMF.cat)&&(!CMF.q||(x.code+' '+fA(x.u.ua)+' '+avFl(flN(x.u))+' '+avKind(x.u)).toLowerCase().includes(CMF.q));
+ function slots(){$v('cmSl').innerHTML=[0,1,2].map(i=>{const c=CM.codes[i],u=c&&BY[c];
+   return u?'<div class="cmS on"><em>'+(i+1)+'</em><div><b>'+esc(c)+'</b><span>'+esc(sub(Object.assign({},u,(typeof OVR!=='undefined'&&OVR[c])||{})))+'</span></div><button type="button" data-x="'+esc(c)+'" aria-label="شيل">✕</button></div>'
+    :'<div class="cmS"><em>'+(i+1)+'</em>'+(i===2?'وحدة تالتة (اختياري)':'دوس على وحدة من تحت')+'</div>'}).join('')}
+ function chips(){const cb=b=>P.filter(x=>(!b||String(x.u.bld)===b)&&pass(x,'b')).length,ck=k=>P.filter(x=>(k==='all'||x.cat===k)&&pass(x,'k')).length;
+  $v('cmB').innerHTML=[['','كل العمارات']].concat(bs.map(b=>[b,avBl(b)])).map(o=>{const n=cb(o[0]);return n||!o[0]||CMF.b===o[0]?'<button type="button" data-v="'+o[0]+'"'+(CMF.b===o[0]?' class="on"':'')+'>'+esc(o[1])+'<small>'+n+'</small></button>':''}).join('');
+  $v('cmK').innerHTML=AVC.map(o=>{const n=ck(o[0]);return n||o[0]==='all'||CMF.cat===o[0]?'<button type="button" data-v="'+o[0]+'"'+(CMF.cat===o[0]?' class="on"':'')+'>'+esc(o[1])+'<small>'+n+'</small></button>':''}).join('')}
+ function grid(){const G=P.filter(x=>pass(x));let last='';
+  $v('cmG').innerHTML=G.length?G.map(x=>{const i=CM.codes.indexOf(x.code),gk=x.u.bld+'|'+flN(x.u),hd=gk!==last?'<div class="cmGh">'+(CMF.b?'':esc(avBl(x.u.bld))+' • ')+'الدور '+esc(avFl(flN(x.u)))+'</div>':'';last=gk;return hd+'<button type="button" class="cmT'+(i>=0?' on':'')+'" data-c="'+esc(x.code)+'">'+(i>=0?'<em>'+(i+1)+'</em>':'')+'<b>'+esc(x.code)+'</b><span>'+esc(avKind(x.u))+'</span><span>'+fA(x.u.ua)+' م²'+(extra(x.u)?' + '+esc(extra(x.u)[0])+' '+fA(extra(x.u)[1]):'')+'</span><i>'+n0(x.price)+' ج</i></button>'}).join('')
+   :'<div class="avNote" style="grid-column:1/-1;text-align:center;padding:18px 0">مفيش وحدات متاحة بالاختيار ده</div>'}
+ function draw(){L=cmList();clearTimeout(dt);dt=setTimeout(()=>{const t=++tok,off=document.createElement('canvas');cmDraw(off,L).then(()=>{if(t!==tok)return;cv.width=off.width;cv.height=off.height;cv.getContext('2d').drawImage(off,0,0)})},120);$v('avTx').value=L.length?cmText(L):'';
+  $v('cmSee').classList.toggle('show',L.length>=2);
+  hint(L.length===0?'اختار أول وحدة – بتظهر مسقطها وسعرها في الصورة على طول.':L.length===1?'تمام، اختار وحدة كمان على الأقل علشان المقارنة.':L.length===2?'✅ المقارنة جاهزة – تقدر تضيف وحدة تالتة لو حابب.':'✅ 3 وحدات – ده الحد الأقصى.')}
+ const all=()=>{slots();chips();grid();draw()};
+ $v('cmB').onclick=e=>{const b=e.target.closest('button');if(!b)return;CMF.b=b.dataset.v;chips();grid()};
+ $v('cmK').onclick=e=>{const b=e.target.closest('button');if(!b)return;CMF.cat=b.dataset.v;chips();grid()};
+ let qt=null;$v('cmQ').oninput=e=>{clearTimeout(qt);qt=setTimeout(()=>{CMF.q=e.target.value.trim().toLowerCase();chips();grid()},150)};
+ $v('cmG').onclick=e=>{const b=e.target.closest('.cmT');if(!b)return;const c=b.dataset.c,i=CM.codes.indexOf(c);
+  if(i>=0)CM.codes.splice(i,1);else{if(CM.codes.length>=3){hint('اخترت 3 وحدات – شيل واحدة من فوق (✕) علشان تضيف دي.',true);const s=$v('cmSl');s.animate&&s.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:260});return}CM.codes.push(c)}
+  slots();grid();draw()};
+ $v('cmSl').onclick=e=>{const b=e.target.closest('button[data-x]');if(!b)return;CM.codes=CM.codes.filter(c=>c!==b.dataset.x);slots();grid();draw()};
+ $v('cmSee').onclick=()=>$v('avCv').scrollIntoView({behavior:'smooth',block:'start'});
+ $v('cmCv').onclick=e=>{const b=e.target.closest('button');if(!b)return;CM.cv=b.dataset.v;saveCM();$v('cmCv').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));draw()};
+ [['cmPr','price'],['cmS10','s10'],['cmS8','s8']].forEach(([id,k])=>{$v(id).onchange=e=>{CM[k]=e.target.checked;saveCM();draw()}});
  const blob=c=>new Promise(r=>c.toBlob(r,'image/jpeg',.92)),save=(b,n)=>{const url=URL.createObjectURL(b),a=document.createElement('a');a.href=url;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000)};
  const nm=ext=>'Palmeira-Compare-'+L.map(x=>x.code).join('_')+'.'+ext;
  const log=n=>{try{sendLog&&sendLog({event:'compare',clientTime:new Date().toISOString(),unit:L.map(x=>x.code).join(' / '),system:'',client:'',note:n})}catch(e){}};
- $v('cmDl').onclick=async()=>{if(!L.length)return;await cmDraw(cv,L);const b=await blob(cv);if(b){save(b,nm('jpg'));log('download')}};
- $v('cmPdf').onclick=async()=>{if(!L.length)return;const b=await blob(cv);if(b){save(await jpegsPdf([b],842,595),nm('pdf'));log('pdf')}};
- $v('cmSh').onclick=async()=>{if(!L.length)return;const b=await blob(cv);if(!b)return;const f=new File([b],nm('jpg'),{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:$v('avTx').value});log('share')}catch(e){}}else $v('cmDl').click()};
+ const fresh=async()=>{const off=document.createElement('canvas');await cmDraw(off,L);return blob(off)};
+ const need=()=>{if(L.length)return true;hint('اختار وحدة على الأقل الأول.',true);return false};
+ $v('cmDl').onclick=async()=>{if(!need())return;const b=await fresh();if(b){save(b,nm('jpg'));log('download')}};
+ $v('cmPdf').onclick=async()=>{if(!need())return;const b=await fresh();if(b){save(await jpegsPdf([b],842,595),nm('pdf'));log('pdf')}};
+ $v('cmSh').onclick=async()=>{if(!need())return;const b=await fresh();if(!b)return;const f=new File([b],nm('jpg'),{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:$v('avTx').value});log('share')}catch(e){}}else{save(b,nm('jpg'));log('download')}};
  $v('cmCp').onclick=e=>{copyTxt($v('avTx').value,e.target);log('copy')};
- const close=()=>{tok++;ov.remove();document.removeEventListener('keydown',escK,true)},escK=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};
- $v('avX').onclick=close;$v('cmBk').onclick=close;document.addEventListener('keydown',escK,true);go()}
-window.cmOpen=cmOpen;
+ const close=()=>{tok++;clearTimeout(dt);ov.remove();document.removeEventListener('keydown',escK,true)},escK=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};
+ $v('avX').onclick=close;$v('cmBk').onclick=close;document.addEventListener('keydown',escK,true);all();
+ setTimeout(()=>{const t=$v('cmG').querySelector('.cmT.on');if(t)t.scrollIntoView({block:'nearest'})},60)}
+window.cmOpen=()=>cmOpen();
+/* من شيت الوحدات المتاحة: ضيف الوحدة للمقارنة وافتحها */
+window.cmAdd=code=>{code=String(code||'').toUpperCase();CM.codes=(CM.codes||[]).filter(Boolean);if(!CM.codes.includes(code)){if(CM.codes.length>=3)CM.codes.pop();CM.codes.push(code)}cmOpen({noCur:true,code})};
 
 window.adOpen=function(){const I=unitInfo();if(!I)return;viewAsk(I.u,v=>open(I,v),{p:'الفيو هيظهر على الصورة وفي النصوص. اختار واحد أو أكتر، أو اكتبه بنفسك.',b:'اعمل الصورة الإعلانية'})};
 window.adDraw=draw;window.adCaps=caps;
@@ -7106,11 +7177,40 @@ setInterval(badge,60000);
 })();
 
 </script>
-<style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
-<div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261128-151953";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<style>
+#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translate(-50%,-140%);opacity:0;z-index:9999;width:min(560px,calc(100vw - 20px));box-sizing:border-box;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:14px;padding:14px 14px 14px 16px;border-radius:20px;color:#fff;font-family:'Cairo',Tahoma,sans-serif;direction:rtl;
+ background:radial-gradient(120% 140% at 100% 0%,rgba(217,189,128,.22) 0%,rgba(217,189,128,0) 45%),linear-gradient(135deg,#0a3a32 0%,#0f5c52 58%,#0c4a41 100%);
+ border:1px solid rgba(217,189,128,.55);box-shadow:0 28px 60px -20px rgba(4,28,23,.75),0 2px 0 rgba(255,255,255,.06) inset;transition:transform .55s cubic-bezier(.2,1.25,.35,1),opacity .35s;pointer-events:none;visibility:hidden}
+#verBan.on{transform:translate(-50%,0);opacity:1;pointer-events:auto;visibility:visible}
+#verBan::before{content:"";position:absolute;inset:0 18% auto 18%;height:1px;background:linear-gradient(90deg,transparent,#f3dfa8,transparent)}
+#verBan .vbIc{position:relative;width:52px;height:52px;border-radius:15px;background:linear-gradient(145deg,#f6e6b8,#c9a24a);padding:2px;box-shadow:0 8px 18px -8px rgba(0,0,0,.6)}
+#verBan .vbIc img{width:100%;height:100%;border-radius:13px;display:block;object-fit:cover;background:#0f5c52}
+#verBan .vbIc i{position:absolute;top:-5px;left:-5px;width:18px;height:18px;border-radius:99px;background:#e9b44c;border:2px solid #0b3d35;animation:vbPing 1.8s infinite}
+@keyframes vbPing{0%{box-shadow:0 0 0 0 rgba(233,180,76,.7)}70%{box-shadow:0 0 0 10px rgba(233,180,76,0)}100%{box-shadow:0 0 0 0 rgba(233,180,76,0)}}
+#verBan .vbTx{min-width:0;line-height:1.35}
+#verBan .vbTx small{display:block;font-size:10.5px;letter-spacing:.22em;color:#e6cf98;font-weight:700;direction:ltr;text-align:right}
+#verBan .vbTx b{display:block;font-size:17px;font-weight:800;margin:1px 0 2px}
+#verBan .vbTx span{display:block;font-size:12.5px;color:rgba(255,255,255,.78)}
+#verBan .vbGo{position:relative;overflow:hidden;border:0;border-radius:13px;padding:11px 20px;font:inherit;font-size:14.5px;font-weight:800;cursor:pointer;color:#241800;white-space:nowrap;background:linear-gradient(135deg,#f7e7bb 0%,#d9bd80 45%,#b8975a 100%);box-shadow:0 10px 22px -10px rgba(217,189,128,.9),0 1px 0 rgba(255,255,255,.6) inset;transition:transform .15s}
+#verBan .vbGo:hover{transform:translateY(-1px)}#verBan .vbGo:active{transform:scale(.97)}
+#verBan .vbGo::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-20deg);animation:vbShine 3.2s ease-in-out infinite 1s}
+@keyframes vbShine{0%{left:-60%}35%,100%{left:130%}}
+#verBan .vbGo .sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(36,24,0,.25);border-top-color:#241800;border-radius:50%;animation:vbSp .7s linear infinite;vertical-align:-2px;margin-inline-end:7px}
+@keyframes vbSp{to{transform:rotate(360deg)}}
+#verBan .vbX{border:0;background:rgba(255,255,255,.08);color:rgba(255,255,255,.75);width:32px;height:32px;border-radius:10px;font-size:15px;cursor:pointer;align-self:start}
+#verBan .vbX:hover{background:rgba(255,255,255,.16);color:#fff}
+@media (max-width:520px){#verBan{grid-template-columns:auto 1fr auto;gap:10px 12px;padding:13px}#verBan .vbGo{grid-column:1/-1;grid-row:2;width:100%;padding:12px}#verBan .vbIc{width:46px;height:46px}}
+@media print{#verBan{display:none!important}}
+@media (prefers-reduced-motion:reduce){#verBan,#verBan .vbGo::after,#verBan .vbIc i{transition:none;animation:none}}
+</style>
+<div id="verBan" data-noi18n role="status" aria-live="polite"><div class="vbIc"><img src="media/icon-192.png" alt=""><i></i></div><div class="vbTx"><small>PALMEIRA · NEW VERSION</small><b>نسخة جديدة جاهزة ✨</b><span>فيه إضافات وتحسينات جديدة مستنياك.</span></div><button type="button" class="vbGo">تحديث الآن</button><button type="button" class="vbX" aria-label="بعدين" title="فكرني بعدين">✕</button></div>
+<script>(function(){var V="20261128-155012";if(!/^https?:/.test(location.protocol))return;var B=document.getElementById("verBan");
+function sn(){try{return +sessionStorage.getItem("vb-snooze")||0}catch(e){return 0}}
+B.querySelector(".vbGo").onclick=function(){this.innerHTML='<span class="sp"></span>جاري التحديث…';this.disabled=true;var go=function(){location.reload()};try{navigator.serviceWorker&&navigator.serviceWorker.getRegistration?navigator.serviceWorker.getRegistration().then(function(r){return r&&r.update()}).catch(function(){}).then(function(){setTimeout(go,150)}):setTimeout(go,250)}catch(e){setTimeout(go,250)}};
+B.querySelector(".vbX").onclick=function(){B.classList.remove("on");try{sessionStorage.setItem("vb-snooze",Date.now()+15*60000)}catch(e){}};
+function chk(){if(Date.now()<sn())return;fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)B.classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <style>#wnOv{position:fixed;inset:0;z-index:9000;background:rgba(6,24,20,.62);display:flex;align-items:center;justify-content:center;padding:16px;animation:wnF .3s both}@keyframes wnF{from{opacity:0}}#wnOv .wnB{background:#fffdf8;color:#14302b;border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.55);border:1px solid #d9bd80;animation:pop .45s both}#wnOv .wnH{background:linear-gradient(135deg,#0b3d35,#0f5c52);color:#fff;padding:20px 22px 16px;border-radius:20px 20px 0 0;position:relative}#wnOv .wnH:after{content:"";position:absolute;left:22px;right:22px;bottom:0;height:2px;background:#d9bd80}#wnOv .wnH b{display:block;font-size:20px}#wnOv .wnH small{color:#e9cf8e;font-weight:600}#wnOv ul{list-style:none;margin:0;padding:14px 20px 6px}#wnOv li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed #e4d7b4;font-size:14.5px;line-height:1.75}#wnOv li:last-child{border-bottom:0}#wnOv li i{flex:none;width:24px;height:24px;border-radius:50%;background:#0f5c52;color:#e9cf8e;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:3px}#wnOv .wnF{padding:8px 20px 18px;text-align:center}#wnOv .wnF button{border:0;border-radius:12px;padding:11px 28px;font:inherit;font-weight:800;background:#0f5c52;color:#fff;cursor:pointer;font-size:15px}@media print{#wnOv{display:none!important}}</style>
-<script>(function(){var WN={"id": "2026-11-28g", "date": "28/11/2026", "items": [{"who": "all", "t": "⚖️ قارن بين وحدات: لو العميل محتار بين 2 أو 3 وحدات، دوس «قارن بين وحدات» فوق اختيار الوحدة، وهتطلع صورة مقارنة فيها المساحة والسعر وسعر المتر والمقدم والقسط لكل وحدة، وبتقولك مين الأكبر ومين الأوفر. تبعتها للعميل واتساب."}, {"who": "all", "t": "🔔 متابعة العملاء: بعد ما تعمل البيمنت دوس «تابع العميل ده» واختار أتابع معاه إمتى. البرنامج هيفكرك في اليوم ده، ومن «📋 متابعاتي» تكلمه أو تبعتله واتساب بضغطة."}, {"who": "all", "t": "📱 الصورة الإعلانية بقت كمان بمقاس ستوري واتساب وإنستجرام (9:16) – اختار «المقاس» من الاختيارات."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
+<script>(function(){var WN={"id": "2026-11-28g", "date": "28/11/2026", "items": [{"who": "all", "t": "⚖️ قارن بين وحدات: لو العميل محتار، دوس «قارن بين وحدات» واختار 2 أو 3 وحدات بالضغط عليهم (مترتبين بالعمارة والدور والنوع – من غير ما تكتب كود). هتطلع صورة مقارنة فيها المساحة والسعر وسعر المتر والمقدم والقسط، وبتقولك مين الأكبر ومين الأوفر. وكمان من «شيت الوحدات المتاحة» تقدر تدوس على وحدة وتختار «قارنها بوحدات تانية»."}, {"who": "all", "t": "🔔 متابعة العملاء: بعد ما تعمل البيمنت دوس «تابع العميل ده» واختار أتابع معاه إمتى. البرنامج هيفكرك في اليوم ده، ومن «📋 متابعاتي» تكلمه أو تبعتله واتساب بضغطة."}, {"who": "all", "t": "📱 الصورة الإعلانية بقت كمان بمقاس ستوري واتساب وإنستجرام (9:16) – اختار «المقاس» من الاختيارات."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
 function ok(w){try{if(w==="all")return true;if(w==="owner")return typeof isOwner==="function"&&isOwner();if(w==="pol")return typeof polAllowed==="function"&&polAllowed();if(w==="full")return typeof fullOK==="function"&&fullOK()}catch(e){}return false}
 function blocked(){var ids=["loginOv","welcome","lock","ryAsk","offerOv","pmOv","viewOv","avOv","rfOv","dshOv","invOv","pwaOv"];for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e&&!e.classList.contains("hide")&&!e.hidden&&getComputedStyle(e).display!=="none")return true}return !!document.querySelector('.fuOv')}
 function show(){var it=WN.items.filter(function(x){return ok(x.who)});try{localStorage.setItem(K,WN.id)}catch(e){}if(!it.length)return;var o=document.createElement("div");o.id="wnOv";o.setAttribute("data-noi18n","");o.setAttribute("dir","rtl");
