@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f5c52">
+<link rel="icon" type="image/png" sizes="192x192" href="media/icon-192.png">
+<link rel="apple-touch-icon" href="media/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="بالميرا">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Palmiera – Payment Plan</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -443,7 +451,7 @@ select:disabled{opacity:.5}
 <section class="panel noprint" id="admPanel" style="display:none">
 <h2 style="cursor:pointer;justify-content:space-between" onclick="admToggle()"><span style="display:flex;align-items:center;gap:10px"><span class="hbar"></span>لوحة التحكم (للأونر)</span><span id="admArrow" style="color:var(--gold)">▾</span></h2>
 <div id="admBody" style="display:none">
-<div class="bar" style="margin:0 0 10px"><button class="btn" type="button" onclick="admLoad()">تحديث</button><select id="admRep" onchange="admRender()" style="max-width:260px"></select><select id="admEv" onchange="admRender()" style="max-width:200px"><option value="">كل الأحداث</option><option value="feedback">💡 الاقتراحات بس</option><option value="plan">خطط</option><option value="print">طباعة</option></select><button class="btn gold" type="button" onclick="admCsv()">تصدير CSV</button></div>
+<div class="bar" style="margin:0 0 10px"><button class="btn" type="button" onclick="admLoad()">تحديث</button><select id="admRep" onchange="admRender()" style="max-width:260px"></select><select id="admEv" onchange="admRender()" style="max-width:200px"><option value="">كل الأحداث</option><option value="feedback">💡 الاقتراحات بس</option><option value="plan">خطط</option><option value="print">طباعة</option></select><button class="btn gold" type="button" onclick="admCsv()">تصدير CSV</button><button class="btn navy" type="button" onclick="dashOpen()">📊 لوحة المتابعة</button></div>
 <div class="hint" id="admStats" style="margin:0 0 10px"></div>
 <div class="scroll" style="max-height:480px;overflow:auto"><table class="admt" id="admT" data-noi18n></table></div>
 </div></section>
@@ -1109,7 +1117,7 @@ ${swap?rName+rCode:rCode+rName}
   const FIRST=CT.on?30:34,NEXT=CT.on?44:50,ch=[rowsArr.slice(0,FIRST)];for(let i=FIRST;i<rowsArr.length;i+=NEXT)ch.push(rowsArr.slice(i,i+NEXT));
   if(ch.length>1&&ch[ch.length-1].length<4){const last=ch.pop();ch[ch.length-1]=ch[ch.length-1].concat(last)}
   const n=ch.length;return{multi:true,html:ch.map((c,i)=>`<div class="paper mp" data-noi18n>${logos}<h3>${ttl}${i?' <small class="cont">(continued)</small>':''}</h3>${i?'':info+'<div class="sp"></div>'}<table>${TH(i)}${c.join('')}</table>${CT.on||i==n-1?sig:''}<div class="pgn">Page ${i+1} / ${n}</div></div>`).join('')}})();
- P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${isOwner()?'<button class="btn" type="button" onclick="ctrApprove()" style="background:#15803d;border-color:#15803d;color:#fff">✅ اعتمد كعقد</button>':''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button><button class="btn gold" type="button" onclick="adOpen()">🖼️ صورة إعلانية</button>'}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
+ P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${isOwner()?'<button class="btn" type="button" onclick="ctrApprove()" style="background:#15803d;border-color:#15803d;color:#fff">✅ اعتمد كعقد</button>':''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button><button class="btn gold" type="button" onclick="adOpen()">🖼️ صورة إعلانية</button><button class="btn" type="button" onclick="rfOpen()" style="background:#7a5a12">📝 استمارة حجز</button>'}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
  <div class="scroll${PG.multi?' mpwrap':''}">${PG.html}</div>${DRAWON&&!I.au?drawBlock(I.u):''}`;
  P.classList.toggle('multi',PG.multi);$('plan').classList.toggle('multi',PG.multi);
  try{setTimeout(tafqUpd,0)}catch(e){}
@@ -3117,6 +3125,7 @@ html.invLock,html.invLock body{overflow:hidden}
 .invBox{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:18px;width:100%;max-width:1120px;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0 14px 18px;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);text-align:start}
 .invHd{position:sticky;top:0;z-index:4;background:var(--bg);display:flex;align-items:center;gap:10px;padding:14px 0 10px;border-bottom:1px solid var(--line)}
 .invHd h3{margin:0;font-size:18px;flex:1}
+.invAvB{flex:0 0 auto;border:0;border-radius:99px;background:linear-gradient(135deg,#0f5c52,#1a7a6c);color:#fff;font:inherit;font-size:13.5px;font-weight:700;padding:9px 16px;cursor:pointer;box-shadow:0 8px 18px -10px rgba(15,92,82,.8)}.invAvB:hover{filter:brightness(1.08)}@media (max-width:520px){.invAvB{font-size:12px;padding:8px 11px}}
 .invX{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:50%;width:40px;height:40px;font:inherit;font-size:16px;font-weight:800;cursor:pointer}
 .invLive{font-size:12px;color:var(--mut);margin:8px 0 6px}.invLive a{color:var(--g1);font-weight:800}
 .invTabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}
@@ -3228,7 +3237,7 @@ function invDet(code){const u=BY[code];if(!u)return;const k=ivK(u.st),q=code.spl
 function invDetX(){$('invDet').hidden=true}
 function invUse(code){invClose();try{sugPick(code)}catch(e){$('code').value=code;syncSel();render()}}
 (function(){const o=document.createElement('div');o.id='invOv';o.className='invOv noprint';o.hidden=true;o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');o.setAttribute('aria-label','شيت الوحدات المتاحة');
- o.innerHTML='<div class="invBox" id="invBox"><div class="invHd"><h3>🏢 شيت الوحدات المتاحة</h3><button type="button" class="invX" onclick="invClose()" aria-label="إغلاق">✕</button></div><div class="invLive" id="invLive"></div><div class="invTabs" id="invTabs"></div><div class="invSum" id="invSum"></div><div class="invChips" id="invChips"></div><div id="invBody"></div></div>';
+ o.innerHTML='<div class="invBox" id="invBox"><div class="invHd"><h3>🏢 شيت الوحدات المتاحة</h3><button type="button" class="invAvB" onclick="avOpen()">📣 صورة المتاح للبروكرز</button><button type="button" class="invX" onclick="invClose()" aria-label="إغلاق">✕</button></div><div class="invLive" id="invLive"></div><div class="invTabs" id="invTabs"></div><div class="invSum" id="invSum"></div><div class="invChips" id="invChips"></div><div id="invBody"></div></div>';
  o.addEventListener('click',e=>{if(e.target===o)invClose()});document.body.appendChild(o);
  const d=document.createElement('div');d.id='invDet';d.className='invDet noprint';d.hidden=true;d.addEventListener('click',e=>{if(e.target===d)invDetX()});document.body.appendChild(d);
  document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!IVS.open)return;if(!$('invDet').hidden)invDetX();else invClose()});
@@ -3846,9 +3855,9 @@ const TPL=[['t1','لايف ستايل','beach'],['t2','المسقط والتفا
 /* أنظمة السداد اللي تظهر على الصورة – مش مربوطة بالنظام المختار في البيمنت */
 const PAYS={p10:[10,10,'10% مقدم – 10 سنين',1],p8:[5,8,'5% مقدم – 8 سنين'],custom:[0,0,'مخصص'],none:[0,0,'من غير سداد']};
 const INTERIORS=[['in_living.jpg','الريسبشن'],['in_kitchen.jpg','المطبخ'],['in_bed.jpg','غرفة النوم'],['in_bath.jpg','الحمام']];
-const AD={t:'t1',cv:{},plan:'auto',pay:'p10',cdp:10,cy:10,dpAmt:false,price:false,bv:0,fv:0};
-try{const o=JSON.parse(localStorage.getItem('pp-ad2')||'{}');if(o.t)AD.t=o.t;if(o.cv)AD.cv=o.cv;['plan','pay'].forEach(k=>{if(o[k])AD[k]=o[k]});if(!PAYS[AD.pay])AD.pay='p10';if(+o.cdp>0)AD.cdp=+o.cdp;if(+o.cy>0)AD.cy=+o.cy;AD.price=!!o.price;AD.dpAmt=!!o.dpAmt}catch(e){}
-const saveAD=()=>{try{localStorage.setItem('pp-ad2',JSON.stringify({t:AD.t,cv:AD.cv,plan:AD.plan,pay:AD.pay,cdp:AD.cdp,cy:AD.cy,dpAmt:AD.dpAmt,price:AD.price}))}catch(e){}};
+const AD={t:'t1',cv:{},plan:'auto',pay:'p10',cdp:10,cy:10,dpAmt:false,price:false,qr:true,bv:0,fv:0};
+try{const o=JSON.parse(localStorage.getItem('pp-ad2')||'{}');if(o.t)AD.t=o.t;if(o.cv)AD.cv=o.cv;['plan','pay'].forEach(k=>{if(o[k])AD[k]=o[k]});if(!PAYS[AD.pay])AD.pay='p10';if(+o.cdp>0)AD.cdp=+o.cdp;if(+o.cy>0)AD.cy=+o.cy;AD.price=!!o.price;AD.dpAmt=!!o.dpAmt;if(o.qr===false)AD.qr=false}catch(e){}
+const saveAD=()=>{try{localStorage.setItem('pp-ad2',JSON.stringify({t:AD.t,cv:AD.cv,plan:AD.plan,pay:AD.pay,cdp:AD.cdp,cy:AD.cy,dpAmt:AD.dpAmt,price:AD.price,qr:AD.qr}))}catch(e){}};
 const covOf=t=>AD.cv[t]||(TPL.find(x=>x[0]===t)||TPL[0])[2];
 const n0=x=>Math.round(+x||0).toLocaleString('en-US');
 /* المساحة بالظبط من غير تقريب (112.5 تفضل 112.5) */
@@ -3899,6 +3908,14 @@ function contactTxt(d){return d.R.ph?d.R.ph:'16339'}
 const PHP='M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z';
 function phoneIcon(g,x,y,s,col){try{g.save();g.translate(x-s/2,y-s/2);g.scale(s/24,s/24);g.fillStyle=col;g.fill(new Path2D(PHP));g.restore()}catch(e){g.restore()}}
 
+/* QR للتواصل: واتساب المندوب لو كاتب رقمه، وإلا الخط الساخن */
+function waNum(ph){let d=String(ph||'').replace(/[^\d]/g,'');if(!d)return '';if(d.startsWith('00'))d=d.slice(2);if(d.startsWith('0'))d='20'+d.slice(1);else if(d.length===10&&d[0]==='1')d='20'+d;return d.length>=11?d:''}
+function qrTarget(d){const n=waNum(d.R.ph);if(n)return{url:'https://wa.me/'+n+'?text='+encodeURIComponent('Palmeira unit '+d.code),lb:'امسح وكلمنا واتساب'};return{url:'tel:16339',lb:'امسح واتصل بينا'}}
+function drawQR(g,d,x,y,s){if(!AD.qr||typeof qrcode!=='function')return false;try{const Q=qrTarget(d),q=qrcode(0,'M');q.addData(Q.url);q.make();const n=q.getModuleCount(),pad=Math.round(s*.07),lbH=Math.round(s*.21),cs=(s-2*pad)/n;
+ g.save();shadow(g,1,16,'rgba(0,0,0,.28)');rr(g,x,y,s,s+lbH,Math.round(s*.08));g.fillStyle='#fff';g.fill();shadow(g,0);g.fillStyle='#0C2C25';
+ for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c)){const x0=Math.round(x+pad+c*cs),y0=Math.round(y+pad+r*cs);g.fillRect(x0,y0,Math.round(x+pad+(c+1)*cs)-x0,Math.round(y+pad+(r+1)*cs)-y0)}
+ T(g,Q.lb,x+s/2,y+s+lbH*.58,'700 '+Math.round(s*.1)+'px '+AR,'#0C2C25','center');g.restore();return true}catch(e){g.restore();return false}}
+
 async function planImg(u){const want=AD.plan==='auto'?(rAvail(u)&&!DRAWUP[u.code]?'open':'plan'):AD.plan;
  const tryR=async()=>{if(!rAvail(u))throw new Error('nor');const r=await fetch(rUrl(u,'open'));if(!r.ok)throw new Error('http');const bm=await createImageBitmap(await r.blob());const b=PLANBOX[rKey(u)];return{im:bm,box:b||null}};
  const tryP=async()=>({im:await createImageBitmap(await planBlob(u)),box:null});
@@ -3929,8 +3946,9 @@ async function t1(g,d){const A=await assets('t1',d.u,false),PH=860;
  if(AD.price){T(g,'السعر',W-60,PH+214,'600 26px '+AR,'rgba(255,255,255,.8)');const pw=M(g,'السعر  ','600 26px '+AR);T(g,d.gross+' جنيه',W-60-pw,PH+216,'800 40px '+AR,GOLD2)}
  const P1=d.pay;if(P1.amt){const at='المقدم '+P1.amt+' جنيه',af='700 26px '+AR,aw=M(g,at,af)+40;rr(g,W-60-aw,H-252,aw,52,26);g.fillStyle='rgba(201,162,74,.95)';g.fill();T(g,at,W-60-20,H-216,af,'#fff');T(g,'استلام الوحدات ألترا سوبر لوكس',60,H-216,'500 24px '+AR,'rgba(255,255,255,.9)','left')}
  else T(g,'استلام الوحدات ألترا سوبر لوكس',W/2,H-212,'500 26px '+AR,'rgba(255,255,255,.9)','center');
- if(P1.none){T(g,'للحجز والمعاينة',W-60,H-120,'700 30px '+AR,GOLD2);T(g,contactTxt(d),W-60,H-60,'800 54px '+AR,'#fff','right','ltr')}else payBlock(g,d,W-60,H-92,'#fff',1);
- logo(g,A.maw,56,H-150,86,false);
+ if(P1.none){T(g,'للحجز والمعاينة',W-60,H-120,'700 30px '+AR,GOLD2);T(g,contactTxt(d),W-60,H-60,'800 54px '+AR,'#fff','right','ltr')}const pw1=P1.none?Math.max(M(g,'للحجز والمعاينة','700 30px '+AR),M(g,contactTxt(d),'800 54px '+AR,'ltr')):payBlock(g,d,W-60,H-92,'#fff',1);
+ const maw1=A.maw?86*A.maw.naturalWidth/A.maw.naturalHeight:300;logo(g,A.maw,56,H-150,86,false);
+ {const L=56+maw1+24,Rr=W-60-pw1-24,s=Math.min(140,Rr-L);if(s>=104)drawQR(g,d,Math.round((L+Rr-s)/2),H-30-Math.round(s*1.21),s);else drawQR(g,d,W-60-118,PH+150,118)}
  T(g,'كود '+d.code,56,H-38,'600 20px '+AR,'rgba(255,255,255,.65)','left');
 }
 
@@ -3960,6 +3978,7 @@ async function t2(g,d){const A=await assets('t2',d.u,true),HH=470;
  if(d.pay.none)T(g,'استلام ألترا سوبر لوكس',W-50,FY+70,'700 24px '+AR,'#fff');else payBlock(g,d,W-50,FY+76,'#fff',.62);
  T(g,contactTxt(d),50,FY+66,'800 44px '+AR,'#fff','left','ltr');T(g,d.R.ph?(d.R.nm||''):'ALMOAMERON-ALARAB.COM',50,FY+98,'500 18px '+AR,'rgba(255,255,255,.8)','left',d.R.ph?'rtl':'ltr');
  logo(g,A.maw,W/2-90,FY+22,70,false);
+ drawQR(g,d,60,168,128);
 }
 
 /* ================= 3) عنوان عربي كبير (سماء فاتحة + شريط أخضر) ================= */
@@ -3977,6 +3996,7 @@ async function t3(g,d){const A=await assets('t3',d.u,false),PY=560+(AD.price?46:
  T(g,l1,x0,PY-50,l1f,BR);T(g,'سنوات',x0,PY+8,l2f,BR);T(g,P.y,x0-lw-18,PY+20,nf,BR,'right','ltr');
  T(g,'مقدم '+P.dp,W/2,PY+78,'800 34px '+AR,'#9A7426','center');if(P.amt)T(g,'قيمة المقدم '+P.amt+' جنيه',W/2,PY+122,'700 28px '+AR,BR,'center')}
  logo(g,A.maw,56,H-128,80,false);
+ drawQR(g,d,56,H-330,150);
  shadow(g,1,10);const ct=contactTxt(d),cf='900 64px '+AR,cw=M(g,ct,cf,'ltr');T(g,ct,W-60,H-70,cf,'#fff','right','ltr');phoneIcon(g,W-60-cw-34,H-92,40,'#fff');
  T(g,d.R.ph?(d.R.nm||''):'almoameron-alarab.com',W-60,H-34,'600 22px '+AR,'#fff','right',d.R.ph?'rtl':'ltr');shadow(g,0);
 }
@@ -4003,6 +4023,7 @@ async function t4(g,d){const A=await assets('t4',d.u,false),PH=700;
   if(i<2){g.fillStyle='rgba(255,255,255,.35)';g.fillRect(W-60-cw*(i+1),cy-40,2,200)}});
  g.fillStyle='rgba(0,0,0,.18)';g.fillRect(0,H-130,W,130);
  logo(g,A.maw,50,H-112,78,false);
+ drawQR(g,d,40,40,130);
  const ct=contactTxt(d),cf='900 56px '+AR,cw2=M(g,ct,cf,'ltr');T(g,ct,W-56,H-58,cf,'#fff','right','ltr');phoneIcon(g,W-56-cw2-30,H-78,36,'#fff');
  T(g,d.R.ph?(d.R.nm||''):'almoameron-alarab.com',W-56,H-24,'600 20px '+AR,'rgba(255,255,255,.85)','right',d.R.ph?'rtl':'ltr');
 }
@@ -4036,6 +4057,7 @@ async function t5(g,d){const A=await assets('t5',d.u,true);
  g.fillStyle='rgba(201,162,74,.5)';g.fillRect(50,H-84,W-100,1);
  phoneIcon(g,68,H-44,30,GOLD2);T(g,contactTxt(d),96,H-30,'500 40px '+CIN,'#fff','left','ltr');const cx2=96+M(g,contactTxt(d),'500 40px '+CIN,'ltr')+20;if(d.R.ph){if(d.R.nm)T(g,d.R.nm,cx2,H-34,'500 22px '+AR,'#CFE0D9','left')}else T(g,'ALMOAMERON-ALARAB.COM',cx2,H-36,'500 15px '+CIN,GOLD2,'left','ltr','3px');
  logo(g,A.maw,W-50,H-74,58,true);
+ drawQR(g,d,W-50-34-118,50+470-34-143,118);
 }
 const DRAW={t1,t2,t3,t4,t5};
 async function draw(cv,I,view,t){const g=cv.getContext('2d');cv.width=W;cv.height=H;await fonts();g.save();await DRAW[t||AD.t](g,D(I,view));g.restore()}
@@ -4109,7 +4131,7 @@ function open(I,view){css();let ov=document.getElementById('pmOv');if(ov)ov.remo
    '<div class="pmCard"><h4>صورة الخلفية للتصميم ده</h4><div id="pmCvBox"></div></div>'+
    '<div class="pmCard"><h4>المسقط</h4>'+chips('plan',[['auto','تلقائي'],['open','تصميم واقعي',hasR?'':'مش متاح للنموذج ده'],['plan','رسم هندسي']],AD.plan)+'<p class="pmNote">بيظهر في تصميم «المسقط والتفاصيل» و«فاخر غامق».</p></div>'+
    '<div class="pmCard"><h4>السعر والسداد على الصورة</h4>'+chips('pay',Object.keys(PAYS).map(k=>[k,PAYS[k][2]]),AD.pay)+'<div class="pmRow" id="pmCus" style="margin-top:10px;'+(AD.pay==='custom'?'':'display:none')+'"><label style="flex:1;font-size:13px">المقدم %<input type="number" id="pmCdp" min="0" max="100" step="0.5" value="'+AD.cdp+'" style="width:100%"></label><label style="flex:1;font-size:13px">عدد السنين<input type="number" id="pmCy" min="1" max="15" step="1" value="'+AD.cy+'" style="width:100%"></label></div>'+'<label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px"><input type="checkbox" id="pmPr"'+(AD.price?' checked':'')+'> إظهار سعر الوحدة</label>'+'<label style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:13.5px"><input type="checkbox" id="pmDa"'+(AD.dpAmt?' checked':'')+'> إظهار قيمة المقدم بالجنيه</label>'+'<p class="pmNote">ده للصورة والنصوص بس، ومش مربوط بالنظام اللي مختاره في البيمنت.</p></div>'+
-   '<div class="pmCard"><h4>بياناتك على الصورة والنص</h4><div class="pmRow"><input type="tel" id="pmPh" placeholder="رقمك (اختياري) – مثال 01012345678" value="'+esc(R.ph)+'"><input type="text" id="pmNm" placeholder="اسمك" value="'+esc(R.nm)+'"></div><p class="pmNote">لو سبت الرقم فاضي هيظهر الخط الساخن 16339.</p></div>'+
+   '<div class="pmCard"><h4>بياناتك على الصورة والنص</h4><div class="pmRow"><input type="tel" id="pmPh" placeholder="رقمك (اختياري) – مثال 01012345678" value="'+esc(R.ph)+'"><input type="text" id="pmNm" placeholder="اسمك" value="'+esc(R.nm)+'"></div><p class="pmNote">لو سبت الرقم فاضي هيظهر الخط الساخن 16339.</p><label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px"><input type="checkbox" id="pmQr"'+(AD.qr?' checked':'')+'> إظهار QR للتواصل على الصورة</label><p class="pmNote">لو كاتب رقمك، الـQR بيفتح واتساب ليك برسالة فيها كود الوحدة. لو مش كاتبه بيتصل بـ 16339.</p></div>'+
    '<div class="pmCard"><h4>📣 نص لجروب البروكرز</h4><textarea id="pmTb" dir="rtl"></textarea><div class="pmBtns" style="margin-top:8px;justify-content:flex-start"><button class="btn" type="button" id="pmCb">نسخ</button><button class="btn ghost" type="button" id="pmNb">صيغة تانية</button></div></div>'+
    '<div class="pmCard"><h4>📘 نص لبوست فيسبوك</h4><textarea id="pmTf" dir="rtl"></textarea><div class="pmBtns" style="margin-top:8px;justify-content:flex-start"><button class="btn" type="button" id="pmCf">نسخ</button><button class="btn ghost" type="button" id="pmNf">صيغة تانية</button></div></div>'+
   '</div></div>';
@@ -4125,6 +4147,7 @@ function open(I,view){css();let ov=document.getElementById('pmOv');if(ov)ov.remo
   if(k==='cv'){AD.cv[AD.t]=b.dataset.v;saveAD();redraw();thumbs();return}AD[k]=b.dataset.v;if(k==='pay')$a('pmCus').style.display=AD.pay==='custom'?'':'none';saveAD();all()});
  $a('pmPr').onchange=e=>{AD.price=e.target.checked;saveAD();all()};
  $a('pmDa').onchange=e=>{AD.dpAmt=e.target.checked;saveAD();all()};
+ $a('pmQr').onchange=e=>{AD.qr=e.target.checked;saveAD();redraw();thumbs()};
  let ct2=null;const cus=()=>{AD.cdp=Math.max(0,Math.min(100,+$a('pmCdp').value||0));AD.cy=Math.max(1,Math.min(15,Math.round(+$a('pmCy').value||1)));saveAD();clearTimeout(ct2);ct2=setTimeout(all,350)};$a('pmCdp').oninput=cus;$a('pmCy').oninput=cus;
  let tt=null;const who=()=>{try{localStorage.setItem('pp-ad-phone',$a('pmPh').value.trim());localStorage.setItem('pp-ad-name',$a('pmNm').value.trim())}catch(e){}clearTimeout(tt);tt=setTimeout(all,400)};
  $a('pmPh').oninput=who;$a('pmNm').oninput=who;
@@ -4144,21 +4167,2673 @@ function open(I,view){css();let ov=document.getElementById('pmOv');if(ov)ov.remo
  $a('pmX').onclick=close;$a('pmBack').onclick=close;document.addEventListener('keydown',escK);
  covChips();all()}
 
+/* ================= 📣 صورة "المتاح النهارده" للبروكرز (من شيت الوحدات) ================= */
+const AV={b:'',cat:'all',mode:'list',price:false,cv:'aerial',pg:0};
+try{const o=JSON.parse(localStorage.getItem('pp-av')||'{}');['cat','mode','cv'].forEach(k=>{if(o[k])AV[k]=o[k]});AV.price=!!o.price}catch(e){}
+const saveAV=()=>{try{localStorage.setItem('pp-av',JSON.stringify({cat:AV.cat,mode:AV.mode,cv:AV.cv,price:AV.price}))}catch(e){}};
+const AVC=[['all','كل الأنواع'],['st','استوديو'],['b1','غرفة'],['b2','غرفتين'],['b3','3 غرف'],['gd','جاردن'],['ph','بنتهاوس']];
+function avCat(u){const t=String(u.type||'');if(/pent/i.test(t))return 'ph';if(/garden/i.test(t))return 'gd';const ta=typeAr(u);return ta==='استوديو'?'st':ta==='غرفة واحدة'?'b1':ta==='غرفتين'?'b2':'b3'}
+function avUnits(){const out=[];(typeof DATA!=='undefined'?DATA:[]).forEach(r=>{const u0=BY[r[0]];if(!u0||u0.bad)return;const u=Object.assign({},u0,(typeof OVR!=='undefined'&&OVR[u0.code])||{});
+  if(u.st!=='Available'||(typeof isBulk==='function'&&isBulk(u))||(typeof isContr==='function'&&isContr(u)))return;if(AV.b&&String(u.bld)!==AV.b)return;if(AV.cat!=='all'&&avCat(u)!==AV.cat)return;
+  const price=Math.floor((+u.ua||0)*(+u.pm||0)+1e-6)+Math.floor((+u.ga||0)*(+u.gp||0)+(+u.ra||0)*(+u.rp||0)+1e-6);out.push({u,price,fl:flN(u)})});
+ return out.sort((a,b)=>String(a.u.bld).localeCompare(String(b.u.bld))||a.fl-b.fl||natCmp(modelN(a.u),modelN(b.u)))}
+const avN=n=>n===1?'وحدة واحدة':n===2?'وحدتين':(n>=3&&n<=10)?n+' وحدات':n+' وحدة';
+const avKind=u=>kindAr(u).replace(/^شقة /,'');
+const avBl=b=>'عمارة '+String(parseInt(String(b).split('-')[1],10)||b);
+const avFl=f=>f===0?'الأرضي':(ORD[f]||String(f));
+function avRows(L){if(AV.mode==='sum'){const G={};L.forEach(x=>{const k=x.u.bld+'|'+avCat(x.u)+'|'+avKind(x.u);(G[k]=G[k]||[]).push(x)});
+  return Object.keys(G).sort().map(k=>{const a=G[k],ar=a.map(x=>+x.u.ua),mn=Math.min(...ar),mx=Math.max(...ar),pr=Math.min(...a.map(x=>x.price));
+   return[avBl(a[0].u.bld),avKind(a[0].u),String(a.length),mn===mx?fA(mn)+' م²':fA(mn)+' – '+fA(mx)+' م²',AV.price?'من '+n0(pr):null]})}
+ return L.map(x=>{const u=x.u,ex=extra(u);return[u.code,kindAr(u).replace(/^شقة /,'').replace(/ بجاردن$/,''),fA(u.ua)+' م²',avFl(x.fl),ex?ex[0]+' '+fA(ex[1]):'—',AV.price?n0(x.price):null]})}
+function avCols(){return AV.mode==='sum'?[['العمارة',.17],['النوع',.27],['العدد',.12],['المساحات',.24],AV.price?['السعر يبدأ',.2]:null]:[['الكود',.2],['النوع',.25],['المساحة',.15],['الدور',.13],['جاردن / روف',.13],AV.price?['السعر',.14]:null]}
+const AVPER=12;
+async function avDraw(cv,L,pg){const g=cv.getContext('2d');cv.width=W;cv.height=H;await fonts();
+ const rows=avRows(L),pages=Math.max(1,Math.ceil(rows.length/AVPER)),R0=rows.slice(pg*AVPER,pg*AVPER+AVPER),d={R:rep(),pay:payInfo(0)};
+ const C=COVERS[AV.cv]||COVERS.aerial,[cov,lw,maw]=await Promise.all([img(MED(C[0])).catch(()=>null),img(MED('logo_pal_white.png')).catch(()=>null),img(MED('logo_ma_white.png')).catch(()=>null)]);
+ g.fillStyle=CREAM;g.fillRect(0,0,W,H);const HH=330;g.fillStyle=BR;g.fillRect(0,0,W,HH);if(cov)cover(g,cov,0,0,W,HH,C[2],C[3]);
+ vgrad(g,0,0,W,HH,[[0,'rgba(12,44,37,.82)'],[.45,'rgba(12,44,37,.35)'],[1,'rgba(12,44,37,.9)']]);
+ logo(g,lw,W-50,36,80,true);
+ const now=new Date(),ds=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
+ shadow(g,1,14);T(g,AV.mode==='sum'?'ملخص المتاح النهارده':'المتاح النهارده',W-50,222,'900 64px '+AR,'#fff');
+ const sub=[AV.b?avBl(AV.b):'كل العمارات',AV.cat==='all'?null:AVC.find(c=>c[0]===AV.cat)[1],avN(L.length)+' متاحة'].filter(Boolean).join('  •  ');
+ T(g,sub,W-50,278,fit(g,sub,W-330,30,'700 #px '+AR),GOLD2);T(g,ds,50,278,'600 26px '+AR,'#fff','left','ltr');
+ T(g,'Palmeira Residence · New Alamein',50,96,'500 22px '+SER,'rgba(255,255,255,.9)','left','ltr','1px');if(pages>1)T(g,(pg+1)+' / '+pages,50,222,'800 40px '+AR,'#fff','left','ltr');shadow(g,0);
+ /* table */
+ const cols=avCols().filter(Boolean),TX=40,TW=W-80,TY=HH+26,rh=63;let x=W-TX;const cx=cols.map(c=>{const w=c[1]*TW,o=[x-w,w];x-=w;return o});
+ g.fillStyle=BR;rr(g,TX,TY,TW,58,14);g.fill();cols.forEach((c,i)=>T(g,c[0],cx[i][0]+cx[i][1]/2,TY+38,'700 23px '+AR,'#fff','center'));
+ if(!R0.length)T(g,'مفيش وحدات متاحة بالاختيار ده',W/2,TY+180,'700 32px '+AR,MUT,'center');
+ R0.forEach((r,j)=>{const y=TY+66+j*rh;if(j%2===0){g.fillStyle='#EFE8D8';rr(g,TX,y,TW,rh-6,10);g.fill()}
+  r.filter(v=>v!==null).forEach((v,i)=>{const isCode=AV.mode!=='sum'&&i===0,isPr=AV.price&&i===cols.length-1,f=isCode?'700 24px '+CIN:(isPr?'800 25px '+AR:'700 25px '+AR),col=isCode?BR:(isPr?'#9A7426':'#14302B');
+   T(g,v,cx[i][0]+cx[i][1]/2,y+rh/2+6,fit(g,v,cx[i][1]-14,isCode?24:25,f.replace(/\d+px/,'#px'),isCode?'ltr':'rtl',14),col,'center',isCode?'ltr':'rtl')})});
+ /* footer */
+ const FY=H-150;g.fillStyle=BR;g.fillRect(0,FY,W,150);g.fillStyle=GOLD;g.fillRect(0,FY,W,3);
+ let pw=0;if(!d.pay.none)pw=payBlock(g,d,W-50,FY+96,'#fff',.72);else T(g,'استلام ألترا سوبر لوكس',W-50,FY+86,'700 28px '+AR,'#fff');
+ phoneIcon(g,64,FY+66,30,GOLD2);T(g,contactTxt(d),92,FY+80,'800 44px '+AR,'#fff','left','ltr');T(g,d.R.ph?(d.R.nm||'للحجز والتفاصيل'):'ALMOAMERON-ALARAB.COM',50,FY+118,'500 18px '+AR,'rgba(255,255,255,.8)','left',d.R.ph?'rtl':'ltr');
+ const L1=50+Math.max(M(g,contactTxt(d),'800 44px '+AR,'ltr')+42,220)+30,R1=W-50-(pw||300)-30;if(maw&&R1-L1>200){const h=64,w=h*maw.naturalWidth/maw.naturalHeight,sc=Math.min(1,(R1-L1)/w);g.drawImage(maw,(L1+R1-w*sc)/2,FY+(150-h*sc)/2,w*sc,h*sc)}
+ return pages}
+function avText(L){const rows=avRows(L),P=payInfo(0),R=rep(),ct=R.ph?(R.nm?R.nm+' – ':'')+R.ph:'16339',now=new Date(),ds=now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
+ const head=['🏢 *Palmeira Residence – العلمين الجديدة*','📋 '+(AV.mode==='sum'?'ملخص المتاح':'المتاح النهارده')+' – '+(AV.b?avBl(AV.b):'كل العمارات')+(AV.cat==='all'?'':' – '+AVC.find(c=>c[0]===AV.cat)[1])+' ('+ds+')','✅ '+avN(L.length)+' متاحة',''];
+ const body=rows.map(r=>AV.mode==='sum'?'• '+r[0]+' – '+r[1]+': '+avN(+r[2])+' ('+r[3]+')'+(r[4]?' – السعر يبدأ '+r[4]+' ج':''):'• '+r[0]+' | '+r[1]+' | '+r[2]+' | الدور '+r[3]+(r[4]!=='—'?' | '+r[4]+' م²':'')+(r[5]?' | '+r[5]+' ج':''));
+ return head.concat(body,['','✨ استلام ألترا سوبر لوكس',P.none?null:'💳 '+P.t,'📞 للحجز والتفاصيل: '+ct].filter(x=>x!==null)).join('\n')}
+function avCss(){if(document.getElementById('avCss'))return;const s=document.createElement('style');s.id='avCss';s.textContent=`
+#avOv{position:fixed;inset:0;z-index:9995;background:#f4f1ea;display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;color:#14302b}
+#avOv .avTop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#0f5c52;color:#fff;font-weight:700}
+#avOv .avTop button{border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+#avOv .avBody{flex:1;overflow:auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,1fr);gap:18px;padding:16px;max-width:1280px;width:100%;margin:0 auto;box-sizing:border-box}
+#avOv .avPrev{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+#avOv #avCv{width:100%;max-width:560px;height:auto;border-radius:6px;box-shadow:0 18px 40px -22px rgba(0,0,0,.5);background:#fff}
+#avOv .avSide{display:flex;flex-direction:column;gap:12px;min-width:0}
+#avOv .avCard{background:#fff;border:1px solid #e3dccb;border-radius:14px;padding:12px 14px}
+#avOv .avCard h4{margin:0 0 8px;font-size:14.5px;color:#0f5c52}
+#avOv .avChips{display:flex;flex-wrap:wrap;gap:6px}
+#avOv .avChips button{border:1px solid #cdd8d5;background:#fff;border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;color:#14302b}
+#avOv .avChips button.on{background:#0f5c52;color:#fff;border-color:#0f5c52}
+#avOv .avChips button small{opacity:.7;margin-inline-start:4px}
+#avOv .avBtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#avOv .avBtns .btn{padding:9px 16px}
+#avOv .avPg{display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px}
+#avOv .avPg button{border:1px solid #cdd8d5;background:#fff;border-radius:8px;padding:5px 12px;font:inherit;cursor:pointer}
+#avOv .avPg button:disabled{opacity:.4;cursor:default}
+#avOv textarea{width:100%;box-sizing:border-box;min-height:200px;border:1px solid #d8d0bf;border-radius:10px;padding:10px;font:inherit;font-size:13.5px;line-height:1.7;resize:vertical;background:#fffdf8;color:#14302b}
+#avOv .avNote{font-size:12px;color:#6a7a75;margin:6px 0 0}
+#avOv input[type=tel],#avOv input[type=text]{flex:1;min-width:140px;border:1px solid #d8d0bf;border-radius:10px;padding:9px 11px;font:inherit;font-size:14px}
+@media (max-width:820px){#avOv .avBody{grid-template-columns:1fr}#avOv #avCv{max-width:100%}}
+@media print{#avOv{display:none!important}}`;document.head.appendChild(s)}
+function avOpen(){avCss();let ov=document.getElementById('avOv');if(ov)ov.remove();
+ AV.b=(typeof IVS!=='undefined'&&IVS.b)||'';AV.pg=0;const R=rep();
+ const bs=[...new Set((typeof DATA!=='undefined'?DATA:[]).map(r=>BY[r[0]]&&BY[r[0]].bld).filter(Boolean))].sort();
+ const cnt=(b,c)=>{const sb=AV.b,sc=AV.cat;AV.b=b;AV.cat=c;const n=avUnits().length;AV.b=sb;AV.cat=sc;return n};
+ const ch=(k,opts,cur)=>'<div class="avChips" data-k="'+k+'">'+opts.map(o=>'<button type="button" data-v="'+o[0]+'"'+(cur===o[0]?' class="on"':'')+'>'+esc(o[1])+(o[2]!=null?'<small>'+o[2]+'</small>':'')+'</button>').join('')+'</div>';
+ ov=document.createElement('div');ov.id='avOv';ov.setAttribute('data-noi18n','');
+ ov.innerHTML='<div class="avTop"><button type="button" id="avX">↩ رجوع</button><span>📣 صورة المتاح للبروكرز</span></div>'+
+  '<div class="avBody"><div class="avPrev"><canvas id="avCv" width="1080" height="1350"></canvas><div class="avPg"><button type="button" id="avPv">‹ السابق</button><span id="avPn"></span><button type="button" id="avNx">التالي ›</button></div>'+
+   '<div class="avBtns"><button class="btn" type="button" id="avDl">⬇ تحميل الصورة</button><button class="btn ghost" type="button" id="avAll">⬇ تحميل كل الصفحات</button><button class="btn gold" type="button" id="avSh">📤 مشاركة</button><button class="btn navy" type="button" id="avBk">↩ رجوع</button></div></div>'+
+  '<div class="avSide"><div class="avCard"><h4>العمارة</h4><div id="avBx"></div></div><div class="avCard"><h4>النوع</h4><div id="avCx"></div></div>'+
+   '<div class="avCard"><h4>الشكل</h4>'+ch('mode',[['list','قايمة بالوحدات'],['sum','ملخص (عدد ومساحات)']],AV.mode)+'<label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px"><input type="checkbox" id="avPr"'+(AV.price?' checked':'')+'> إظهار الأسعار</label></div>'+
+   '<div class="avCard"><h4>السداد اللي تحت</h4>'+ch('pay',Object.keys(PAYS).filter(k=>k!=='custom').map(k=>[k,PAYS[k][2]]),AD.pay==='custom'?'p10':AD.pay)+'</div>'+
+   '<div class="avCard"><h4>صورة الهيدر</h4>'+ch('cv',Object.keys(COVERS).map(k=>[k,COVERS[k][1]]),AV.cv)+'</div>'+
+   '<div class="avCard"><h4>بياناتك</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><input type="tel" id="avPh" placeholder="رقمك (اختياري)" value="'+esc(R.ph)+'"><input type="text" id="avNm" placeholder="اسمك" value="'+esc(R.nm)+'"></div><p class="avNote">لو سبت الرقم فاضي هيظهر الخط الساخن 16339.</p></div>'+
+   '<div class="avCard"><h4>📣 نص لجروب البروكرز</h4><textarea id="avTx" dir="rtl"></textarea><div class="avBtns" style="margin-top:8px;justify-content:flex-start"><button class="btn" type="button" id="avCp">نسخ</button></div></div>'+
+  '</div></div>';
+ document.body.appendChild(ov);const $v=id=>ov.querySelector('#'+id),cv=$v('avCv');let tok=0,L=[],pages=1;
+ const bx=()=>{$v('avBx').innerHTML=ch('b',[['','كل العمارات',cnt('',AV.cat)]].concat(bs.map(b=>[b,avBl(b),cnt(b,AV.cat)])),AV.b);$v('avCx').innerHTML=ch('cat',AVC.map(c=>[c[0],c[1],cnt(AV.b,c[0])]),AV.cat)};
+ const go=()=>{L=avUnits();pages=Math.max(1,Math.ceil(avRows(L).length/AVPER));if(AV.pg>=pages)AV.pg=pages-1;const t=++tok;avDraw(cv,L,AV.pg).then(()=>{if(t!==tok)return;$v('avPn').textContent='صفحة '+(AV.pg+1)+' من '+pages;$v('avPv').disabled=AV.pg<=0;$v('avNx').disabled=AV.pg>=pages-1});$v('avTx').value=avText(L)};
+ ov.addEventListener('click',e=>{const b=e.target.closest('.avChips button');if(!b)return;const k=b.parentNode.dataset.k,v=b.dataset.v;
+  if(k==='pay'){AD.pay=v;saveAD()}else AV[k]=v;AV.pg=0;saveAV();bx();ov.querySelectorAll('.avChips[data-k="mode"] button,.avChips[data-k="pay"] button,.avChips[data-k="cv"] button').forEach(x=>{const kk=x.parentNode.dataset.k;x.classList.toggle('on',x.dataset.v===(kk==='pay'?AD.pay:AV[kk]))});go()});
+ $v('avPr').onchange=e=>{AV.price=e.target.checked;saveAV();go()};
+ let tt=null;const who=()=>{try{localStorage.setItem('pp-ad-phone',$v('avPh').value.trim());localStorage.setItem('pp-ad-name',$v('avNm').value.trim())}catch(e){}clearTimeout(tt);tt=setTimeout(go,400)};$v('avPh').oninput=who;$v('avNm').oninput=who;
+ $v('avPv').onclick=()=>{if(AV.pg>0){AV.pg--;go()}};$v('avNx').onclick=()=>{if(AV.pg<pages-1){AV.pg++;go()}};
+ const blob=c=>new Promise(r=>c.toBlob(r,'image/jpeg',.92)),save=(b,n)=>{const url=URL.createObjectURL(b),a=document.createElement('a');a.href=url;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000)};
+ const nm=p=>'Palmeira-Available-'+(AV.b||'All')+(AV.cat==='all'?'':'-'+AV.cat)+(pages>1?'-'+(p+1):'')+'.jpg';
+ const log=n=>{try{sendLog&&sendLog({event:'avail_image',clientTime:new Date().toISOString(),unit:AV.b||'All',system:AV.mode+':'+AV.cat,client:'',note:n+' ('+L.length+')'})}catch(e){}};
+ $v('avDl').onclick=async()=>{const b=await blob(cv);if(b){save(b,nm(AV.pg));log('download')}};
+ $v('avAll').onclick=async e=>{const btn=e.target,o=btn.textContent;btn.disabled=true;const off=document.createElement('canvas');for(let p=0;p<pages;p++){btn.textContent='جاري '+(p+1)+'/'+pages+'…';await avDraw(off,L,p);const b=await blob(off);if(b)save(b,nm(p));await new Promise(r=>setTimeout(r,350))}btn.textContent=o;btn.disabled=false;log('download-all')};
+ $v('avSh').onclick=async()=>{const off=document.createElement('canvas'),fs=[];for(let p=0;p<pages;p++){await avDraw(off,L,p);const b=await blob(off);if(b)fs.push(new File([b],nm(p),{type:'image/jpeg'}))}
+  if(navigator.canShare&&navigator.canShare({files:fs})){try{await navigator.share({files:fs,text:$v('avTx').value});log('share')}catch(e){}}else $v('avDl').click()};
+ $v('avCp').onclick=e=>{copyTxt($v('avTx').value,e.target);log('copy')};
+ const close=()=>{tok++;ov.remove();document.removeEventListener('keydown',escK)},escK=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};
+ $v('avX').onclick=close;$v('avBk').onclick=close;document.addEventListener('keydown',escK,true);bx();go()}
+window.avOpen=avOpen;
+
 window.adOpen=function(){const I=unitInfo();if(!I)return;viewAsk(I.u,v=>open(I,v),{p:'الفيو هيظهر على الصورة وفي النصوص. اختار واحد أو أكتر، أو اكتبه بنفسك.',b:'اعمل الصورة الإعلانية'})};
 window.adDraw=draw;window.adCaps=caps;
 })();
 
 </script>
+<script>
+/* ===== PMB:qrlib (qrcode-generator, MIT, Kazuhiko Arase) ===== */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+qrcode.stringToBytes=qrcode.stringToBytesFuncs["UTF-8"];
+</script>
+<script>
+/* ===== PMB:form – استمارة حجز جاهزة (نفس ورقة الشركة) ===== */
+(function(){
+const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const N=x=>(Math.round((+x||0)*100)/100).toLocaleString('en-US',{maximumFractionDigits:2});
+const ORD=['الأرضي','الأول','الثاني','الثالث','الرابع','الخامس','السادس','السابع','الثامن','التاسع'];
+/* تفقيط: رقم ← كلام */
+const O=['','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة','عشرة','أحد عشر','اثنا عشر','ثلاثة عشر','أربعة عشر','خمسة عشر','ستة عشر','سبعة عشر','ثمانية عشر','تسعة عشر'];
+const TN=['','','عشرون','ثلاثون','أربعون','خمسون','ستون','سبعون','ثمانون','تسعون'];
+const HN=['','مائة','مائتان','ثلاثمائة','أربعمائة','خمسمائة','ستمائة','سبعمائة','ثمانمائة','تسعمائة'];
+function u1000(n){const h=Math.floor(n/100),r=n%100,p=[];if(h)p.push(HN[h]);if(r){if(r<20)p.push(O[r]);else{const o=r%10,t=Math.floor(r/10);p.push(o?O[o]+' و'+TN[t]:TN[t])}}return p.join(' و')}
+const SC=[['مليار','ملياران','مليارات'],['مليون','مليونان','ملايين'],['ألف','ألفان','آلاف']];
+function words(n){n=Math.floor(Math.abs(+n||0));if(!n)return 'صفر';const parts=[],div=[1e9,1e6,1e3];
+ div.forEach((d,i)=>{const q=Math.floor(n/d);n%=d;if(!q)return;const s=SC[i];parts.push(q===1?s[0]:q===2?s[1]:(q>=3&&q<=10)?u1000(q)+' '+s[2]:u1000(q)+' '+s[0])});
+ if(n)parts.push(u1000(n));return parts.join(' و')}
+function tafqit(v){const x=+String(v||'').replace(/[^\d.]/g,'');if(!x)return '';const g=Math.floor(x),p=Math.round((x-g)*100);return words(g)+' جنيه'+(p?' و'+words(p)+' قرش':'')+' لا غير'}
+window.tafqit=tafqit;
+
+function data(){const I=unitInfo();if(!I)return null;const u=I.u,q=u.code.split('-'),f=parseInt(q[2],10);
+ const X=window.PLAN_X&&window.PLAN_X.I&&window.PLAN_X.I.u&&window.PLAN_X.I.u.code===u.code?window.PLAN_X:null,S=X?X.S:null;
+ let mp=10;try{mp=mPctGet()}catch(e){}
+ const sys=S?(S.cash?'كاش':String(S.t||(S.n+' سنين')).replace(/سنين/g,'سنوات')):'';
+ const gd=+u.ga>0?N(u.ga):(+u.ra>0?N(u.ra)+' (روف)':'');
+ const d=new Date();
+ return{name:(($('name')||{}).value||'').trim(),date:String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(),
+  code:u.code,type:typeAr(u),floor:f===0?'الأرضي':(ORD[f]||String(f)),bld:String(parseInt(q[1],10)||q[1]),area:N(u.ua),garden:gd,
+  total:X?N(X.netShow!=null?X.netShow:X.net)+' جنيه':'',maint:N(Math.floor((+I.gross||0)*mp/100+1e-6))+' جنيه',sys}}
+
+const TERMS=['هذا الطلب لا يعد ضمانة حق لبيع أو شراء وحدة أو وحدات، ولكنه إبداء رغبة للشراء، ولا يعد وعدًا بالبيع وبشكل عام لا يترتب ثمة التزامات من أي نوع على الشركة ولكنه يعطي للطالب الأولوية في التمييز في اختيار الوحدات',
+ 'المبلغ المدفوع سيتم خصمه من ثمن الوحدة/الوحدات حال توقيع استمارة الحجز، أو سيتم رده بالكامل في حالة العدول عن الشراء في خلال مدة أقصاها 5 أيام عمل من تاريخ الإعلان عن بدء البيع',
+ 'لا يعتد بهذه الاستمارة في الأولوية وتمييز الحجز إلا بموجب إيصال موقع ومختوم صادر من الشركة',
+ 'يقر ويوافق العميل على أنه في حالة تحويل أي مبالغ مالية من خارج جمهورية مصر العربية على حساب الشركة فإن الشركة حال طلب العميل استرداد المبلغ حال لم تنطبق عليه شروط الحجز، فإن الشركة لم ولن تسلم المبلغ إلا للعميل شخصيًا أو بموجب وكالة تتيح استلام المبلغ المسترد أو تحويله على حساب بنكي للعميل داخل جمهورية مصر العربية',
+ 'في حال كان الإيداع في البنك أو تحرير شيك بالمبلغ فإنه لا يعتد بأي منهما إلا عند تحصيل الشيك أو تسليم الشركة إيصال إيداع المبلغ خلال 24 ساعة من تاريخ الطلب، وفي حالة عدم الدفع عن طريق الفيزا يتم خصم 2%'];
+const SIGN=['العميل','مسئول المبيعات','مدير المبيعات','مدير العمليات','الإدارة المالية','مدير عام المبيعات'];
+
+function doc(D){const inp=(id,v,cls)=>'<input class="v'+(cls?' '+cls:'')+'" id="'+id+'" value="'+E(v)+'" autocomplete="off">';
+ const row=(lb,id,v,cls)=>'<tr><th>'+lb+'</th><td colspan="3">'+inp(id,v,cls)+'</td></tr>';
+ const logo=new URL('media/logo_ma.png',document.baseURI).href;
+ return '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>'+E('استمارة حجز'+(D.name?' - '+D.name:'')+' - '+D.code)+'</title>'+
+ '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">'+
+ '<style>@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#e9e6df}body{font-family:Cairo,Tahoma,sans-serif;color:#222}'+
+ '.pg{width:210mm;height:297mm;overflow:hidden;margin:0 auto;background:#fff;padding:11mm 14mm 8mm;position:relative}'+
+ '.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3mm}.hd img{height:15mm}.dt{font-size:15px;font-weight:600;color:#444;display:flex;align-items:center;gap:8px}.dt input{width:40mm;border:0;border-bottom:1px dotted #888;font:inherit;font-weight:800;color:#1d2b6b;text-align:center;background:transparent}'+
+ 'h2{font-size:15px;font-weight:800;margin:3.4mm 0 1.4mm;color:#222}'+
+ 'table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1.2px solid #333;height:6.6mm;padding:0 2.2mm;font-size:11.5px;vertical-align:middle;white-space:nowrap;overflow:hidden}th{font-weight:700;text-align:right;color:#333;background:#fafafa}'+
+ '.kv th{width:56mm}.kv th.sub{width:32mm;text-align:center}.un th{text-align:center;font-size:10.5px;background:#fafafa;white-space:normal;line-height:1.2;height:8mm}.un td{text-align:center}'+
+ '.fin th{width:60mm}.fin td.w{width:60mm}'+
+ 'input.v{width:100%;border:0;background:transparent;font:inherit;font-size:13px;font-weight:800;color:#1d2b6b;padding:0;outline:none}input.v.c{text-align:center}input.v.l{direction:ltr;text-align:right}'+
+ '@media screen{input.v{background:rgba(29,43,107,.04);border-radius:3px}input.v:focus{background:#fff8e1;box-shadow:0 0 0 2px #d9bd80}}'+
+ 'ul{margin:0;padding:0 5mm 0 0;font-size:11.2px;line-height:1.72;color:#222}li{margin-bottom:.8mm}li::marker{font-size:15px}'+
+ '.sg{display:flex;justify-content:space-between;margin-top:3mm}.sg div{flex:1;text-align:center;font-size:12.5px;font-weight:600;color:#333;padding-bottom:12mm}'+
+ '.fx{position:absolute;bottom:4mm;left:15mm;right:15mm;font-size:9.5px;color:#999;text-align:center}'+
+ '@media print{html,body{background:#fff}.pg{margin:0}.fx{display:none}}</style></head><body><div class="pg">'+
+ '<div class="hd"><div class="dt">تحريرا في '+'<input id="f_date" value="'+E(D.date)+'"></div><img src="'+logo+'" alt="Al-Moameron Al-Arab"></div>'+
+ '<h2>بيانات العميل</h2><table class="kv">'+
+  row('اسم العميل','f_name',D.name)+row('بطاقة الرقم القومي / جواز السفر','f_id','','l')+row('الجنسية','f_nat','')+row('رقم الموبايل','f_mob','','l')+row('الوظيفة','f_job','')+row('الإيميل','f_mail','','l')+
+  row('عنوان الإقامة','f_addr','')+row('عنوان المراسلات','f_addr2','')+row('مصدر العميل','f_src','')+
+  '<tr><th>اسم شركة البروكر</th><td>'+inp('f_bco','')+'</td><th class="sub">اسم سيلز البروكر</th><td>'+inp('f_bsales','')+'</td></tr>'+
+  row('رقم تليفون سيلز البروكر','f_bph','','l')+'</table>'+
+ '<h2>بيانات الوحدة</h2><table class="un"><tr><th>رقم الوحدة</th><th>نوع الوحدة</th><th>الطابق</th><th>المبنى</th><th>مساحة الوحدة</th><th>مساحة الحديقة إن وجدت</th></tr>'+
+  '<tr><td>'+inp('f_code',D.code,'c')+'</td><td>'+inp('f_type',D.type,'c')+'</td><td>'+inp('f_floor',D.floor,'c')+'</td><td>'+inp('f_bld',D.bld,'c')+'</td><td>'+inp('f_area',D.area,'c')+'</td><td>'+inp('f_gd',D.garden,'c')+'</td></tr></table>'+
+ '<h2>البيانات الماليـة</h2><table class="fin">'+
+  '<tr><th>قيمة الحجز</th><td>'+inp('f_res','')+'</td><td class="w">'+inp('f_resw','')+'</td></tr>'+
+  '<tr><th>شيك بنكي - تحويل بنكي - دفع نقدي</th><td>'+inp('f_pm','')+'</td><td class="w">'+inp('f_pm2','')+'</td></tr>'+
+  '<tr><th>إجمالي ثمن الوحدة</th><td>'+inp('f_tot',D.total)+'</td><td class="w">'+inp('f_totw','')+'</td></tr>'+
+  '<tr><th>وديعة الصيانة - المقايسات</th><td>'+inp('f_mt',D.maint)+'</td><td class="w">'+inp('f_mtw','')+'</td></tr>'+
+  '<tr><th>نظام السداد</th><td>'+inp('f_sys',D.sys)+'</td><td class="w">'+inp('f_sysw','')+'</td></tr></table>'+
+ '<h2>الشروط والأحكام</h2><ul>'+TERMS.map(t=>'<li>'+E(t)+'</li>').join('')+'</ul>'+
+ '<h2>التوقيعات</h2><div class="sg">'+SIGN.map(s=>'<div>'+s+'</div>').join('')+'</div>'+
+ '<div class="fx">الخانات الفاضية تقدر تكتبها هنا قبل الطباعة أو تسيبها وتتكتب بخط اليد</div>'+
+ '</div></body></html>'}
+
+function css(){if(document.getElementById('rfCss'))return;const s=document.createElement('style');s.id='rfCss';s.textContent=`
+#rfOv{position:fixed;inset:0;z-index:126;background:#e9e6df;display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;color:#14302b}
+#rfOv .rfTop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#0f5c52;color:#fff;font-weight:700}
+#rfOv .rfTop button{border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
+#rfOv .rfTop .rfPr{background:#d9bd80;color:#2a1a00}
+#rfOv .rfTop span{flex:1}
+#rfOv .rfHint{background:#fff8e1;border-bottom:1px solid #ecd9a6;padding:7px 14px;font-size:13px;color:#6b4a0f;text-align:center}
+#rfOv .rfWrap{flex:1;overflow:auto;padding:16px 8px}
+#rfOv .rfBox{margin:0 auto;transform-origin:top center}
+#rfOv iframe{width:794px;height:1123px;border:0;background:#fff;box-shadow:0 18px 40px -22px rgba(0,0,0,.45);display:block}
+@media print{#rfOv{display:none!important}}`;document.head.appendChild(s)}
+
+window.rfOpen=function(){const D=data();if(!D)return;css();let ov=document.getElementById('rfOv');if(ov)ov.remove();
+ ov=document.createElement('div');ov.id='rfOv';ov.setAttribute('data-noi18n','');
+ ov.innerHTML='<div class="rfTop"><button type="button" id="rfX">↩ رجوع للبيمنت</button><span>📝 استمارة حجز – '+E(D.code)+'</span><button type="button" class="rfPr" id="rfP">🖨️ طباعة / حفظ PDF</button></div>'+
+  '<div class="rfHint">بيانات الوحدة والسعر والنظام اتملت من البيمنت. اكتب بيانات العميل وقيمة الحجز هنا، أو سيبها فاضية وتتكتب بخط اليد بعد الطباعة.</div>'+
+  '<div class="rfWrap"><div class="rfBox" id="rfBox"><iframe id="rfF" title="استمارة حجز"></iframe></div></div>';
+ document.body.appendChild(ov);const f=ov.querySelector('#rfF'),box=ov.querySelector('#rfBox'),wrap=ov.querySelector('.rfWrap');
+ f.srcdoc=doc(D);
+ const fit=()=>{const w=wrap.clientWidth-16,s=Math.min(1,w/794);box.style.width=794*s+'px';f.style.transform='scale('+s+')';f.style.transformOrigin='top right';box.style.height=1123*s+'px';f.style.height='1123px'};
+ f.onload=()=>{fit();try{const d=f.contentDocument,res=d.getElementById('f_res'),rw=d.getElementById('f_resw');
+  const upd=()=>{const v=res.value.replace(/[^\d.]/g,'');if(v)res.value=Number(v).toLocaleString('en-US',{maximumFractionDigits:2});rw.value=v?tafqit(v):''};res.addEventListener('change',upd);res.addEventListener('blur',upd);
+  const h=d.documentElement.scrollHeight;if(h>1123){f.style.height=h+'px';box.style.height=h*Math.min(1,(wrap.clientWidth-16)/794)+'px'}}catch(e){}};
+ window.addEventListener('resize',fit);
+ ov.querySelector('#rfP').onclick=()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){}try{sendLog&&sendLog({event:'form',clientTime:new Date().toISOString(),unit:D.code,system:D.sys,client:D.name,note:'reservation form'})}catch(e){}};
+ const close=()=>{window.removeEventListener('resize',fit);ov.remove();document.removeEventListener('keydown',esc)},esc=e=>{if(e.key==='Escape')close()};
+ ov.querySelector('#rfX').onclick=close;document.addEventListener('keydown',esc)};
+})();
+
+</script>
+<script>
+/* ===== PMB:dash – 📊 لوحة المتابعة (للأونر بس) ===== */
+(function(){
+const E=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const EV={plan:['بيمنت','#0f5c52'],print:['طباعة / PDF','#2d3047'],ad_image:['صورة إعلانية','#c9a24a'],avail_image:['صورة المتاح','#e08a2c'],form:['استمارة حجز','#7a5a12'],feedback:['اقتراح','#8e44ad']};
+const DS={rows:null,per:7,me:true,busy:false,err:''};
+const tOf=x=>{const t=Date.parse(x['Time']||x['Client Time']||'');return isNaN(t)?0:t};
+const who=x=>String(x['Rep Name']||x['Rep Email']||'—').trim();
+const em=x=>String(x['Rep Email']||'').trim().toLowerCase();
+const dayK=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const dShort=k=>{const p=k.split('-');return +p[2]+'/'+ +p[1]};
+const ago=t=>{const m=Math.round((Date.now()-t)/6e4);if(m<1)return 'دلوقتي';if(m<60)return 'من '+m+' دقيقة';const h=Math.round(m/60);if(h<24)return 'من '+h+' ساعة';const d=Math.round(h/24);return d===1?'امبارح':'من '+d+' يوم'};
+const pct=(a,b)=>b?Math.round(a*100/b):0;
+function sysAr(s){s=String(s||'').trim();if(!s)return '—';if(/^cash$/i.test(s))return 'كاش';if(/^admin/i.test(s))return 'إداري';const m=s.match(/^(\d+)\s*years?(.*)$/i);if(!m)return s;let r=m[1]+' سنين';if(/semi/i.test(m[2]))r+=' نصف سنوي';const q=m[2].match(/([+-]\d+)Q/);if(q)r+=' ('+q[1]+' كوارتر)';return r}
+function stOf(c){try{const u=BY[String(c||'').toUpperCase()];return u?u.st:''}catch(e){return ''}}
+function filt(){const now=Date.now(),me=(typeof SES!=='undefined'&&SES&&SES.email||'').trim().toLowerCase(),from=DS.per?now-DS.per*864e5:0;
+ return (DS.rows||[]).filter(x=>{const e=String(x['Event']||'');if(!e||e==='buyer')return false;if(DS.me&&me&&em(x)===me)return false;const t=tOf(x);return !from||t>=from})}
+function css(){if(document.getElementById('dshCss'))return;const s=document.createElement('style');s.id='dshCss';s.textContent=`
+#dshOv{position:fixed;inset:0;z-index:130;background:#f4f1ea;display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;color:#14302b}
+#dshOv .dTop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#0f5c52;color:#fff;font-weight:700}
+#dshOv .dTop button{border:0;border-radius:8px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer}
+#dshOv .dTop span{flex:1}
+#dshOv .dBar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 16px 0;max-width:1240px;width:100%;margin:0 auto;box-sizing:border-box}
+#dshOv .dSeg{display:flex;background:#fff;border:1px solid #d9d2c0;border-radius:99px;padding:3px}
+#dshOv .dSeg button{border:0;background:transparent;border-radius:99px;padding:6px 14px;font:inherit;font-size:13.5px;font-weight:700;color:#14302b;cursor:pointer}
+#dshOv .dSeg button.on{background:#0f5c52;color:#fff}
+#dshOv .dBar label{font-size:13.5px;display:flex;align-items:center;gap:6px}
+#dshOv .dBody{flex:1;overflow:auto;padding:12px 16px 24px;max-width:1240px;width:100%;margin:0 auto;box-sizing:border-box}
+#dshOv .dKp{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+#dshOv .kp{background:#fff;border:1px solid #e3dccb;border-radius:14px;padding:12px 14px;position:relative;overflow:hidden}
+#dshOv .kp:before{content:'';position:absolute;inset:0 auto 0 0;width:4px;background:var(--c,#0f5c52)}
+#dshOv .kp b{display:block;font-size:28px;line-height:1.1;color:var(--c,#0f5c52)}
+#dshOv .kp span{font-size:13px;color:#56655f;font-weight:600}
+#dshOv .kp i{font-style:normal;font-size:11.5px;color:#8a978f;display:block;margin-top:2px}
+#dshOv .dGrid{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin-top:12px}
+#dshOv .dc{background:#fff;border:1px solid #e3dccb;border-radius:14px;padding:12px 14px;min-width:0;overflow-x:auto}
+#dshOv .dc table{min-width:520px}
+#dshOv .dc h4{margin:0 0 10px;font-size:15px;color:#0f5c52;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#dshOv .dc h4 small{font-size:12px;color:#8a978f;font-weight:600}
+#dshOv table{width:100%;border-collapse:collapse;font-size:13.5px}
+#dshOv th{font-size:12px;color:#7b8a84;font-weight:700;text-align:right;padding:4px 6px;border-bottom:1px solid #eee5d3}
+#dshOv td{padding:6px;border-bottom:1px solid #f2ecdf;vertical-align:middle}
+#dshOv td.n{text-align:center;font-weight:700}
+#dshOv .dbr{height:8px;border-radius:99px;background:#eee8da;overflow:hidden;min-width:60px}
+#dshOv .dbr i{display:block;height:100%;background:linear-gradient(90deg,#0f5c52,#1a8a78);border-radius:99px}
+#dshOv .dhb{display:grid;grid-template-columns:minmax(90px,auto) 1fr 44px;gap:8px;align-items:center;font-size:13.5px;margin:6px 0}
+#dshOv .dhb .bar{height:12px}
+#dshOv .dst{font-size:11.5px;font-weight:700;border-radius:99px;padding:2px 8px;white-space:nowrap}
+#dshOv .dst.Available{background:#e3f4ea;color:#1d7a43}#dshOv .dst.Hold{background:#fff1d6;color:#8a6200}#dshOv .dst.Sold{background:#fde4e4;color:#b02a2a}
+#dshOv .dtip{background:#fffaf0;border:1px solid #ecd9a6;border-radius:12px;padding:10px 14px;margin-top:12px;font-size:14px;line-height:1.8}
+#dshOv .dtip b{color:#0f5c52}
+#dshOv .dlg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#56655f;margin-top:6px}
+#dshOv .dlg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:-1px}
+#dshOv .demp{text-align:center;color:#7b8a84;padding:30px 10px;font-weight:600}
+#dshOv .dcode{direction:ltr;unicode-bidi:isolate;font-weight:700;color:#0f5c52}
+@media (max-width:900px){#dshOv .dKp{grid-template-columns:repeat(3,1fr)}#dshOv .dGrid{grid-template-columns:1fr}}
+@media (max-width:520px){#dshOv .dKp{grid-template-columns:repeat(2,1fr)}#dshOv .kp b{font-size:24px}}
+@media print{#dshOv{display:none!important}}`;document.head.appendChild(s)}
+
+function chart(R,days){const now=new Date();now.setHours(0,0,0,0);const ks=[];for(let i=days-1;i>=0;i--){ks.push(dayK(now.getTime()-i*864e5))}
+ const C={};ks.forEach(k=>C[k]={plan:0,other:0});R.forEach(x=>{const k=dayK(tOf(x));if(C[k])C[k][x['Event']==='plan'?'plan':'other']++});
+ const mx=Math.max(1,...ks.map(k=>C[k].plan+C[k].other)),Wd=720,Hd=190,bw=Wd/ks.length,lab=Math.ceil(ks.length/10);
+ let s='<svg viewBox="0 0 '+Wd+' '+(Hd+26)+'" width="100%" role="img" aria-label="النشاط اليومي" style="direction:ltr">';
+ [0,.5,1].forEach(f=>{const y=Hd-f*(Hd-14);s+='<line x1="0" x2="'+Wd+'" y1="'+y+'" y2="'+y+'" stroke="#eee5d3"/><text x="2" y="'+(y-3)+'" font-size="10" fill="#9aa59f">'+Math.round(mx*f)+'</text>'});
+ ks.forEach((k,i)=>{const c=C[k],x=i*bw+bw*.18,w=bw*.64,h1=(c.plan/mx)*(Hd-14),h2=(c.other/mx)*(Hd-14);
+  s+='<rect x="'+x+'" y="'+(Hd-h1)+'" width="'+w+'" height="'+h1+'" rx="2" fill="#0f5c52"><title>'+dShort(k)+': '+c.plan+' بيمنت</title></rect>';
+  s+='<rect x="'+x+'" y="'+(Hd-h1-h2)+'" width="'+w+'" height="'+h2+'" rx="2" fill="#c9a24a"><title>'+dShort(k)+': '+c.other+' نشاط تاني</title></rect>';
+  if(i%lab===0||i===ks.length-1)s+='<text x="'+(i*bw+bw/2)+'" y="'+(Hd+16)+'" font-size="10.5" text-anchor="middle" fill="#7b8a84">'+dShort(k)+'</text>'});
+ return s+'</svg><div class="dlg"><span><i style="background:#0f5c52"></i>بيمنتات</span><span><i style="background:#c9a24a"></i>طباعة وصور واستمارات</span></div>'}
+
+function render(){const B=document.querySelector('#dshOv .dBody');if(!B)return;
+ if(DS.busy){B.innerHTML='<div class="demp">جاري تحميل النشاط…</div>';return}
+ if(DS.err){B.innerHTML='<div class="demp">'+E(DS.err)+'</div>';return}
+ const R=filt();if(!R.length){B.innerHTML='<div class="demp">مفيش نشاط في الفترة دي</div>';return}
+ const cnt=e=>R.filter(x=>x['Event']===e).length,plans=R.filter(x=>x['Event']==='plan');
+ const reps={};R.forEach(x=>{const k=who(x),o=reps[k]=reps[k]||{n:k,plan:0,print:0,img:0,form:0,tot:0,u:new Set(),last:0};o.tot++;const e=x['Event'];if(e==='plan')o.plan++;else if(e==='print')o.print++;else if(e==='ad_image'||e==='avail_image')o.img++;else if(e==='form')o.form++;if(x['Unit']&&/^[AB]-/.test(x['Unit']))o.u.add(x['Unit']);o.last=Math.max(o.last,tOf(x))});
+ const RP=Object.values(reps).sort((a,b)=>b.tot-a.tot),mxR=RP[0]?RP[0].tot:1;
+ const units={};R.forEach(x=>{const c=String(x['Unit']||'').toUpperCase();if(!/^[AB]-\d+-\d+-/.test(c))return;const o=units[c]=units[c]||{c,n:0,r:new Set(),last:0};o.n++;o.r.add(who(x));o.last=Math.max(o.last,tOf(x))});
+ const UN=Object.values(units).sort((a,b)=>b.r.size-a.r.size||b.n-a.n).slice(0,12);
+ const sys={};plans.forEach(x=>{const k=sysAr(x['System']);sys[k]=(sys[k]||0)+1});const SY=Object.entries(sys).sort((a,b)=>b[1]-a[1]),mxS=SY[0]?SY[0][1]:1;
+ const bl={};Object.values(units).forEach(o=>{const k=o.c.split('-').slice(0,2).join('-');bl[k]=(bl[k]||0)+o.n});const BL=Object.entries(bl).sort((a,b)=>b[1]-a[1]),mxB=BL[0]?BL[0][1]:1;
+ const ds=plans.map(x=>parseFloat(x['Discount %'])).filter(v=>isFinite(v)),avgD=ds.length?Math.round(ds.reduce((a,b)=>a+b,0)/ds.length*10)/10:0,withD=ds.filter(v=>v>0).length;
+ const imgs=cnt('ad_image')+cnt('avail_image');
+ const K=[[plans.length,'بيمنت اتعمل','#0f5c52',Object.keys(units).length+' وحدة مختلفة'],[cnt('print'),'طباعة / PDF','#2d3047',pct(cnt('print'),plans.length)+'% من البيمنتات'],[imgs,'صورة إعلانية','#c9a24a',cnt('avail_image')+' منهم صور متاح'],[cnt('form'),'استمارة حجز','#7a5a12','اتطبعت'],[RP.length,'مندوب نشط','#1a7a6c',RP[0]?'الأنشط: '+RP[0].n:''],[avgD+'%','متوسط الخصم','#b0552a',withD+' بيمنت بخصم']];
+ let h='<div class="dKp">'+K.map(k=>'<div class="kp" style="--c:'+k[2]+'"><b>'+k[0]+'</b><span>'+k[1]+'</span><i>'+E(k[3])+'</i></div>').join('')+'</div>';
+ const top=RP[0],hot=UN.filter(u=>u.r.size>=2),hotA=hot.filter(u=>stOf(u.c)==='Available');
+ const tips=[];if(top)tips.push('🏆 أنشط مندوب: <b>'+E(top.n)+'</b> ('+top.plan+' بيمنت و'+top.tot+' نشاط).');
+ if(hotA.length)tips.push('🔥 وحدات متاحة عليها طلب من أكتر من مندوب: '+hotA.slice(0,5).map(u=>'<span class="dcode">'+u.c+'</span>').join('، ')+' – ممكن تكون فرصة تتابعها.');
+ if(SY[0])tips.push('💳 أكتر نظام بيتطلب: <b>'+E(SY[0][0])+'</b> ('+pct(SY[0][1],plans.length)+'% من البيمنتات).');
+ const idle=RP.filter(r=>Date.now()-r.last>3*864e5);if(DS.per!==1&&idle.length)tips.push('😴 مندوبين ما عملوش حاجة من أكتر من 3 أيام: '+idle.slice(0,6).map(r=>E(r.n)).join('، ')+'.');
+ if(tips.length)h+='<div class="dtip">'+tips.join('<br>')+'</div>';
+ h+='<div class="dGrid"><div class="dc"><h4>📈 النشاط اليومي <small>'+(DS.per?'آخر '+Math.max(DS.per,7)+' يوم':'آخر 30 يوم')+'</small></h4>'+chart(R,DS.per&&DS.per>1?DS.per:(DS.per===1?7:30))+'</div>';
+ h+='<div class="dc"><h4>💳 الأنظمة اللي بتتطلب <small>'+plans.length+' بيمنت</small></h4>'+(SY.length?SY.slice(0,8).map(s=>'<div class="dhb"><span>'+E(s[0])+'</span><div class="dbr"><i style="width:'+pct(s[1],mxS)+'%"></i></div><b>'+s[1]+'</b></div>').join(''):'<div class="demp">مفيش</div>')+
+  '<h4 style="margin-top:14px">🏢 حسب العمارة</h4>'+BL.map(b=>'<div class="dhb"><span>عمارة '+E(b[0].split('-')[1])+' <small style="color:#8a978f">'+b[0].charAt(0)+'</small></span><div class="dbr"><i style="width:'+pct(b[1],mxB)+'%;background:linear-gradient(90deg,#c9a24a,#e0c27a)"></i></div><b>'+b[1]+'</b></div>').join('')+'</div></div>';
+ h+='<div class="dGrid"><div class="dc"><h4>👥 ترتيب المندوبين <small>'+RP.length+' مندوب</small></h4><table><tr><th>#</th><th>المندوب</th><th>بيمنت</th><th>طباعة</th><th>صور</th><th>استمارة</th><th>وحدات</th><th style="min-width:90px">النشاط</th><th>آخر مرة</th></tr>'+
+  RP.slice(0,20).map((r,i)=>'<tr><td class="n">'+(['🥇','🥈','🥉'][i]||i+1)+'</td><td><b>'+E(r.n)+'</b></td><td class="n">'+r.plan+'</td><td class="n">'+r.print+'</td><td class="n">'+r.img+'</td><td class="n">'+r.form+'</td><td class="n">'+r.u.size+'</td><td><div class="dbr"><i style="width:'+pct(r.tot,mxR)+'%"></i></div></td><td style="font-size:12px;color:#7b8a84;white-space:nowrap">'+ago(r.last)+'</td></tr>').join('')+'</table></div>';
+ h+='<div class="dc"><h4>🔥 أكتر الوحدات طلبًا</h4><table><tr><th>الوحدة</th><th>مرات</th><th>مندوبين</th><th>الحالة</th></tr>'+
+  UN.map(u=>{const st=stOf(u.c);return '<tr><td><span class="dcode">'+u.c+'</span></td><td class="n">'+u.n+'</td><td class="n">'+u.r.size+'</td><td>'+(st?'<span class="dst '+st+'">'+({Available:'متاحة',Hold:'هولد',Sold:'مباعة'}[st]||st)+'</span>':'')+'</td></tr>'}).join('')+'</table></div></div>';
+ const LR=R.slice().sort((a,b)=>tOf(b)-tOf(a)).slice(0,15);
+ h+='<div class="dc" style="margin-top:12px"><h4>🕒 آخر نشاط</h4><table><tr><th>الوقت</th><th>المندوب</th><th>العملية</th><th>الوحدة</th><th>النظام</th><th>العميل</th></tr>'+
+  LR.map(x=>{const e=EV[x['Event']]||[x['Event'],'#555'];return '<tr><td style="white-space:nowrap;font-size:12.5px;color:#56655f">'+ago(tOf(x))+'</td><td>'+E(who(x))+'</td><td><span class="dst" style="background:'+e[1]+'1f;color:'+e[1]+'">'+E(e[0])+'</span></td><td><span class="dcode">'+E(x['Unit']||'')+'</span></td><td>'+E(x['Event']==='plan'?sysAr(x['System']):'')+'</td><td>'+E(x['Event']==='feedback'?'':(x['Client']||''))+'</td></tr>'}).join('')+'</table></div>';
+ B.innerHTML=h}
+
+async function load(){DS.busy=true;DS.err='';render();
+ try{if(typeof apiUrl!=='function'||!apiUrl()||typeof sesOk!=='function'||!sesOk()){DS.err='لازم تكون مسجّل دخول والسيرفر متوصل علشان النشاط يظهر';return}
+  const r=await apiCall({action:'list',token:SES.token,limit:5000});
+  if(r&&r.ok&&Array.isArray(r.rows)){DS.rows=r.rows}else if(r&&r.error==='auth'){DS.err='الجلسة انتهت – سجّل دخول تاني';try{sessionExpired()}catch(e){}}else DS.err='السيرفر رجّع خطأ: '+((r&&r.error)||'غير معروف')}
+ catch(e){DS.err='تعذّر الاتصال بالسيرفر – جرّب تاني'}finally{DS.busy=false;render();const s=document.getElementById('dshUp');if(s)s.textContent='اتحدث '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}}
+
+window.dashOpen=function(){if(typeof isOwner==='function'&&!isOwner())return;css();let ov=document.getElementById('dshOv');if(ov)ov.remove();
+ ov=document.createElement('div');ov.id='dshOv';ov.setAttribute('data-noi18n','');
+ ov.innerHTML='<div class="dTop"><button type="button" id="dshX">↩ رجوع</button><span>📊 لوحة المتابعة</span><small id="dshUp" style="opacity:.8;font-weight:600"></small><button type="button" id="dshR" style="background:#d9bd80;color:#2a1a00">🔄 تحديث</button></div>'+
+  '<div class="dBar"><div class="dSeg" id="dshP">'+[[1,'النهارده'],[7,'7 أيام'],[30,'30 يوم'],[0,'الكل']].map(p=>'<button type="button" data-p="'+p[0]+'"'+(DS.per===p[0]?' class="on"':'')+'>'+p[1]+'</button>').join('')+'</div><label><input type="checkbox" id="dshMe"'+(DS.me?' checked':'')+'> من غير نشاطي أنا</label></div><div class="dBody"></div>';
+ document.body.appendChild(ov);
+ ov.querySelector('#dshP').onclick=e=>{const b=e.target.closest('button');if(!b)return;DS.per=+b.dataset.p;ov.querySelectorAll('#dshP button').forEach(x=>x.classList.toggle('on',x===b));render()};
+ ov.querySelector('#dshMe').onchange=e=>{DS.me=e.target.checked;render()};
+ ov.querySelector('#dshR').onclick=load;
+ const close=()=>{ov.remove();document.removeEventListener('keydown',esc)},esc=e=>{if(e.key==='Escape')close()};
+ ov.querySelector('#dshX').onclick=close;document.addEventListener('keydown',esc);
+ if(DS.rows)render();load()};
+})();
+
+</script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261128-104545";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261128-115516";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <style>#wnOv{position:fixed;inset:0;z-index:9000;background:rgba(6,24,20,.62);display:flex;align-items:center;justify-content:center;padding:16px;animation:wnF .3s both}@keyframes wnF{from{opacity:0}}#wnOv .wnB{background:#fffdf8;color:#14302b;border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.55);border:1px solid #d9bd80;animation:pop .45s both}#wnOv .wnH{background:linear-gradient(135deg,#0b3d35,#0f5c52);color:#fff;padding:20px 22px 16px;border-radius:20px 20px 0 0;position:relative}#wnOv .wnH:after{content:"";position:absolute;left:22px;right:22px;bottom:0;height:2px;background:#d9bd80}#wnOv .wnH b{display:block;font-size:20px}#wnOv .wnH small{color:#e9cf8e;font-weight:600}#wnOv ul{list-style:none;margin:0;padding:14px 20px 6px}#wnOv li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed #e4d7b4;font-size:14.5px;line-height:1.75}#wnOv li:last-child{border-bottom:0}#wnOv li i{flex:none;width:24px;height:24px;border-radius:50%;background:#0f5c52;color:#e9cf8e;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:3px}#wnOv .wnF{padding:8px 20px 18px;text-align:center}#wnOv .wnF button{border:0;border-radius:12px;padding:11px 28px;font:inherit;font-weight:800;background:#0f5c52;color:#fff;cursor:pointer;font-size:15px}@media print{#wnOv{display:none!important}}</style>
-<script>(function(){var WN={"id": "2026-11-28c", "date": "28/11/2026", "items": [{"who": "all", "t": "في شاشة الصورة الإعلانية: لو عندك صور أحسن للمشروع أو محتاج صور تانية، دوس زرار «ابعت على واتساب» وابعتها مباشرة. وفيه تصميمات جديدة جاية في التحديث الجاي ⏳"}, {"who": "all", "t": "الصورة الإعلانية مبقتش محتاجة تختار نظام: أول ما تكتب كود الوحدة هيظهرلك زرار «🖼️ اعمل صورة إعلانية للوحدة» تحت بيانات الوحدة."}, {"who": "all", "t": "انت اللي تختار اللي يظهر على الصورة: السعر يظهر أو لأ، والسداد (10% – 10 سنين، 5% – 8 سنين، مخصص تكتبه بنفسك، أو من غير سداد)، وقيمة المقدم بالجنيه تظهر أو لأ."}, {"who": "all", "t": "5 تصميمات مختلفة للوحدة، وكل تصميم تغيّر صورته من 11 صورة للمشروع، وتقدر تحمّل الخمسة مرة واحدة."}, {"who": "all", "t": "المساحة بتظهر بالظبط من غير تقريب (مثلاً 112.5 م²)، والمسقط بيظهر أكبر وأوضح."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
+<script>(function(){var WN={"id": "2026-11-28d", "date": "28/11/2026", "items": [{"who": "all", "t": "📣 جديد في شيت الوحدات المتاحة: زرار «صورة المتاح للبروكرز». بيطلعلك صورة شيك بالوحدات المتاحة (عمارة أو نوع أو الكل، بالأسعار أو من غيرها، قايمة أو ملخص) ومعاها نص جاهز للجروب."}, {"who": "all", "t": "📝 «استمارة حجز» جنب العرض الكامل: نفس ورقة الشركة، بيانات الوحدة والسعر والنظام بتتملى لوحدها، وقيمة الحجز بتتكتب بالحروف أوتوماتيك، وتطبعها أو تحفظها PDF."}, {"who": "all", "t": "🔳 الصورة الإعلانية بقى عليها QR: لو كاتب رقمك العميل يعمل سكان يفتحله واتساب معاك برسالة فيها كود الوحدة."}, {"who": "all", "t": "📲 تقدر تثبت البرنامج على الموبايل أو الكمبيوتر كأنه أبلكيشن – هيظهرلك زرار «تثبيت» تحت."}, {"who": "owner", "t": "📊 لوحة المتابعة (من لوحة التحكم): أنشط المندوبين، أكتر الوحدات والأنظمة طلبًا، والنشاط اليومي."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
 function ok(w){try{if(w==="all")return true;if(w==="owner")return typeof isOwner==="function"&&isOwner();if(w==="pol")return typeof polAllowed==="function"&&polAllowed();if(w==="full")return typeof fullOK==="function"&&fullOK()}catch(e){}return false}
-function blocked(){var ids=["loginOv","welcome","lock","ryAsk","offerOv","pmOv","viewOv"];for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e&&!e.classList.contains("hide")&&!e.hidden&&getComputedStyle(e).display!=="none")return true}return false}
+function blocked(){var ids=["loginOv","welcome","lock","ryAsk","offerOv","pmOv","viewOv","avOv","rfOv","dshOv","invOv","pwaOv"];for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e&&!e.classList.contains("hide")&&!e.hidden&&getComputedStyle(e).display!=="none")return true}return false}
 function show(){var it=WN.items.filter(function(x){return ok(x.who)});try{localStorage.setItem(K,WN.id)}catch(e){}if(!it.length)return;var o=document.createElement("div");o.id="wnOv";o.setAttribute("data-noi18n","");o.setAttribute("dir","rtl");
 o.innerHTML='<div class="wnB" role="dialog" aria-modal="true"><div class="wnH"><b>✨ الجديد في التحديث</b><small>'+WN.date+'</small></div><ul>'+it.map(function(x,i){return '<li><i>'+(i+1)+'</i><span>'+x.t+'</span></li>'}).join("")+'</ul><div class="wnF"><button type="button">تمام، يلا بينا</button></div></div>';
 document.body.appendChild(o);var c=function(){o.remove()};o.querySelector("button").onclick=c;o.addEventListener("click",function(e){if(e.target===o)c()})}
 var n=0;(function wait(){if(++n>600)return;if(document.readyState!=="complete"||blocked()){setTimeout(wait,1200);return}setTimeout(function(){if(!blocked())show();else setTimeout(wait,1200)},900)})()})();</script>
+<style>#pwaBar{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%);width:min(460px,calc(100vw - 20px));box-sizing:border-box;z-index:9998;display:none;align-items:center;gap:10px;background:#fffdf8;color:#14302b;border:1px solid #d9bd80;border-radius:16px;padding:9px 10px 9px 14px;font:600 13.5px 'Cairo',sans-serif;box-shadow:0 16px 36px -14px rgba(0,0,0,.45);max-width:calc(100vw - 20px)}#pwaBar.on{display:flex;animation:pop .45s both}#pwaBar>div{flex:1;min-width:0}#pwaBar img{width:38px;height:38px;border-radius:10px;flex:none}#pwaBar b{display:block;font-size:14px}#pwaBar small{display:block;color:#6a7a75;font-weight:500;font-size:12px}#pwaBar .go{border:0;border-radius:10px;background:#0f5c52;color:#fff;font:inherit;font-weight:800;padding:8px 14px;cursor:pointer;white-space:nowrap}#pwaBar .no{border:0;background:transparent;color:#8a978f;font-size:18px;cursor:pointer;padding:4px 6px}#pwaOv{position:fixed;inset:0;z-index:9999;background:rgba(6,24,20,.55);display:flex;align-items:flex-end;justify-content:center;padding:14px}#pwaOv .bx{background:#fffdf8;border-radius:18px;max-width:420px;width:100%;padding:18px 18px 14px;font:500 14.5px/1.9 'Cairo',sans-serif;color:#14302b;box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}#pwaOv h3{margin:0 0 6px;font-size:17px;color:#0f5c52}#pwaOv ol{margin:0;padding-inline-start:20px}#pwaOv button{margin-top:10px;width:100%;border:0;border-radius:12px;background:#0f5c52;color:#fff;font:inherit;font-weight:800;padding:10px;cursor:pointer}@media print{#pwaBar,#pwaOv{display:none!important}}</style>
+<div id="pwaBar" data-noi18n dir="rtl"><img src="media/icon-192.png" alt=""><div><b>ثبّت البرنامج على جهازك</b><small>يفتح أسرع زي الأبلكيشن، من غير المتصفح</small></div><button type="button" class="go" id="pwaGo">تثبيت</button><button type="button" class="no" id="pwaNo" aria-label="إغلاق">✕</button></div>
+<script>(function(){if(!/^https:/.test(location.protocol)||!('serviceWorker' in navigator))return;
+window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+var K='pp-pwa-no',st=window.matchMedia&&matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,ev=null,bar=document.getElementById('pwaBar');
+if(st)return;function no(){try{return +localStorage.getItem(K)>Date.now()}catch(e){return false}}
+var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!/crios|fxios|edgios/i.test(navigator.userAgent);
+function busy(){var ids=['loginOv','welcome','lock','ryAsk','offerOv','pmOv','viewOv','avOv','rfOv','dshOv','invOv','wnOv'];for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e&&!e.classList.contains('hide')&&!e.hidden&&getComputedStyle(e).display!=='none')return true}return false}
+function show(){if(no())return;var n=0;(function w(){if(++n>200)return;if(busy()){setTimeout(w,4000);return}bar.classList.add('on')})()}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;setTimeout(show,15000)});
+if(ios)setTimeout(show,20000);
+window.addEventListener('appinstalled',function(){bar.classList.remove('on')});
+document.getElementById('pwaNo').onclick=function(){bar.classList.remove('on');try{localStorage.setItem(K,String(Date.now()+14*864e5))}catch(e){}};
+document.getElementById('pwaGo').onclick=function(){if(ev){ev.prompt();ev.userChoice.then(function(){ev=null;bar.classList.remove('on')});return}
+ var o=document.createElement('div');o.id='pwaOv';o.setAttribute('dir','rtl');o.innerHTML='<div class="bx"><h3>📲 تثبيت البرنامج على الآيفون</h3><ol><li>من Safari دوس زرار المشاركة <b>⬆️</b> اللي تحت</li><li>اختار <b>«إضافة إلى الشاشة الرئيسية»</b> <bdi dir="ltr">(Add to Home Screen)</bdi></li><li>دوس <b>«إضافة»</b> – هتلاقي أيقونة بالميرا على الشاشة</li></ol><button type="button">تمام</button></div>';
+ document.body.appendChild(o);o.onclick=function(e){if(e.target===o||e.target.tagName==='BUTTON'){o.remove();bar.classList.remove('on')}}};
+})();</script>
 </body>
 </html>
