@@ -1117,7 +1117,7 @@ ${swap?rName+rCode:rCode+rName}
   const FIRST=CT.on?30:34,NEXT=CT.on?44:50,ch=[rowsArr.slice(0,FIRST)];for(let i=FIRST;i<rowsArr.length;i+=NEXT)ch.push(rowsArr.slice(i,i+NEXT));
   if(ch.length>1&&ch[ch.length-1].length<4){const last=ch.pop();ch[ch.length-1]=ch[ch.length-1].concat(last)}
   const n=ch.length;return{multi:true,html:ch.map((c,i)=>`<div class="paper mp" data-noi18n>${logos}<h3>${ttl}${i?' <small class="cont">(continued)</small>':''}</h3>${i?'':info+'<div class="sp"></div>'}<table>${TH(i)}${c.join('')}</table>${CT.on||i==n-1?sig:''}<div class="pgn">Page ${i+1} / ${n}</div></div>`).join('')}})();
- P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${isOwner()?'<button class="btn" type="button" onclick="ctrApprove()" style="background:#15803d;border-color:#15803d;color:#fff">✅ اعتمد كعقد</button>':''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button><button class="btn gold" type="button" onclick="adOpen()">🖼️ صورة إعلانية</button><button class="btn" type="button" onclick="rfOpen()" style="background:#7a5a12">📝 استمارة حجز</button>'}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
+ P.innerHTML=`${auW}${warn}${mW}${yW}${gW}${dpN}${dpZ}${ddN}${cmpHTML}${spW}${note}${ctW}<div class="bar"><button class="btn" onclick="printPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>طباعة / PDF</button><button class="btn" type="button" onclick="exportPdfPlan()" ${(S.appr&&!approved)||mBlock?'disabled':''}>⬇ تحميل PDF</button>${CT.on?'<button class="btn" type="button" onclick="exportXlsx()">⬇ تحميل Excel</button>'+(isOwner()?'<button class="btn gold" type="button" onclick="exportAcc()">📊 حسابات سموحة والمعمرون</button>':''):''}${isOwner()?'<button class="btn" type="button" onclick="ctrApprove()" style="background:#15803d;border-color:#15803d;color:#fff">✅ اعتمد كعقد</button>':''}${S.adm?'':'<button class="btn navy" type="button" onclick="offerOpen()">عرض كامل للعميل</button><button class="btn gold" type="button" onclick="adOpen()">🖼️ صورة إعلانية</button>'+(polOn()?'':'<button class="btn" type="button" onclick="rfOpen()" style="background:#7a5a12">📝 استمارة حجز'+(bdOn()?' (القضاة)':'')+'</button>')}<label class="drawck" ${S.adm?'style="display:none"':''}><input type="checkbox" ${DRAWON?'checked':''} onchange="drawToggle(this.checked)"> إظهار رسمة الوحدة مع البيمنت (هندسية أو تصميم واقعي)</label>${DRAWON&&!S.adm?'<span class="hint" style="margin:0">'+(CT.on?'الرسمة هتظهر بشكل العقد (ملحق ١) بالمشتري وشركة المعمرون. ':'')+'اختار "حفظ كـ PDF" من نافذة الطباعة علشان البيمنت والرسمة يتحفظوا في ملف واحد</span>':''}</div>
  <div class="scroll${PG.multi?' mpwrap':''}">${PG.html}</div>${DRAWON&&!I.au?drawBlock(I.u):''}`;
  P.classList.toggle('multi',PG.multi);$('plan').classList.toggle('multi',PG.multi);
  try{setTimeout(tafqUpd,0)}catch(e){}
@@ -4215,6 +4215,18 @@ function avText(L){const rows=avRows(L),P=payInfo(0),R=rep(),ct=R.ph?(R.nm?R.nm+
  const head=['🏢 *Palmeira Residence – العلمين الجديدة*','📋 '+(AV.mode==='sum'?'ملخص المتاح':'المتاح النهارده')+' – '+(AV.b?avBl(AV.b):'كل العمارات')+(AV.cat==='all'?'':' – '+AVC.find(c=>c[0]===AV.cat)[1])+' ('+ds+')','✅ '+avN(L.length)+' متاحة',''];
  const body=rows.map(r=>AV.mode==='sum'?'• '+r[0]+' – '+r[1]+': '+avN(+r[2])+' ('+r[3]+')'+(r[4]?' – السعر يبدأ '+r[4]+' ج':''):'• '+r[0]+' | '+r[1]+' | '+r[2]+' | الدور '+r[3]+(r[4]!=='—'?' | '+r[4]+' م²':'')+(r[5]?' | '+r[5]+' ج':''));
  return head.concat(body,['','✨ استلام ألترا سوبر لوكس',P.none?null:'💳 '+P.t,'📞 للحجز والتفاصيل: '+ct].filter(x=>x!==null)).join('\n')}
+/* PDF بسيط من صور JPEG (صفحة لكل صورة) – من غير مكتبات */
+async function jpegsPdf(blobs,wPt,hPt){const enc=new TextEncoder(),parts=[],offs=[];let len=0;const push=x=>{const b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length};
+ const n=blobs.length,obj=(i,body)=>{offs[i]=len;push(i+' 0 obj\n');if(typeof body==='string')push(body);else body();push('\nendobj\n')};
+ push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');const kids=[];for(let i=0;i<n;i++)kids.push((3+i*3)+' 0 R');
+ obj(1,'<< /Type /Catalog /Pages 2 0 R >>');obj(2,'<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>');
+ for(let i=0;i<n;i++){const pg=3+i*3,ct=pg+1,im=pg+2,buf=new Uint8Array(await blobs[i].arrayBuffer()),bm=await createImageBitmap(blobs[i]),iw=bm.width,ih=bm.height;try{bm.close()}catch(e){}
+  obj(pg,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+wPt+' '+hPt+'] /Resources << /XObject << /Im0 '+im+' 0 R >> >> /Contents '+ct+' 0 R >>');
+  const cs='q '+wPt+' 0 0 '+hPt+' 0 0 cm /Im0 Do Q';obj(ct,'<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream');
+  obj(im,()=>{push('<< /Type /XObject /Subtype /Image /Width '+iw+' /Height '+ih+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+buf.length+' >>\nstream\n');push(buf);push('\nendstream')})}
+ const xr=len,N=3+n*3;let x='xref\n0 '+N+'\n0000000000 65535 f \n';for(let i=1;i<N;i++)x+=String(offs[i]).padStart(10,'0')+' 00000 n \n';
+ push(x+'trailer\n<< /Size '+N+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');return new Blob(parts,{type:'application/pdf'})}
+window.jpegsPdf=jpegsPdf;
 function avCss(){if(document.getElementById('avCss'))return;const s=document.createElement('style');s.id='avCss';s.textContent=`
 #avOv{position:fixed;inset:0;z-index:9995;background:#f4f1ea;display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;color:#14302b}
 #avOv .avTop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#0f5c52;color:#fff;font-weight:700}
@@ -4247,7 +4259,7 @@ function avOpen(){avCss();let ov=document.getElementById('avOv');if(ov)ov.remove
  ov=document.createElement('div');ov.id='avOv';ov.setAttribute('data-noi18n','');
  ov.innerHTML='<div class="avTop"><button type="button" id="avX">↩ رجوع</button><span>📣 صورة المتاح للبروكرز</span></div>'+
   '<div class="avBody"><div class="avPrev"><canvas id="avCv" width="1080" height="1350"></canvas><div class="avPg"><button type="button" id="avPv">‹ السابق</button><span id="avPn"></span><button type="button" id="avNx">التالي ›</button></div>'+
-   '<div class="avBtns"><button class="btn" type="button" id="avDl">⬇ تحميل الصورة</button><button class="btn ghost" type="button" id="avAll">⬇ تحميل كل الصفحات</button><button class="btn gold" type="button" id="avSh">📤 مشاركة</button><button class="btn navy" type="button" id="avBk">↩ رجوع</button></div></div>'+
+   '<div class="avBtns"><button class="btn" type="button" id="avAll">🖼️ تحميل صور</button><button class="btn" type="button" id="avPdf" style="background:#b02a2a">📄 تحميل PDF</button><button class="btn gold" type="button" id="avSh">📤 مشاركة</button><button class="btn navy" type="button" id="avBk">↩ رجوع</button></div></div>'+
   '<div class="avSide"><div class="avCard"><h4>العمارة</h4><div id="avBx"></div></div><div class="avCard"><h4>النوع</h4><div id="avCx"></div></div>'+
    '<div class="avCard"><h4>الشكل</h4>'+ch('mode',[['list','قايمة بالوحدات'],['sum','ملخص (عدد ومساحات)']],AV.mode)+'<label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13.5px"><input type="checkbox" id="avPr"'+(AV.price?' checked':'')+'> إظهار الأسعار</label></div>'+
    '<div class="avCard"><h4>السداد اللي تحت</h4>'+ch('pay',Object.keys(PAYS).filter(k=>k!=='custom').map(k=>[k,PAYS[k][2]]),AD.pay==='custom'?'p10':AD.pay)+'</div>'+
@@ -4266,10 +4278,10 @@ function avOpen(){avCss();let ov=document.getElementById('avOv');if(ov)ov.remove
  const blob=c=>new Promise(r=>c.toBlob(r,'image/jpeg',.92)),save=(b,n)=>{const url=URL.createObjectURL(b),a=document.createElement('a');a.href=url;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000)};
  const nm=p=>'Palmeira-Available-'+(AV.b||'All')+(AV.cat==='all'?'':'-'+AV.cat)+(pages>1?'-'+(p+1):'')+'.jpg';
  const log=n=>{try{sendLog&&sendLog({event:'avail_image',clientTime:new Date().toISOString(),unit:AV.b||'All',system:AV.mode+':'+AV.cat,client:'',note:n+' ('+L.length+')'})}catch(e){}};
- $v('avDl').onclick=async()=>{const b=await blob(cv);if(b){save(b,nm(AV.pg));log('download')}};
+ $v('avPdf').onclick=async e=>{const btn=e.target,o=btn.textContent;btn.disabled=true;try{const off=document.createElement('canvas'),bs=[];for(let p=0;p<pages;p++){btn.textContent='جاري '+(p+1)+'/'+pages+'…';await avDraw(off,L,p);const b=await blob(off);if(b)bs.push(b)}btn.textContent='جاري تجهيز الـPDF…';const pdf=await jpegsPdf(bs,540,675);save(pdf,nm(0).replace(/(-1)?\.jpg$/,'.pdf'));log('pdf')}catch(err){try{say('حصلت مشكلة في تجهيز الـPDF')}catch(x){}}btn.textContent=o;btn.disabled=false};
  $v('avAll').onclick=async e=>{const btn=e.target,o=btn.textContent;btn.disabled=true;const off=document.createElement('canvas');for(let p=0;p<pages;p++){btn.textContent='جاري '+(p+1)+'/'+pages+'…';await avDraw(off,L,p);const b=await blob(off);if(b)save(b,nm(p));await new Promise(r=>setTimeout(r,350))}btn.textContent=o;btn.disabled=false;log('download-all')};
  $v('avSh').onclick=async()=>{const off=document.createElement('canvas'),fs=[];for(let p=0;p<pages;p++){await avDraw(off,L,p);const b=await blob(off);if(b)fs.push(new File([b],nm(p),{type:'image/jpeg'}))}
-  if(navigator.canShare&&navigator.canShare({files:fs})){try{await navigator.share({files:fs,text:$v('avTx').value});log('share')}catch(e){}}else $v('avDl').click()};
+  if(navigator.canShare&&navigator.canShare({files:fs})){try{await navigator.share({files:fs,text:$v('avTx').value});log('share')}catch(e){}}else $v('avAll').click()};
  $v('avCp').onclick=e=>{copyTxt($v('avTx').value,e.target);log('copy')};
  const close=()=>{tok++;ov.remove();document.removeEventListener('keydown',escK)},escK=e=>{if(e.key==='Escape'){e.stopPropagation();close()}};
  $v('avX').onclick=close;$v('avBk').onclick=close;document.addEventListener('keydown',escK,true);bx();go()}
@@ -6617,42 +6629,44 @@ const TERMS=['هذا الطلب لا يعد ضمانة حق لبيع أو شرا
  'في حال كان الإيداع في البنك أو تحرير شيك بالمبلغ فإنه لا يعتد بأي منهما إلا عند تحصيل الشيك أو تسليم الشركة إيصال إيداع المبلغ خلال 24 ساعة من تاريخ الطلب، وفي حالة عدم الدفع عن طريق الفيزا يتم خصم 2%'];
 const SIGN=['العميل','مسئول المبيعات','مدير المبيعات','مدير العمليات','الإدارة المالية','مدير عام المبيعات'];
 
-function doc(D){const inp=(id,v,cls)=>'<input class="v'+(cls?' '+cls:'')+'" id="'+id+'" value="'+E(v)+'" autocomplete="off">';
- const row=(lb,id,v,cls)=>'<tr><th>'+lb+'</th><td colspan="3">'+inp(id,v,cls)+'</td></tr>';
- const logo=new URL('media/logo_ma.png',document.baseURI).href;
- return '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>'+E('استمارة حجز'+(D.name?' - '+D.name:'')+' - '+D.code)+'</title>'+
- '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">'+
- '<style>@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#e9e6df}body{font-family:Cairo,Tahoma,sans-serif;color:#222}'+
- '.pg{width:210mm;height:297mm;overflow:hidden;margin:0 auto;background:#fff;padding:11mm 14mm 8mm;position:relative}'+
- '.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3mm}.hd img{height:15mm}.dt{font-size:15px;font-weight:600;color:#444;display:flex;align-items:center;gap:8px}.dt input{width:40mm;border:0;border-bottom:1px dotted #888;font:inherit;font-weight:800;color:#1d2b6b;text-align:center;background:transparent}'+
- 'h2{font-size:15px;font-weight:800;margin:3.4mm 0 1.4mm;color:#222}'+
- 'table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1.2px solid #333;height:6.6mm;padding:0 2.2mm;font-size:11.5px;vertical-align:middle;white-space:nowrap;overflow:hidden}th{font-weight:700;text-align:right;color:#333;background:#fafafa}'+
- '.kv th{width:56mm}.kv th.sub{width:32mm;text-align:center}.un th{text-align:center;font-size:10.5px;background:#fafafa;white-space:normal;line-height:1.2;height:8mm}.un td{text-align:center}'+
- '.fin th{width:60mm}.fin td.w{width:60mm}'+
- 'input.v{width:100%;border:0;background:transparent;font:inherit;font-size:13px;font-weight:800;color:#1d2b6b;padding:0;outline:none}input.v.c{text-align:center}input.v.l{direction:ltr;text-align:right}'+
- '@media screen{input.v{background:rgba(29,43,107,.04);border-radius:3px}input.v:focus{background:#fff8e1;box-shadow:0 0 0 2px #d9bd80}}'+
- 'ul{margin:0;padding:0 5mm 0 0;font-size:11.2px;line-height:1.72;color:#222}li{margin-bottom:.8mm}li::marker{font-size:15px}'+
- '.sg{display:flex;justify-content:space-between;margin-top:3mm}.sg div{flex:1;text-align:center;font-size:12.5px;font-weight:600;color:#333;padding-bottom:12mm}'+
- '.fx{position:absolute;bottom:4mm;left:15mm;right:15mm;font-size:9.5px;color:#999;text-align:center}'+
- '@media print{html,body{background:#fff}.pg{margin:0}.fx{display:none}}</style></head><body><div class="pg">'+
- '<div class="hd"><div class="dt">تحريرا في '+'<input id="f_date" value="'+E(D.date)+'"></div><img src="'+logo+'" alt="Al-Moameron Al-Arab"></div>'+
- '<h2>بيانات العميل</h2><table class="kv">'+
-  row('اسم العميل','f_name',D.name)+row('بطاقة الرقم القومي / جواز السفر','f_id','','l')+row('الجنسية','f_nat','')+row('رقم الموبايل','f_mob','','l')+row('الوظيفة','f_job','')+row('الإيميل','f_mail','','l')+
-  row('عنوان الإقامة','f_addr','')+row('عنوان المراسلات','f_addr2','')+row('مصدر العميل','f_src','')+
-  '<tr><th>اسم شركة البروكر</th><td>'+inp('f_bco','')+'</td><th class="sub">اسم سيلز البروكر</th><td>'+inp('f_bsales','')+'</td></tr>'+
-  row('رقم تليفون سيلز البروكر','f_bph','','l')+'</table>'+
- '<h2>بيانات الوحدة</h2><table class="un"><tr><th>رقم الوحدة</th><th>نوع الوحدة</th><th>الطابق</th><th>المبنى</th><th>مساحة الوحدة</th><th>مساحة الحديقة إن وجدت</th></tr>'+
-  '<tr><td>'+inp('f_code',D.code,'c')+'</td><td>'+inp('f_type',D.type,'c')+'</td><td>'+inp('f_floor',D.floor,'c')+'</td><td>'+inp('f_bld',D.bld,'c')+'</td><td>'+inp('f_area',D.area,'c')+'</td><td>'+inp('f_gd',D.garden,'c')+'</td></tr></table>'+
- '<h2>البيانات الماليـة</h2><table class="fin">'+
-  '<tr><th>قيمة الحجز</th><td>'+inp('f_res','')+'</td><td class="w">'+inp('f_resw','')+'</td></tr>'+
-  '<tr><th>شيك بنكي - تحويل بنكي - دفع نقدي</th><td>'+inp('f_pm','')+'</td><td class="w">'+inp('f_pm2','')+'</td></tr>'+
-  '<tr><th>إجمالي ثمن الوحدة</th><td>'+inp('f_tot',D.total)+'</td><td class="w">'+inp('f_totw','')+'</td></tr>'+
-  '<tr><th>وديعة الصيانة - المقايسات</th><td>'+inp('f_mt',D.maint)+'</td><td class="w">'+inp('f_mtw','')+'</td></tr>'+
-  '<tr><th>نظام السداد</th><td>'+inp('f_sys',D.sys)+'</td><td class="w">'+inp('f_sysw','')+'</td></tr></table>'+
- '<h2>الشروط والأحكام</h2><ul>'+TERMS.map(t=>'<li>'+E(t)+'</li>').join('')+'</ul>'+
- '<h2>التوقيعات</h2><div class="sg">'+SIGN.map(s=>'<div>'+s+'</div>').join('')+'</div>'+
- '<div class="fx">الخانات الفاضية تقدر تكتبها هنا قبل الطباعة أو تسيبها وتتكتب بخط اليد</div>'+
- '</div></body></html>'}
+const PT=v=>(v*0.352778).toFixed(2)+'mm';
+/* خانات الاستمارة: [المفتاح, الاسم, المجموعة, خيارات] */
+const SRC=['فيسبوك','إنستجرام','تيك توك','إعلان ممول','ترشيح من عميل','بروكر','زيارة للمقر','معرض','مكالمة / واتساب'];
+const FIELDS=[['name','اسم العميل','c'],['id','بطاقة الرقم القومي / جواز السفر','c',{ltr:1,hint:'id'}],['nat','الجنسية','c',{list:['مصري','مصرية']}],['mob','رقم الموبايل','c',{ltr:1,type:'tel',hint:'mob'}],['job','الوظيفة','c'],['mail','الإيميل','c',{ltr:1,type:'email'}],['addr','عنوان الإقامة','c'],['addr2','عنوان المراسلات','c',{same:1}],['src','مصدر العميل','c',{list:SRC}],
+ ['bco','اسم شركة البروكر','b'],['bsales','اسم سيلز البروكر','b'],['bph','رقم تليفون سيلز البروكر','b',{ltr:1,type:'tel'}],
+ ['date','تحريرا في','r',{ltr:1}],['res','قيمة الحجز (جنيه)','r',{ltr:1,num:1}],['pm','طريقة الدفع','r',{chips:['شيك بنكي','تحويل بنكي','دفع نقدي','إنستاباي','فيزا']}],['pm2','تفاصيل الدفع (البنك / رقم الشيك / المحوِّل)','r'],
+ ['code','رقم الوحدة','u',{ltr:1}],['type','نوع الوحدة','u'],['floor','الطابق','u'],['bld','المبنى','u'],['area','مساحة الوحدة','u'],['gd','مساحة الحديقة إن وجدت','u'],['tot','إجمالي ثمن الوحدة','u'],['mt','وديعة الصيانة - المقايسات','u'],['sys','نظام السداد','u']];
+const sp=(k,cls)=>'<span class="fv'+(cls?' '+cls:'')+'" data-k="'+k+'"></span>';
+const HEAD=t=>'<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>'+E(t)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap">'+
+ '<style>@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;background:#e9e6df}body{font-family:Cairo,Tahoma,sans-serif;color:#222;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
+ '.pg{width:210mm;height:297mm;overflow:hidden;margin:0 auto;background:#fff;position:relative}.fv{font-weight:800;color:#1d2b6b;white-space:nowrap;overflow:hidden;font-size:13px}.fv.l{direction:ltr;unicode-bidi:isolate}'+
+ '@media print{html,body{background:#fff}.pg{margin:0}}';
+/* ===== الاستمارة العادية (زي ورقة الشركة) ===== */
+function docNormal(D){const row=(lb,k,c)=>'<tr><th>'+lb+'</th><td colspan="3">'+sp(k,c)+'</td></tr>';const logo=new URL('media/logo_ma.png',document.baseURI).href;
+ return HEAD('استمارة حجز - '+D.code)+
+ '.pg{padding:11mm 14mm 8mm}.hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:3mm}.hd img{height:15mm}.dt{font-size:15px;font-weight:600;color:#444;display:flex;align-items:center;gap:8px}.dt .fv{min-width:40mm;border-bottom:1px dotted #888;text-align:center;display:inline-block;font-size:14px}'+
+ 'h2{font-size:15px;font-weight:800;margin:3.4mm 0 1.4mm;color:#222}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1.2px solid #333;height:6.6mm;padding:0 2.2mm;font-size:11.5px;vertical-align:middle;white-space:nowrap;overflow:hidden}th{font-weight:700;text-align:right;color:#333;background:#fafafa}'+
+ '.kv th{width:56mm}.kv th.sub{width:32mm;text-align:center}.un th{text-align:center;font-size:10.5px;background:#fafafa;white-space:normal;line-height:1.2;height:8mm}.un td{text-align:center}.fin th{width:60mm}.fin td.w{width:60mm}td .fv{display:block}.kv .fv.l{text-align:right}'+
+ 'ul{margin:0;padding:0 5mm 0 0;font-size:11.2px;line-height:1.72;color:#222}li{margin-bottom:.8mm}li::marker{font-size:15px}.sg{display:flex;justify-content:space-between;margin-top:3mm}.sg div{flex:1;text-align:center;font-size:12.5px;font-weight:600;color:#333;padding-bottom:12mm}</style></head><body><div class="pg">'+
+ '<div class="hd"><div class="dt">تحريرا في '+sp('date','l')+'</div><img src="'+logo+'" alt=""></div>'+
+ '<h2>بيانات العميل</h2><table class="kv">'+row('اسم العميل','name')+row('بطاقة الرقم القومي / جواز السفر','id','l')+row('الجنسية','nat')+row('رقم الموبايل','mob','l')+row('الوظيفة','job')+row('الإيميل','mail','l')+row('عنوان الإقامة','addr')+row('عنوان المراسلات','addr2')+row('مصدر العميل','src')+
+  '<tr><th>اسم شركة البروكر</th><td>'+sp('bco')+'</td><th class="sub">اسم سيلز البروكر</th><td>'+sp('bsales')+'</td></tr>'+row('رقم تليفون سيلز البروكر','bph','l')+'</table>'+
+ '<h2>بيانات الوحدة</h2><table class="un"><tr><th>رقم الوحدة</th><th>نوع الوحدة</th><th>الطابق</th><th>المبنى</th><th>مساحة الوحدة</th><th>مساحة الحديقة إن وجدت</th></tr><tr><td>'+sp('code','l')+'</td><td>'+sp('type')+'</td><td>'+sp('floor')+'</td><td>'+sp('bld')+'</td><td>'+sp('area')+'</td><td>'+sp('gd')+'</td></tr></table>'+
+ '<h2>البيانات الماليـة</h2><table class="fin"><tr><th>قيمة الحجز</th><td>'+sp('resF')+'</td><td class="w">'+sp('resw')+'</td></tr><tr><th>شيك بنكي - تحويل بنكي - دفع نقدي</th><td>'+sp('pm')+'</td><td class="w">'+sp('pm2')+'</td></tr>'+
+  '<tr><th>إجمالي ثمن الوحدة</th><td>'+sp('tot')+'</td><td class="w"></td></tr><tr><th>وديعة الصيانة - المقايسات</th><td>'+sp('mt')+'</td><td class="w"></td></tr><tr><th>نظام السداد</th><td>'+sp('sys')+'</td><td class="w"></td></tr></table>'+
+ '<h2>الشروط والأحكام</h2><ul>'+TERMS.map(t=>'<li>'+E(t)+'</li>').join('')+'</ul><h2>التوقيعات</h2><div class="sg">'+SIGN.map(s=>'<div>'+s+'</div>').join('')+'</div></div></body></html>'}
+/* ===== استمارة السادة القضاة والمستشارين (فوق الورقة الأصلية نفسها) ===== */
+function docJudges(D){const bg=new URL('media/form_judges.jpg',document.baseURI).href;
+ const at=(k,x0,y0,x1,y1,al,c)=>'<span class="fv ab'+(c?' '+c:'')+'" data-k="'+k+'" style="left:'+PT(x0+1.5)+';top:'+PT(y0)+';width:'+PT(x1-x0-3)+';height:'+PT(y1-y0)+';justify-content:'+(al||'flex-start')+'"></span>';
+ const C=[['name',161.4],['id',176.2],['nat',191.0],['mob',205.8],['job',220.6],['mail',235.4],['addr',250.2],['addr2',265.0],['src',279.8]];
+ const U=[['code',467.8,553.1],['type',382.6,467.8],['floor',297.3,382.6],['bld',212.0,297.3],['area',126.8,212.0],['gd',41.5,126.8]];
+ const FN=[['resF','resw',401.7],['pm','pm2',416.5],['tot','',431.3],['mt','',446.1],['sys','',460.9]];
+ let h=HEAD('استمارة حجز القضاة والمستشارين - '+D.code)+'.bg{position:absolute;inset:0;width:100%;height:100%;display:block}.ab{position:absolute;display:flex;align-items:center;font-size:11.5px;line-height:1}.ab.l{direction:ltr}.dtc{position:absolute;background:#fff}</style></head><body><div class="pg"><img class="bg" src="'+bg+'" alt="">';
+ h+='<div class="dtc" style="left:'+PT(74)+';top:'+PT(97)+';width:'+PT(60)+';height:'+PT(15)+'"></div>'+at('date',74,97,134,112,'center','l');
+ C.forEach(c=>{const l=/^(id|mob|mail)$/.test(c[0]);h+=at(c[0],41.5,c[1],433.7,c[1]+14.8,l?'flex-end':'flex-start',l?'l':'')});
+ U.forEach(u=>{h+=at(u[0],u[1],345.0,u[2],359.8,'center',u[0]==='code'?'l':'')});
+ FN.forEach(f=>{h+=at(f[0],212.0,f[2],382.6,f[2]+14.8,'flex-start');if(f[1])h+=at(f[1],41.5,f[2],212.0,f[2]+14.8,'flex-start')});
+ return h+'</div></body></html>'}
 
 function css(){if(document.getElementById('rfCss'))return;const s=document.createElement('style');s.id='rfCss';s.textContent=`
 #rfOv{position:fixed;inset:0;z-index:126;background:#e9e6df;display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;color:#14302b}
@@ -6660,27 +6674,75 @@ function css(){if(document.getElementById('rfCss'))return;const s=document.creat
 #rfOv .rfTop button{border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700;cursor:pointer}
 #rfOv .rfTop .rfPr{background:#d9bd80;color:#2a1a00}
 #rfOv .rfTop span{flex:1}
-#rfOv .rfHint{background:#fff8e1;border-bottom:1px solid #ecd9a6;padding:7px 14px;font-size:13px;color:#6b4a0f;text-align:center}
-#rfOv .rfWrap{flex:1;overflow:auto;padding:16px 8px}
-#rfOv .rfBox{margin:0 auto;transform-origin:top center}
+#rfOv .rfBody{flex:1;overflow:auto;display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);gap:16px;padding:14px;box-sizing:border-box}
+#rfOv .rfSide{display:flex;flex-direction:column;gap:10px;min-width:0}
+#rfOv .rfCard{background:#fff;border:1px solid #e3dccb;border-radius:14px;padding:12px 14px}
+#rfOv .rfCard h4{margin:0 0 8px;font-size:14.5px;color:#0f5c52;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#rfOv .rfCard h4 small{font-size:12px;color:#8a978f;font-weight:700}
+#rfOv .rfKind{background:#0f5c52;color:#fff;border-radius:12px;padding:9px 12px;font-size:13.5px;font-weight:700;line-height:1.6}
+#rfOv .rfKind.j{background:linear-gradient(135deg,#7a1d1d,#a33a2a)}
+#rfOv label.rfF{display:block;margin:0 0 8px;font-size:12.5px;font-weight:700;color:#4a5a55}
+#rfOv label.rfF input{display:block;width:100%;box-sizing:border-box;margin-top:3px;border:1px solid #d8d0bf;border-radius:10px;padding:8px 10px;font:inherit;font-size:14px;font-weight:600;color:#14302b;background:#fffdf8}
+#rfOv label.rfF input:focus{outline:none;border-color:#c9a24a;box-shadow:0 0 0 3px #f3e6c4}
+#rfOv label.rfF input.emp{background:#fff6e6;border-color:#ecd3a0}
+#rfOv label.rfF input.ltr{direction:ltr;text-align:right}
+#rfOv .rfW{font-size:12px;color:#b0552a;font-weight:600;margin-top:2px;display:none}
+#rfOv .rfW.on{display:block}
+#rfOv .rfWords{font-size:12.5px;color:#0f5c52;font-weight:700;margin:-4px 0 8px}
+#rfOv .rfChips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+#rfOv .rfChips button{border:1px solid #cdd8d5;background:#fff;border-radius:99px;padding:5px 11px;font:inherit;font-size:12.5px;cursor:pointer;color:#14302b}
+#rfOv .rfChips button.on{background:#0f5c52;color:#fff;border-color:#0f5c52}
+#rfOv .rfSame{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;margin:-4px 0 8px}
+#rfOv details summary{cursor:pointer;font-weight:800;color:#0f5c52;font-size:14.5px}
+#rfOv details[open] summary{margin-bottom:8px}
+#rfOv .rfPrev{min-width:0}
+#rfOv .rfBox{margin:0 auto}
 #rfOv iframe{width:794px;height:1123px;border:0;background:#fff;box-shadow:0 18px 40px -22px rgba(0,0,0,.45);display:block}
+#rfOv .rfBar{height:6px;border-radius:99px;background:#eee8da;overflow:hidden;margin-top:6px}#rfOv .rfBar i{display:block;height:100%;background:#0f5c52;border-radius:99px;transition:width .25s}
+@media (min-width:901px){#rfOv .rfBody{overflow:hidden}#rfOv .rfSide,#rfOv .rfPrev{overflow-y:auto;min-height:0;padding-bottom:20px}#rfOv .rfSide{padding-inline-end:4px}}
+@media (max-width:900px){#rfOv .rfBody{grid-template-columns:1fr}}
 @media print{#rfOv{display:none!important}}`;document.head.appendChild(s)}
 
-window.rfOpen=function(){const D=data();if(!D)return;css();let ov=document.getElementById('rfOv');if(ov)ov.remove();
+function kindNow(){try{if(typeof polOn==='function'&&polOn())return 'pol';if(typeof bdOn==='function'&&bdOn()&&BD.kind==='c')return 'j'}catch(e){}return 'n'}
+window.rfAllowed=()=>kindNow()!=='pol';
+window.rfOpen=function(){const kind=kindNow();if(kind==='pol'){try{say('بالك الشرطة مش محتاج استمارة حجز')}catch(e){}return}
+ const D=data();if(!D)return;css();let ov=document.getElementById('rfOv');if(ov)ov.remove();
+ const V={name:D.name,id:'',nat:'',mob:'',job:'',mail:'',addr:'',addr2:'',src:'',bco:'',bsales:'',bph:'',date:D.date,res:'',pm:'',pm2:'',code:D.code,type:D.type,floor:D.floor,bld:D.bld,area:D.area,gd:D.garden,tot:D.total,mt:D.maint,sys:D.sys};
+ const J=kind==='j',FS=FIELDS.filter(f=>!(J&&f[2]==='b'));
+ const fld=f=>{const o=f[3]||{},id='rf_'+f[0];let h='<label class="rfF">'+f[1]+'<input id="'+id+'" data-k="'+f[0]+'"'+(o.type?' type="'+o.type+'"':'')+(o.num?' inputmode="decimal"':'')+(o.ltr?' class="ltr"':'')+(o.list?' list="'+id+'L"':'')+' value="'+E(V[f[0]])+'" autocomplete="off"></label>';
+  if(o.list)h+='<datalist id="'+id+'L">'+o.list.map(x=>'<option value="'+E(x)+'">').join('')+'</datalist>';
+  if(o.hint)h+='<div class="rfW" id="'+id+'W"></div>';if(o.num)h+='<div class="rfWords" id="rfResW"></div>';
+  if(o.chips)h+='<div class="rfChips" data-for="pm">'+o.chips.map(c=>'<button type="button" data-v="'+E(c)+'">'+E(c)+'</button>').join('')+'</div>';
+  if(o.same)h+='<label class="rfSame"><input type="checkbox" id="rfSame"> نفس عنوان الإقامة</label>';return h};
+ const grp=(g,t)=>FS.filter(f=>f[2]===g).map(fld).join('');
  ov=document.createElement('div');ov.id='rfOv';ov.setAttribute('data-noi18n','');
  ov.innerHTML='<div class="rfTop"><button type="button" id="rfX">↩ رجوع للبيمنت</button><span>📝 استمارة حجز – '+E(D.code)+'</span><button type="button" class="rfPr" id="rfP">🖨️ طباعة / حفظ PDF</button></div>'+
-  '<div class="rfHint">بيانات الوحدة والسعر والنظام اتملت من البيمنت. اكتب بيانات العميل وقيمة الحجز هنا، أو سيبها فاضية وتتكتب بخط اليد بعد الطباعة.</div>'+
-  '<div class="rfWrap"><div class="rfBox" id="rfBox"><iframe id="rfF" title="استمارة حجز"></iframe></div></div>';
- document.body.appendChild(ov);const f=ov.querySelector('#rfF'),box=ov.querySelector('#rfBox'),wrap=ov.querySelector('.rfWrap');
- f.srcdoc=doc(D);
- const fit=()=>{const w=wrap.clientWidth-16,s=Math.min(1,w/794);box.style.width=794*s+'px';f.style.transform='scale('+s+')';f.style.transformOrigin='top right';box.style.height=1123*s+'px';f.style.height='1123px'};
- f.onload=()=>{fit();try{const d=f.contentDocument,res=d.getElementById('f_res'),rw=d.getElementById('f_resw');
-  const upd=()=>{const v=res.value.replace(/[^\d.]/g,'');if(v)res.value=Number(v).toLocaleString('en-US',{maximumFractionDigits:2});rw.value=v?tafqit(v):''};res.addEventListener('change',upd);res.addEventListener('blur',upd);
-  const h=d.documentElement.scrollHeight;if(h>1123){f.style.height=h+'px';box.style.height=h*Math.min(1,(wrap.clientWidth-16)/794)+'px'}}catch(e){}};
+  '<div class="rfBody"><div class="rfSide"><div class="rfKind'+(J?' j':'')+'">'+(J?'⚖️ استمارة حجز خاصة بالسادة القضاة والمستشارين (بالك ديل المستشارين)':'📄 استمارة الحجز العادية')+'<br><small style="font-weight:600;opacity:.85">بتتغير لوحدها حسب البيمنت</small></div>'+
+   '<div class="rfCard"><h4>👤 بيانات العميل <small id="rfCnt"></small></h4><div class="rfBar"><i id="rfBarI" style="width:0"></i></div><div style="height:10px"></div>'+grp('c')+'</div>'+
+   (J?'':'<div class="rfCard"><h4>🤝 البروكر <small>لو العميل جاي من بروكر</small></h4>'+grp('b')+'</div>')+
+   '<div class="rfCard"><h4>💰 الحجز</h4>'+grp('r')+'</div>'+
+   '<div class="rfCard"><details><summary>🏠 بيانات الوحدة والسعر (اتملت من البيمنت)</summary>'+grp('u')+'</details></div></div>'+
+  '<div class="rfPrev"><div class="rfBox" id="rfBox"><iframe id="rfF" title="استمارة حجز"></iframe></div></div></div>';
+ document.body.appendChild(ov);const f=ov.querySelector('#rfF'),box=ov.querySelector('#rfBox'),wrap=ov.querySelector('.rfPrev');
+ f.srcdoc=J?docJudges(D):docNormal(D);
+ const cl=FS.filter(x=>x[2]==='c').map(x=>x[0]);
+ const paint=()=>{const d=f.contentDocument;if(!d)return;const r=String(V.res||'').replace(/[^\d.]/g,''),X=Object.assign({},V,{resF:r?Number(r).toLocaleString('en-US',{maximumFractionDigits:2})+' جنيه':'',resw:r?tafqit(r):''});
+  d.querySelectorAll('.fv').forEach(e=>{e.textContent=X[e.dataset.k]||'';e.style.fontSize='';let fs=parseFloat(getComputedStyle(e).fontSize)||12;while(e.scrollWidth>e.clientWidth+1&&fs>7){fs-=.5;e.style.fontSize=fs+'px'}});
+  const w=ov.querySelector('#rfResW');if(w)w.textContent=r?'= '+tafqit(r):'';
+  const n=cl.filter(k=>String(V[k]||'').trim()).length;ov.querySelector('#rfCnt').textContent='اتملى '+n+' من '+cl.length;ov.querySelector('#rfBarI').style.width=Math.round(n*100/cl.length)+'%';
+  ov.querySelectorAll('label.rfF input[data-k]').forEach(i=>i.classList.toggle('emp',cl.includes(i.dataset.k)&&!i.value.trim()));
+  const idv=String(V.id||'').replace(/\s/g,''),iw=ov.querySelector('#rf_idW');if(iw){const bad=idv&&/^\d+$/.test(idv)&&idv.length!==14;iw.textContent=bad?'الرقم القومي المصري 14 رقم – المكتوب '+idv.length+' رقم':'';iw.classList.toggle('on',!!bad)}
+  const mv=String(V.mob||'').replace(/[\s-]/g,''),mw=ov.querySelector('#rf_mobW');if(mw){const bad=mv&&/^0\d+$/.test(mv)&&!/^01[0125]\d{8}$/.test(mv);mw.textContent=bad?'رقم الموبايل المصري 11 رقم ويبدأ بـ 010 / 011 / 012 / 015':'';mw.classList.toggle('on',!!bad)}};
+ ov.addEventListener('input',e=>{const i=e.target;if(!i.dataset||!i.dataset.k)return;V[i.dataset.k]=i.value;if(i.dataset.k==='addr'&&ov.querySelector('#rfSame').checked){V.addr2=i.value;ov.querySelector('#rf_addr2').value=i.value}if(i.dataset.k==='pm')ov.querySelectorAll('.rfChips button').forEach(b=>b.classList.toggle('on',b.dataset.v===i.value));paint()});
+ ov.querySelector('#rfSame').onchange=e=>{if(e.target.checked){V.addr2=V.addr;ov.querySelector('#rf_addr2').value=V.addr}paint()};
+ ov.querySelector('.rfChips').onclick=e=>{const b=e.target.closest('button');if(!b)return;V.pm=b.dataset.v;ov.querySelector('#rf_pm').value=V.pm;ov.querySelectorAll('.rfChips button').forEach(x=>x.classList.toggle('on',x===b));paint()};
+ const fit=()=>{const w=wrap.clientWidth-8,s=Math.min(1,w/794);box.style.width=794*s+'px';box.style.height=1123*s+'px';f.style.transform='scale('+s+')';f.style.transformOrigin='top right'};
+ f.onload=()=>{fit();paint();try{f.contentDocument.fonts.ready.then(paint)}catch(e){}};
  window.addEventListener('resize',fit);
- ov.querySelector('#rfP').onclick=()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){}try{sendLog&&sendLog({event:'form',clientTime:new Date().toISOString(),unit:D.code,system:D.sys,client:D.name,note:'reservation form'})}catch(e){}};
+ ov.querySelector('#rfP').onclick=()=>{paint();try{f.contentWindow.focus();f.contentWindow.print()}catch(e){}try{sendLog&&sendLog({event:'form',clientTime:new Date().toISOString(),unit:V.code,system:V.sys,client:V.name,note:J?'judges form':'reservation form'})}catch(e){}};
  const close=()=>{window.removeEventListener('resize',fit);ov.remove();document.removeEventListener('keydown',esc)},esc=e=>{if(e.key==='Escape')close()};
- ov.querySelector('#rfX').onclick=close;document.addEventListener('keydown',esc)};
+ ov.querySelector('#rfX').onclick=close;document.addEventListener('keydown',esc);
+ setTimeout(()=>{const n=ov.querySelector('#rf_'+(V.name?'id':'name'));if(n&&window.innerWidth>900)n.focus()},300)};
 })();
 
 </script>
@@ -6809,9 +6871,9 @@ window.dashOpen=function(){if(typeof isOwner==='function'&&!isOwner())return;css
 </script>
 <style>#verBan{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:9999;display:none;align-items:center;gap:10px;background:#0f5c52;color:#fff;border:2px solid #d9bd80;border-radius:99px;padding:8px 10px 8px 18px;font:700 14px 'Cairo',sans-serif;box-shadow:0 14px 30px rgba(0,0,0,.35);cursor:pointer;white-space:nowrap;max-width:calc(100vw - 20px)}#verBan.on{display:flex;animation:pop .4s both}#verBan b{background:#d9bd80;color:#2a1a00;border-radius:99px;padding:4px 12px}@media print{#verBan{display:none!important}}</style>
 <div id="verBan" data-noi18n onclick="location.reload()">🔄 فيه نسخة جديدة من البرنامج <b>تحديث</b></div>
-<script>(function(){var V="20261128-115516";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
+<script>(function(){var V="20261128-144445";if(!/^https?:/.test(location.protocol))return;function chk(){fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(t&&t!==V)document.getElementById("verBan").classList.add("on")}).catch(function(){})}setTimeout(chk,8000);setInterval(chk,180000);document.addEventListener("visibilitychange",function(){if(!document.hidden)chk()})})();</script>
 <style>#wnOv{position:fixed;inset:0;z-index:9000;background:rgba(6,24,20,.62);display:flex;align-items:center;justify-content:center;padding:16px;animation:wnF .3s both}@keyframes wnF{from{opacity:0}}#wnOv .wnB{background:#fffdf8;color:#14302b;border-radius:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.55);border:1px solid #d9bd80;animation:pop .45s both}#wnOv .wnH{background:linear-gradient(135deg,#0b3d35,#0f5c52);color:#fff;padding:20px 22px 16px;border-radius:20px 20px 0 0;position:relative}#wnOv .wnH:after{content:"";position:absolute;left:22px;right:22px;bottom:0;height:2px;background:#d9bd80}#wnOv .wnH b{display:block;font-size:20px}#wnOv .wnH small{color:#e9cf8e;font-weight:600}#wnOv ul{list-style:none;margin:0;padding:14px 20px 6px}#wnOv li{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed #e4d7b4;font-size:14.5px;line-height:1.75}#wnOv li:last-child{border-bottom:0}#wnOv li i{flex:none;width:24px;height:24px;border-radius:50%;background:#0f5c52;color:#e9cf8e;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:3px}#wnOv .wnF{padding:8px 20px 18px;text-align:center}#wnOv .wnF button{border:0;border-radius:12px;padding:11px 28px;font:inherit;font-weight:800;background:#0f5c52;color:#fff;cursor:pointer;font-size:15px}@media print{#wnOv{display:none!important}}</style>
-<script>(function(){var WN={"id": "2026-11-28d", "date": "28/11/2026", "items": [{"who": "all", "t": "📣 جديد في شيت الوحدات المتاحة: زرار «صورة المتاح للبروكرز». بيطلعلك صورة شيك بالوحدات المتاحة (عمارة أو نوع أو الكل، بالأسعار أو من غيرها، قايمة أو ملخص) ومعاها نص جاهز للجروب."}, {"who": "all", "t": "📝 «استمارة حجز» جنب العرض الكامل: نفس ورقة الشركة، بيانات الوحدة والسعر والنظام بتتملى لوحدها، وقيمة الحجز بتتكتب بالحروف أوتوماتيك، وتطبعها أو تحفظها PDF."}, {"who": "all", "t": "🔳 الصورة الإعلانية بقى عليها QR: لو كاتب رقمك العميل يعمل سكان يفتحله واتساب معاك برسالة فيها كود الوحدة."}, {"who": "all", "t": "📲 تقدر تثبت البرنامج على الموبايل أو الكمبيوتر كأنه أبلكيشن – هيظهرلك زرار «تثبيت» تحت."}, {"who": "owner", "t": "📊 لوحة المتابعة (من لوحة التحكم): أنشط المندوبين، أكتر الوحدات والأنظمة طلبًا، والنشاط اليومي."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
+<script>(function(){var WN={"id": "2026-11-28e", "date": "28/11/2026", "items": [{"who": "all", "t": "📝 استمارة الحجز بقت بتتغير حسب البيمنت: العادية للبيمنت العادي، واستمارة السادة القضاة والمستشارين لبالك ديل المستشارين، وبالك الشرطة مش محتاج استمارة."}, {"who": "all", "t": "جنب الاستمارة فيه قايمة تملى منها بيانات العميل (الرقم القومي، الموبايل، الإيميل، العنوان…) وقيمة الحجز وطريقة الدفع، والاستمارة بتتملى قدامك وتطبعها أو تحفظها PDF."}, {"who": "all", "t": "📣 صورة المتاح للبروكرز بقت بتتحمل صور أو ملف PDF واحد فيه كل الصفحات."}]},K="pp-wn-seen";try{if(localStorage.getItem(K)===WN.id)return}catch(e){return}
 function ok(w){try{if(w==="all")return true;if(w==="owner")return typeof isOwner==="function"&&isOwner();if(w==="pol")return typeof polAllowed==="function"&&polAllowed();if(w==="full")return typeof fullOK==="function"&&fullOK()}catch(e){}return false}
 function blocked(){var ids=["loginOv","welcome","lock","ryAsk","offerOv","pmOv","viewOv","avOv","rfOv","dshOv","invOv","pwaOv"];for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e&&!e.classList.contains("hide")&&!e.hidden&&getComputedStyle(e).display!=="none")return true}return false}
 function show(){var it=WN.items.filter(function(x){return ok(x.who)});try{localStorage.setItem(K,WN.id)}catch(e){}if(!it.length)return;var o=document.createElement("div");o.id="wnOv";o.setAttribute("data-noi18n","");o.setAttribute("dir","rtl");
